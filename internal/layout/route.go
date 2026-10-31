@@ -119,6 +119,8 @@ type router struct {
 	nodesep float64
 	lr      bool
 	nodes   []NodeResult
+	// tree holds the clusters, when the graph has them.
+	tree *clusterTree
 }
 
 // toFinal turns an offset in the layout orientation into one in the final
@@ -137,20 +139,59 @@ func (r *router) inside(real int, center, p Point) bool {
 
 // bounds returns the free horizontal range around a ranked node: from the
 // right side of its left neighbor plus half nodesep to the left side of its
-// right neighbor minus half nodesep.
-func (r *router) bounds(v int) (float64, float64) {
+// right neighbor minus half nodesep. With clusters, the box of a cluster
+// that has the neighbor and not the node bounds the range instead, half a
+// margin away, and so does the box of the innermost cluster of the node.
+// The vertical range [down, up] of the bound widens to the boxes that bound
+// it, unless the edge enters them: ends are the ends of the edge.
+func (r *router) bounds(v int, ends [2]int) (lo, hi, down, up float64) {
 	rn := r.g.nodes[v]
 	rank := r.g.ranks[rn.rank]
-	lo, hi := math.Inf(-1), math.Inf(1)
+	lo, hi = math.Inf(-1), math.Inf(1)
+	down, up = math.Inf(1), math.Inf(-1)
+	box := func(c int) [2]Point {
+		b := r.tree.clusters[c].box
+		if !r.tree.contains(c, r.g.clust[ends[0]]) && !r.tree.contains(c, r.g.clust[ends[1]]) {
+			down, up = min(down, b[0].Y), max(up, b[1].Y)
+		}
+		return b
+	}
+	var cv int
+	if r.tree != nil {
+		cv = r.g.clust[v]
+		if cv > 0 {
+			b := r.tree.clusters[cv].box
+			lo, hi = b[0].X+half(clusterMargin), b[1].X-half(clusterMargin)
+		}
+	}
 	if rn.order > 0 {
 		u := rank[rn.order-1]
-		lo = r.pos[u].X + half(r.width[u]) + half(r.nodesep)
+		if cu := r.clusterOf(u); cu >= 0 && r.tree.common(cv, cu) != cu {
+			a := r.tree.childToward(r.tree.common(cv, cu), cu)
+			lo = max(lo, box(a)[1].X+half(clusterMargin))
+		} else {
+			lo = max(lo, r.pos[u].X+half(r.width[u])+half(r.nodesep))
+		}
 	}
 	if rn.order+1 < len(rank) {
 		u := rank[rn.order+1]
-		hi = r.pos[u].X - half(r.width[u]) - half(r.nodesep)
+		if cu := r.clusterOf(u); cu >= 0 && r.tree.common(cv, cu) != cu {
+			a := r.tree.childToward(r.tree.common(cv, cu), cu)
+			hi = min(hi, box(a)[0].X-half(clusterMargin))
+		} else {
+			hi = min(hi, r.pos[u].X-half(r.width[u])-half(r.nodesep))
+		}
 	}
-	return lo, hi
+	return lo, hi, down, up
+}
+
+// clusterOf returns the innermost cluster of a ranked node, or -1 when the
+// graph has no clusters.
+func (r *router) clusterOf(v int) int {
+	if r.tree == nil {
+		return -1
+	}
+	return r.g.clust[v]
 }
 
 // gate is a horizontal opening the path crosses, at height y.
@@ -166,11 +207,14 @@ func (r *router) chainPath(chain []int) []Point {
 	src, dst := r.pos[chain[0]], r.pos[chain[len(chain)-1]]
 	var gates []gate
 	for _, v := range chain[1 : len(chain)-1] {
-		lo, hi := r.bounds(v)
+		lo, hi, down, up := r.bounds(v, [2]int{chain[0], chain[len(chain)-1]})
 		rank := r.g.nodes[v].rank
+		// A box widens the gates up to the bands of the neighboring ranks.
+		up = min(up, r.ys[rank-1]-r.bandDn[rank-1])
+		down = max(down, r.ys[rank+1]+r.bandUp[rank+1])
 		gates = append(gates,
-			gate{y: r.ys[rank] + r.bandUp[rank], lo: lo, hi: hi},
-			gate{y: r.ys[rank] - r.bandDn[rank], lo: lo, hi: hi})
+			gate{y: max(r.ys[rank]+r.bandUp[rank], up), lo: lo, hi: hi},
+			gate{y: min(r.ys[rank]-r.bandDn[rank], down), lo: lo, hi: hi})
 	}
 	return funnel(src, dst, gates)
 }

@@ -111,3 +111,19 @@ func TestSeveralGraphs(t *testing.T) {
 		t.Errorf("canon of two graphs:\n%s", canon.String())
 	}
 }
+
+func TestSVGClusters(t *testing.T) {
+	svg := render(t, "digraph { subgraph cluster_a { subgraph cluster_b { a } } }", SVG)
+	ia := strings.Index(svg, `<g id="clust1" class="cluster">`+"\n<title>cluster_a</title>")
+	ib := strings.Index(svg, `<g id="clust2" class="cluster">`+"\n<title>cluster_b</title>")
+	in := strings.Index(svg, `<g id="node1" class="node">`)
+	if ia < 0 || ib < ia || in < ib {
+		t.Errorf("cluster groups are not before the node, outer first:\n%s", svg)
+	}
+
+	svg = render(t, `digraph { subgraph cluster_a { color="#FF0000"; label="A"; a } }`, SVG)
+	box := regexp.MustCompile(`<g id="clust1" class="cluster">\n<title>cluster_a</title>\n<polygon fill="none" stroke="#ff0000" points="[^"]+"/>\n<text [^>]*>A</text>\n</g>`)
+	if !box.MatchString(svg) {
+		t.Errorf("cluster box:\n%s", svg)
+	}
+}

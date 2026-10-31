@@ -1,7 +1,7 @@
 # Conformance report
 
 - Reference: Graphviz 16.1.0 built without Pango
-- Cases: 399
+- Cases: 476
 
 ## By capability
 
@@ -12,8 +12,9 @@
 | cli | 13 | 10 | 0 | 3 | 0 |
 | description-diagram | 11 | 6 | 0 | 5 | 0 |
 | diagram-source | 4 | 4 | 0 | 0 | 0 |
-| dot-language | 78 | 48 | 1 | 29 | 0 |
-| dot-layout | 48 | 46 | 1 | 1 | 0 |
+| dot-language | 90 | 59 | 2 | 29 | 0 |
+| dot-layout | 77 | 73 | 3 | 1 | 0 |
+| gopuml-clusters | 36 | 26 | 0 | 10 | 0 |
 | graph-layout | 1 | 1 | 0 | 0 | 0 |
 | legacy-activity-diagram | 13 | 9 | 0 | 4 | 0 |
 | output-formats | 1 | 1 | 0 | 0 | 0 |
@@ -33,16 +34,16 @@
 
 | Name | Cases | Passed | Known differences | Not supported yet | Failed |
 |---|---|---|---|---|---|
-| canon | 399 | 262 | 0 | 124 | 0 |
-| plain | 399 | 262 | 0 | 124 | 0 |
-| svg | 399 | 258 | 4 | 124 | 0 |
+| canon | 476 | 329 | 0 | 134 | 0 |
+| plain | 476 | 328 | 1 | 134 | 0 |
+| svg | 476 | 322 | 7 | 134 | 0 |
 
 ## Cases not passed
 
 | Case | Outcome | Problems |
 |---|---|---|
 | dot-language/canon-canon-02 | not supported yet |  |
-| dot-language/canon-canon-03 | not supported yet |  |
+| dot-language/canon-canon-03 | known difference | plain: plain height 1.2889 is not within 5% of the reference 1.5467; svg: svg height 101 is not within 5% of the reference 119 SSIM 0.5505 is below 0.90 |
 | dot-language/canon-canon-04 | not supported yet |  |
 | dot-language/canon-canon-05 | not supported yet |  |
 | dot-language/canon-canon-06 | not supported yet |  |
@@ -52,7 +53,6 @@
 | dot-language/canon-canon2-17 | not supported yet |  |
 | dot-language/canon-canon2-18 | not supported yet |  |
 | dot-language/canon-canon2-20 | not supported yet |  |
-| dot-language/canon-canon2-23 | not supported yet |  |
 | dot-language/canon-canon3-B2 | not supported yet |  |
 | dot-language/canon-canon3-F | not supported yet |  |
 | dot-language/canon-canon4-M | not supported yet |  |
@@ -68,9 +68,13 @@
 | dot-language/canon-p-P4 | not supported yet |  |
 | dot-language/canon-p-P5 | not supported yet |  |
 | dot-language/canon-p-P7 | not supported yet |  |
+| dot-language/cluster-html-label | not supported yet |  |
+| dot-language/cluster-style-filled | not supported yet |  |
 | dot-language/grammar-all | not supported yet |  |
 | dot-language/grammar-several-graphs | not supported yet |  |
 | dot-language/node-lists | known difference | svg: SSIM 0.7385 is below 0.90 |
+| dot-layout/cluster-edges-between | known difference | svg: SSIM 0.4339 is below 0.90 |
+| dot-layout/cluster-two-chains | known difference | svg: SSIM 0.8553 is below 0.90 |
 | dot-layout/fontname-verdana | not supported yet |  |
 | dot-layout/long-edges | known difference | svg: SSIM 0.4851 is below 0.90 |
 | chen-eer-diagram/association-color-1 | not supported yet |  |
@@ -169,6 +173,16 @@
 | vega-svg/interactive-SVG0004_Svek-1 | not supported yet |  |
 | vega-svg/interactive-SVG0005_Svek-1 | not supported yet |  |
 | vega-svg/interactive-SVG0006_Svek-1 | not supported yet |  |
+| gopuml-clusters/description-diagram-linked-ports-1 | not supported yet |  |
+| gopuml-clusters/state-diagram-entry-exit-points-1 | not supported yet |  |
+| gopuml-clusters/state-diagram-history-state-1 | not supported yet |  |
+| gopuml-clusters/vega-nonreg-group2783-hide_stereotype-1 | not supported yet |  |
+| gopuml-clusters/vega-nonreg-group2783-reported_case-1 | not supported yet |  |
+| gopuml-clusters/vega-nonreg-group2936-light_theme_nested_package-1 | not supported yet |  |
+| gopuml-clusters/vega-nonreg-group2938-nested_links-1 | not supported yet |  |
+| gopuml-clusters/vega-scxml-state3-1 | not supported yet |  |
+| gopuml-clusters/vega-svg-interactive-SVG0004_Svek-1 | not supported yet |  |
+| gopuml-clusters/vega-svg-interactive-SVG0005_Svek-1 | not supported yet |  |
 | cli/later-format | not supported yet |  |
 | cli/other-engine | not supported yet |  |
 | cli/default-attribute-flag | not supported yet |  |

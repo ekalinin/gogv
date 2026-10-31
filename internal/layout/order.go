@@ -19,6 +19,12 @@ type rnode struct {
 	up    []int // redges to the rank above
 	down  []int // redges to the rank below
 	flat  []int // flat edges, by index into ranked.flats
+	// fixed nodes keep their place in the order: the nodes around a
+	// cluster that is being ordered.
+	fixed bool
+	// skeleton nodes stand for a cluster on one rank while its parent is
+	// ordered.
+	skeleton bool
 }
 
 // redge joins nodes of adjacent ranks, from the upper to the lower one. One
@@ -41,6 +47,15 @@ type ranked struct {
 	flats  []flatEdge
 	ranks  [][]int // node ids by rank, in order
 	nComps int
+	// clust is the innermost cluster of each node, when the graph has
+	// clusters.
+	clust []int
+	// startSkeletons makes the initial order start from the skeleton nodes
+	// as well, as it does at the root of a graph with clusters.
+	startSkeletons bool
+	// joins are pairs of nodes in one rank subgraph: they belong to the same
+	// component, as the reference merges them when it ranks.
+	joins [][2]int
 }
 
 func (g *ranked) addEdge(upper, lower, count int) {
@@ -171,6 +186,9 @@ func (g *ranked) components() [][]int {
 	for _, f := range g.flats {
 		edges = append(edges, rankEdge{tail: f.left, head: f.right})
 	}
+	for _, j := range g.joins {
+		edges = append(edges, rankEdge{tail: j[0], head: j[1]})
+	}
 	comps := components(len(g.nodes), edges)
 	for i, c := range comps {
 		for _, v := range c {
@@ -192,6 +210,9 @@ func (g *ranked) neighbors(v int) []int {
 	}
 	for _, f := range g.nodes[v].flat {
 		fe := g.flats[f]
+		if g.nodes[fe.left].skeleton || g.nodes[fe.right].skeleton {
+			continue // a cluster is not reached sideways
+		}
 		if fe.left == v {
 			ns = append(ns, fe.right)
 		} else {
@@ -220,7 +241,7 @@ func (g *ranked) initialOrder(comp []int) [][]int {
 			queue = queue[1:]
 			ranks[g.nodes[v].rank] = append(ranks[g.nodes[v].rank], v)
 			for _, w := range g.neighbors(v) {
-				if !seen[w] {
+				if !seen[w] && !g.nodes[w].fixed {
 					seen[w] = true
 					queue = append(queue, w)
 				}
@@ -228,7 +249,7 @@ func (g *ranked) initialOrder(comp []int) [][]int {
 		}
 	}
 	for _, v := range comp {
-		if len(g.nodes[v].up) == 0 {
+		if len(g.nodes[v].up) == 0 || g.startSkeletons && g.nodes[v].skeleton {
 			visit(v)
 		}
 	}
@@ -324,6 +345,9 @@ func (g *ranked) wmedian(ranks [][]int, iter int, reverseTies bool) {
 		med := make(map[int]float64, len(nodes))
 		for _, v := range nodes {
 			med[v] = g.median(v, down)
+			if g.nodes[v].fixed {
+				med[v] = -1
+			}
 		}
 		// Sort the nodes with a median among the positions they occupy,
 		// leaving the others in place.
@@ -398,7 +422,7 @@ func (g *ranked) transpose(ranks [][]int, equal bool) {
 			nodes := ranks[r]
 			for i := 0; i+1 < len(nodes); i++ {
 				v, w := nodes[i], nodes[i+1]
-				if g.flatBetween(v, w) {
+				if g.flatBetween(v, w) || g.nodes[v].fixed || g.nodes[w].fixed {
 					continue
 				}
 				c0 := g.pairCrossings(v, w)

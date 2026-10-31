@@ -68,6 +68,19 @@ type Result struct {
 	// when there is none.
 	Label    Text
 	LabelPos Point
+	// Clusters are the drawn clusters, outer clusters before the clusters
+	// nested in them.
+	Clusters []ClusterResult
+}
+
+// ClusterResult is a laid-out cluster: its box from (X0, Y0) to (X1, Y1),
+// and its label, centered on LabelPos.
+type ClusterResult struct {
+	Graph          *graph.Graph
+	X0, Y0, X1, Y1 float64
+	Color          string
+	Label          Text
+	LabelPos       Point
 }
 
 // params are the graph attributes the layout reads.
@@ -133,13 +146,26 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 		minlen := int(number(edgeValue(g, e, "minlen"), 1, 0))
 		rankEdges = append(rankEdges, rankEdge{tail: t, head: h, minlen: minlen, weight: 1})
 	}
-	ranks, err := assignRanks(ctx, len(nodes), rankEdges, p.search)
+	tree := buildClusterTree(g, index)
+	var ranks []int
+	var err error
+	if tree.drawn() || tree.hasRankSets() {
+		ranks, err = tree.rank(ctx, rankEdges, p.search)
+	} else {
+		ranks, err = assignRanks(ctx, len(nodes), rankEdges, p.search)
+	}
 	if err != nil {
 		return nil, err
 	}
 
 	rg, chains := buildRanked(ranks, ends)
-	if err := rg.order(ctx, 24, p.lr); err != nil {
+	rg.joins = tree.joins()
+	if tree.drawn() {
+		err = rg.orderClusters(ctx, tree, 24, p.lr)
+	} else {
+		err = rg.order(ctx, 24, p.lr)
+	}
+	if err != nil {
 		return nil, err
 	}
 	width := make([]float64, len(rg.nodes))
@@ -154,11 +180,23 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 			height[v] = 1
 		}
 	}
-	xs, err := rg.placeX(ctx, width, p.nodesep, p.search)
+	var extra func(next int) ([]nsEdge, int)
+	if tree.drawn() {
+		tree.readLabels()
+		extra = func(next int) ([]nsEdge, int) { return tree.xEdges(rg, width, next, p.lr) }
+	}
+	xs, err := rg.placeX(ctx, width, p.nodesep, p.search, extra)
 	if err != nil {
 		return nil, err
 	}
-	ys := rg.placeY(height, p.ranksep)
+	var gaps []float64
+	if tree.drawn() {
+		gaps = tree.yGaps(rg, height, p.lr)
+	}
+	ys := rg.placeY(height, p.ranksep, gaps)
+	if tree.drawn() {
+		tree.boxes(xs, ys, p.lr)
+	}
 
 	// The drawing in the layout orientation: positions of the ranked nodes.
 	pos := make([]Point, len(rg.nodes))
@@ -166,6 +204,9 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 		pos[v] = Point{xs[v], ys[rn.rank]}
 	}
 	rt := &router{g: rg, pos: pos, width: width, ys: ys, nodesep: p.nodesep, lr: p.lr, nodes: res.Nodes}
+	if tree.drawn() {
+		rt.tree = tree
+	}
 	rt.bandUp = make([]float64, len(rg.ranks))
 	rt.bandDn = make([]float64, len(rg.ranks))
 	for v, rn := range rg.nodes {
@@ -198,6 +239,11 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 			}
 		}
 	}
+	for _, cl := range tree.clusters[1:] {
+		// The drawing keeps clusterMargin around the boxes.
+		m := Point{clusterMargin, clusterMargin}
+		grow(sub(cl.box[0], m), add(cl.box[1], m))
+	}
 	if len(nodes) == 0 {
 		minP, maxP = Point{}, Point{}
 	}
@@ -224,6 +270,23 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 			}
 		}
 	}
+	for _, cl := range tree.clusters[1:] {
+		a, b := final(cl.box[0]), final(cl.box[1])
+		cr := ClusterResult{
+			Graph: cl.g, Color: cl.color, Label: cl.label,
+			X0: min(a.X, b.X), Y0: min(a.Y, b.Y), X1: max(a.X, b.X), Y1: max(a.Y, b.Y),
+		}
+		if len(cl.label.Lines) > 0 {
+			cr.LabelPos = Point{half(cr.X0 + cr.X1), cr.Y1 - half(cl.labelH)}
+			switch cl.labelJust {
+			case "l":
+				cr.LabelPos.X = cr.X0 + half(cl.labelW)
+			case "r":
+				cr.LabelPos.X = cr.X1 - half(cl.labelW)
+			}
+		}
+		res.Clusters = append(res.Clusters, cr)
+	}
 	res.Width, res.Height = layoutW, layoutH
 	if p.lr {
 		res.Width, res.Height = layoutH, layoutW
@@ -232,9 +295,9 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 	return res, nil
 }
 
-// placeGraphLabel puts the graph label centered below the drawing, which
-// grows by the label's height and margins, and widens when the label is
-// wider.
+// placeGraphLabel puts the graph label below the drawing, centered or at
+// the side that labeljust names; the drawing grows by the label's height and
+// margins, and widens when the label is wider.
 func placeGraphLabel(g *graph.Graph, res *Result) {
 	v := graphValue(g, "label")
 	if v.S == "" || v.HTML {
@@ -254,10 +317,21 @@ func placeGraphLabel(g *graph.Graph, res *Result) {
 	res.Height += lh
 	res.Label = text
 	res.LabelPos = Point{res.Width / 2, lh / 2}
+	switch supported(graph.GraphKind, "labeljust", graphValue(g, "labeljust"), "c") {
+	case "l":
+		res.LabelPos.X = half(lw)
+	case "r":
+		res.LabelPos.X = res.Width - half(lw)
+	}
 }
 
-// translate moves every node and edge of the drawing by d.
+// translate moves every node, edge and cluster of the drawing by d.
 func (res *Result) translate(d Point) {
+	for i := range res.Clusters {
+		c := &res.Clusters[i]
+		c.X0, c.Y0, c.X1, c.Y1 = c.X0+d.X, c.Y0+d.Y, c.X1+d.X, c.Y1+d.Y
+		c.LabelPos = add(c.LabelPos, d)
+	}
 	for i := range res.Nodes {
 		res.Nodes[i].X += d.X
 		res.Nodes[i].Y += d.Y

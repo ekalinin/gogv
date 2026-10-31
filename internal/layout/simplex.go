@@ -54,6 +54,9 @@ type simplex struct {
 	// examines before it takes the most negative one found.
 	search int
 	next   int
+	// occupancy is, for a node that stands for a block of nodes on several
+	// ranks, the number of its nodes on each of them; nil means one node.
+	occupancy [][]int
 }
 
 func newSimplex(ctx context.Context, n int, edges []nsEdge, search int) *simplex {
@@ -110,7 +113,8 @@ func (s *simplex) slack(e int) int {
 }
 
 // initRank gives an initial feasible ranking: nodes in topological order,
-// each as low as its in-edges allow.
+// each as low as its in-edges allow. When the edges have cycles, which are
+// then of length 0 or less, the longest paths give it.
 func (s *simplex) initRank() {
 	s.rank = make([]int, s.n)
 	indeg := make([]int, s.n)
@@ -132,6 +136,18 @@ func (s *simplex) initRank() {
 			indeg[e.head]--
 			if indeg[e.head] == 0 {
 				queue = append(queue, e.head)
+			}
+		}
+	}
+	if !slices.ContainsFunc(indeg, func(d int) bool { return d > 0 }) {
+		return
+	}
+	for changed := true; changed; {
+		changed = false
+		for _, e := range s.edges {
+			if r := s.rank[e.tail] + e.minlen; r > s.rank[e.head] {
+				s.rank[e.head] = r
+				changed = true
 			}
 		}
 	}
@@ -400,10 +416,30 @@ func (s *simplex) normalize() {
 // feasible rank with the fewest nodes, which spreads ranks without changing
 // the total edge length.
 func (s *simplex) balanceTB() {
-	maxRank := slices.Max(s.rank)
+	one := []int{1}
+	occ := func(v int) []int {
+		if s.occupancy != nil && s.occupancy[v] != nil {
+			return s.occupancy[v]
+		}
+		return one
+	}
+	maxRank := 0
+	for v, r := range s.rank {
+		maxRank = max(maxRank, r+len(occ(v))-1)
+	}
 	count := make([]int, maxRank+1)
-	for _, r := range s.rank {
-		count[r]++
+	for v, r := range s.rank {
+		for k, c := range occ(v) {
+			count[r+k] += c
+		}
+	}
+	// load is how many nodes the ranks from r on hold where v would lie.
+	load := func(v, r int) int {
+		var sum int
+		for k := range occ(v) {
+			sum += count[r+k]
+		}
+		return sum
 	}
 	for v := range s.n {
 		var inW, outW int
@@ -421,14 +457,17 @@ func (s *simplex) balanceTB() {
 		if inW != outW || len(s.in[v])+len(s.out[v]) == 0 {
 			continue
 		}
+		high = min(high, maxRank-len(occ(v))+1)
 		best := s.rank[v]
 		for r := low; r <= high; r++ {
-			if count[r] < count[best] {
+			if load(v, r) < load(v, best) {
 				best = r
 			}
 		}
-		count[s.rank[v]]--
-		count[best]++
+		for k, c := range occ(v) {
+			count[s.rank[v]+k] -= c
+			count[best+k] += c
+		}
 		s.rank[v] = best
 	}
 }

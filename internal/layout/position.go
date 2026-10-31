@@ -18,8 +18,10 @@ var omegaTable = [3]int{1, 1, 8}
 // auxiliary graph of section 4.2: an extra node for each edge pulls its ends
 // together with weight omega times the number of edges it stands for, and an
 // edge between neighbors in a rank keeps them apart by their half widths
-// plus nodesep, rounded.
-func (g *ranked) placeX(ctx context.Context, width []float64, nodesep float64, search int) ([]float64, error) {
+// plus nodesep, rounded. extra, when not nil, adds nodes from next on and
+// their edges; the result holds their x coordinates after those of the
+// ranked nodes.
+func (g *ranked) placeX(ctx context.Context, width []float64, nodesep float64, search int, extra func(next int) ([]nsEdge, int)) ([]float64, error) {
 	n := len(g.nodes)
 	var edges []nsEdge
 	next := n
@@ -53,6 +55,11 @@ func (g *ranked) placeX(ctx context.Context, width []float64, nodesep float64, s
 			edges = append(edges, nsEdge{tail: v, head: w, minlen: sep, weight: 0})
 		}
 	}
+	if extra != nil {
+		es, end := extra(next)
+		edges = append(edges, es...)
+		next = end
+	}
 	total := next
 	if total == 0 {
 		return nil, nil
@@ -61,8 +68,8 @@ func (g *ranked) placeX(ctx context.Context, width []float64, nodesep float64, s
 	if err != nil {
 		return nil, err
 	}
-	x := make([]float64, n)
-	for v := range n {
+	x := make([]float64, total)
+	for v := range total {
 		x[v] = float64(sol[v])
 	}
 	return x, nil
@@ -101,8 +108,9 @@ func solveConnected(ctx context.Context, n int, edges []nsEdge, search int, mode
 // placeY returns the y coordinate of each rank, y growing upward, with rank
 // 0 at the top: the bottom rank's center is half its height above 0, and
 // neighboring ranks are ranksep apart between the bottom of the upper one
-// and the top of the lower one.
-func (g *ranked) placeY(height []float64, ranksep float64) []float64 {
+// and the top of the lower one, and at least minGap[r] apart when minGap is
+// not nil.
+func (g *ranked) placeY(height []float64, ranksep float64, minGap []float64) []float64 {
 	n := len(g.ranks)
 	ht := make([]float64, n)
 	for r, nodes := range g.ranks {
@@ -116,7 +124,11 @@ func (g *ranked) placeY(height []float64, ranksep float64) []float64 {
 	}
 	y[n-1] = half(ht[n-1])
 	for r := n - 2; r >= 0; r-- {
-		y[r] = y[r+1] + half(ht[r+1]) + ranksep + half(ht[r])
+		d := half(ht[r+1]) + ranksep + half(ht[r])
+		if minGap != nil {
+			d = max(d, minGap[r])
+		}
+		y[r] = y[r+1] + d
 	}
 	return y
 }
