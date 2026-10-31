@@ -5,8 +5,10 @@ package attrs
 
 import (
 	"regexp"
+	"strings"
 
 	"github.com/ekalinin/gogv/internal/graph"
+	"github.com/ekalinin/gogv/internal/label"
 	"github.com/ekalinin/gogv/internal/textmetrics"
 )
 
@@ -141,15 +143,37 @@ func (c *checker) add(w Warning) {
 	c.warnings = append(c.warnings, w)
 }
 
+// isLabel reports whether an attribute holds a label.
+func isLabel(name string) bool {
+	return name == "label" || name == "xlabel" || name == "headlabel" || name == "taillabel"
+}
+
+// tableAllowed reports whether a single-cell table label is supported as
+// that attribute of that object: the label and the xlabel of a node, the
+// labels of an edge, and the label of a cluster, whose warnings name it as a
+// subgraph, but not the label of the root graph.
+func tableAllowed(k graph.Kind, name, object string) bool {
+	switch k {
+	case graph.NodeKind:
+		return name == "label" || name == "xlabel"
+	case graph.EdgeKind:
+		return true
+	}
+	return name == "label" && strings.HasPrefix(object, "subgraph ")
+}
+
 // value checks one attribute value of a graph, a cluster, a node or an edge.
 func (c *checker) value(k graph.Kind, object, name string, v graph.Value) {
 	if v.S == "" && !v.HTML {
 		return
 	}
 	switch {
-	case name == "label" && v.HTML && (k == graph.GraphKind || k == graph.NodeKind):
+	case isLabel(name) && v.HTML:
+		if _, ok := label.ParseTable(v.S); ok && tableAllowed(k, name, object) {
+			return
+		}
 		def := ""
-		if k == graph.NodeKind {
+		if k == graph.NodeKind && name == "label" {
 			def = graph.LabelDefault
 		}
 		c.add(Warning{Object: object, Feature: "HTML labels", Plural: true, Default: def})

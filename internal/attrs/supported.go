@@ -53,6 +53,7 @@ var supported = [3]map[string]spec{
 	},
 	graph.NodeKind: {
 		"label":     anyValue,
+		"xlabel":    anyValue,
 		"fontname":  anyValue,
 		"fontsize":  anyValue,
 		"fontcolor": colorValue,
@@ -63,6 +64,14 @@ var supported = [3]map[string]spec{
 		"style":     oneOf("solid", "solid", "rounded"),
 	},
 	graph.EdgeKind: {
+		"label":      anyValue,
+		"xlabel":     anyValue,
+		"headlabel":  anyValue,
+		"taillabel":  anyValue,
+		"fontname":   anyValue,
+		"fontsize":   anyValue,
+		"fontcolor":  colorValue,
+		"sametail":   anyValue,
 		"minlen":     anyValue,
 		"color":      colorValue,
 		"style":      oneOf("solid", "solid", "invis"),
