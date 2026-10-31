@@ -1,0 +1,1 @@
+digraph { subgraph cluster_a { label="Title\nsecond line"; fontname="Helvetica"; fontsize=10; fontcolor="#0000FF"; a } }

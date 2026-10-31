@@ -1,0 +1,45 @@
+digraph {
+	graph [nodesep=0.486111,
+		ranksep=0.833333,
+		remincross=true,
+		searchsize=500
+	];
+	node [label="\N"];
+	subgraph cluster6 {
+		graph [color="#000006",
+			labeljust=c,
+			style=solid
+		];
+		{
+			graph [rank=source];
+			s1	[height=0.166667,
+				label="",
+				shape=rect,
+				width=0.166667];
+		}
+		{
+			graph [rank=sink];
+			s2	[height=0.166667,
+				label="",
+				shape=rect,
+				width=0.166667];
+		}
+		x1	[height=0.5,
+			label="",
+			shape=rect,
+			width=1];
+		s1 -> x1;
+		x2	[height=0.5,
+			label="",
+			shape=rect,
+			width=1];
+		x1 -> x2;
+		x2 -> s2;
+	}
+	y	[height=0.5,
+		label="",
+		shape=rect,
+		width=1];
+	s1 -> y	[arrowhead=none];
+	y -> s2;
+}

@@ -1,0 +1,1 @@
+digraph { a -> b -> c; { rank=same; a; c } }

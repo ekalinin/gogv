@@ -1,0 +1,12 @@
+graph 1 2.7083 4.2778
+node s1 0.93056 3.9722 0.16667 0.16667 "" solid rect black lightgrey
+node x1 0.72222 2.8056 1 0.5 "" solid rect black lightgrey
+node x2 0.72222 1.4722 1 0.5 "" solid rect black lightgrey
+node s2 0.93056 0.30556 0.16667 0.16667 "" solid rect black lightgrey
+node y 2.2083 1.4722 1 0.5 "" solid rect black lightgrey
+edge s1 x1 4 0.91689 3.8836 0.89235 3.7495 0.83924 3.4591 0.79468 3.2155 solid black
+edge s1 y 7 0.97811 3.8849 1.0758 3.733 1.3038 3.3717 1.4722 3.0556 1.717 2.596 1.9671 2.0409 2.1036 1.7292 solid black
+edge x1 x2 4 0.72222 2.5522 0.72222 2.3657 0.72222 2.1026 0.72222 1.8845 solid black
+edge x2 s2 4 0.7664 1.2168 0.80261 1.0189 0.85348 0.74078 0.88896 0.54681 solid black
+edge y s2 4 1.9373 1.2168 1.6947 1.0005 1.3446 0.68848 1.1277 0.49512 solid black
+stop

@@ -1,0 +1,1 @@
+digraph { x -> a; subgraph cluster_c { a -> b -> c; d; { rank=source; d } } }

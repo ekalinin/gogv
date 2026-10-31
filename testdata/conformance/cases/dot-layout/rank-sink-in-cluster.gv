@@ -1,0 +1,1 @@
+digraph { subgraph cluster_c { a -> b; c; { rank=sink; c } } b -> y }

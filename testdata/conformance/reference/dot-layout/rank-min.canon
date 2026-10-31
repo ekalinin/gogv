@@ -1,0 +1,10 @@
+digraph {
+	node [label="\N"];
+	{
+		graph [rank=min];
+		d;
+	}
+	a -> b;
+	b -> c;
+	d -> e;
+}

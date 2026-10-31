@@ -37,11 +37,11 @@ func TestJudgeOutcomes(t *testing.T) {
 	shifted := clone(ref)
 	shifted["svg"] = Result{Stdout: []byte(okSVG + " shifted")}
 
-	clusterWarning := clone(ref)
+	labelWarning := clone(ref)
 	for _, f := range Formats {
-		r := clusterWarning[f]
-		r.Stderr = []byte("Warning: subgraph cluster_x: clusters are not supported yet\n")
-		clusterWarning[f] = r
+		r := labelWarning[f]
+		r.Stderr = []byte("Warning: edge a->b: label=x is not supported yet\n")
+		labelWarning[f] = r
 	}
 
 	otherNodes := clone(ref)
@@ -58,7 +58,7 @@ func TestJudgeOutcomes(t *testing.T) {
 			map[string]Outcome{"canon": Passed, "plain": Passed, "svg": Passed}},
 		{"listed failure", "dot-layout/listed", shifted, KnownDiff,
 			map[string]Outcome{"canon": Passed, "plain": Passed, "svg": KnownDiff}},
-		{"cluster before its slice", "dot-language/cluster", clusterWarning, NotSupported,
+		{"edge label before its slice", "dot-language/edge-label", labelWarning, NotSupported,
 			map[string]Outcome{"canon": NotSupported, "plain": NotSupported, "svg": NotSupported}},
 		{"unlisted svg failure", "dot-layout/shifted", shifted, Failed,
 			map[string]Outcome{"canon": Passed, "plain": Passed, "svg": Failed}},
@@ -200,7 +200,7 @@ func TestRun(t *testing.T) {
 	ref := okReference()
 	cases := []Case{
 		{ID: "dot-layout/same", Capability: "dot-layout", Source: []byte("same")},
-		{ID: "dot-language/cluster", Capability: "dot-language", Source: []byte("digraph { subgraph cluster_x { a } }")},
+		{ID: "dot-language/edge-label", Capability: "dot-language", Source: []byte("digraph { a -> b [label=x] }")},
 	}
 	for _, c := range cases {
 		if err := WriteReference(refDir, c.ID, ref); err != nil {
@@ -209,8 +209,8 @@ func TestRun(t *testing.T) {
 	}
 	render := func(src []byte, format string) Result {
 		r := ref[format]
-		if strings.Contains(string(src), "cluster") {
-			r.Stderr = []byte("Warning: subgraph cluster_x: clusters are not supported yet\n")
+		if strings.Contains(string(src), "label") {
+			r.Stderr = []byte("Warning: edge a->b: label=x is not supported yet\n")
 		}
 		return r
 	}
@@ -219,7 +219,7 @@ func TestRun(t *testing.T) {
 		t.Fatalf("run failed: %v", err)
 	}
 	if report.Results[1].Outcome != NotSupported {
-		t.Errorf("cluster case: outcome %q, want not supported yet", report.Results[1].Outcome)
+		t.Errorf("edge label case: outcome %q, want not supported yet", report.Results[1].Outcome)
 	}
 
 	failing := func(src []byte, format string) Result {

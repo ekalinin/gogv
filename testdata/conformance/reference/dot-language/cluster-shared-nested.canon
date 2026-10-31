@@ -1,0 +1,11 @@
+digraph {
+	node [label="\N"];
+	subgraph cluster_a {
+		a;
+	}
+	subgraph cluster_b {
+		subgraph cluster_c {
+		}
+		b;
+	}
+}

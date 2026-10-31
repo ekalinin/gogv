@@ -1,0 +1,15 @@
+digraph {
+	node [label="\N"];
+	subgraph cluster_a {
+		graph [color="#FF0000",
+			label=A,
+			labeljust=l,
+			style=solid
+		];
+		{
+			graph [rank=source];
+			b;
+		}
+		a;
+	}
+}

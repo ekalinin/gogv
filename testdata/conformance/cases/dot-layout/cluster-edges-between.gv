@@ -1,0 +1,11 @@
+digraph {
+	subgraph cluster_a { a1; a2; a1 -> a2 }
+	subgraph cluster_b { b1; b2; b1 -> b2 }
+	subgraph cluster_c { c1 }
+	a1 -> b2;
+	b1 -> a2;
+	a2 -> c1;
+	b2 -> c1;
+	x -> a1;
+	x -> c1;
+}

@@ -1,0 +1,7 @@
+digraph {
+	graph [rank=same];
+	node [label="\N"];
+	subgraph s {
+		a -> b;
+	}
+}

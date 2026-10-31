@@ -1,0 +1,9 @@
+digraph {
+	node [label="\N"];
+	{
+		graph [rank=sink];
+		d;
+	}
+	a -> b;
+	b -> c;
+}

@@ -1,0 +1,1 @@
+digraph { subgraph cluster_a { color="#FF0000"; label="A"; a -> b } }
