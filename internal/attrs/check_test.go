@@ -75,6 +75,7 @@ func TestSupportedAttributesGiveNoWarning(t *testing.T) {
 	src := `digraph { rankdir=LR; nodesep=1; ranksep=0.4; splines=polyline; remincross=true; searchsize=500;
 		label="title"; fontname="Courier"; fontsize=12; fontcolor="#123456";
 		a [shape=diamond, color="#00FF00", width=1, height=2, label="x\ny", fontname="Helvetica", fontsize=10, fontcolor="#000000"];
+		r [shape=rect, style=rounded]; s [style=solid];
 		a -> b [arrowhead=empty, arrowtail=none, dir=both, arrowsize=2, minlen=2, color="#ff0000", style=invis, constraint=false] }`
 	if w := check(t, src); len(w) != 0 {
 		t.Errorf("warnings %q", w)
@@ -103,6 +104,7 @@ func TestNotSupportedYetWarnings(t *testing.T) {
 		{"digraph { splines=ortho; a }", "graph: splines=ortho is not supported yet, using spline"},
 		{`digraph { a -> b [label="some text"] }`, "edge a->b: label is not supported yet"},
 		{"digraph { a [style=filled] }", "node a: style=filled is not supported yet"},
+		{"digraph { a [shape=diamond, style=rounded] }", "node a: style=rounded with shape=diamond is not supported yet, using solid"},
 	}
 	for _, tt := range tests {
 		got := check(t, tt.src)

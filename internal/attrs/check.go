@@ -107,6 +107,12 @@ func Check(g *graph.Graph) []Warning {
 		for _, s := range root.Symbols(graph.NodeKind) {
 			c.value(graph.NodeKind, NodeName(n), s.Name, n.AttrAt(s))
 		}
+		// Rounded corners are drawn on rectangles only.
+		style, _ := n.Attr(root, "style")
+		shape, _ := n.Attr(root, "shape")
+		if style.S == "rounded" && (shape.S == "diamond" || shape.S == "hexagon" || shape.S == "octagon") {
+			c.add(Warning{Object: NodeName(n), Feature: "style=rounded with shape=" + shape.S, Default: "solid"})
+		}
 	}
 	for _, e := range root.Edges() {
 		for _, s := range root.Symbols(graph.EdgeKind) {

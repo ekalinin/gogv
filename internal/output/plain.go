@@ -23,7 +23,7 @@ func Plain(res *layout.Result) []byte {
 			fill = n.Color
 		}
 		b.WriteString("node " + quoteID(n.Node.Name, false) + " " + in(n.X) + " " + in(n.Y) + " " + in(n.W) + " " + in(n.H) +
-			" " + quoteID(n.LabelText, false) + " solid " + n.Shape + " " + n.Color + " " + fill + "\n")
+			" " + quoteID(n.LabelText, false) + " " + n.Style + " " + n.Shape + " " + n.Color + " " + fill + "\n")
 	}
 	for _, e := range res.Edges {
 		b.WriteString("edge " + quoteID(e.Edge.Tail.Name, false) + " " + quoteID(e.Edge.Head.Name, false) + " " + strconv.Itoa(len(e.Points)))

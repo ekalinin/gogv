@@ -43,10 +43,40 @@ func PolygonVertices(shape string, w, h float64) []Point {
 	return nil
 }
 
+// CornerRadius is the radius of the corners of a rounded rectangle: a
+// third of its smaller side, at most 12 points.
+func CornerRadius(w, h float64) float64 { return min(12, min(w, h)/3) }
+
+// RoundedOutline returns the outline of a rounded rectangle relative to its
+// center, y growing upward, as a piecewise cubic Bezier curve: from the right
+// end of the top side, counterclockwise, with straight sides as degenerate
+// segments and each corner as one segment whose control points are half a
+// radius from its ends towards the corner.
+func RoundedOutline(w, h float64) []Point {
+	hw, hh := half(w), half(h)
+	r := CornerRadius(w, h)
+	k := half(r)
+	pts := []Point{{hw - r, hh}}
+	side := func(to Point) {
+		from := pts[len(pts)-1]
+		pts = append(pts, from, to, to)
+	}
+	corner := func(c1, c2, to Point) { pts = append(pts, c1, c2, to) }
+	side(Point{-hw + r, hh})
+	corner(Point{-hw + k, hh}, Point{-hw, hh - k}, Point{-hw, hh - r})
+	side(Point{-hw, -hh + r})
+	corner(Point{-hw, -hh + k}, Point{-hw + k, -hh}, Point{-hw + r, -hh})
+	side(Point{hw - r, -hh})
+	corner(Point{hw - k, -hh}, Point{hw, -hh + k}, Point{hw, -hh + r})
+	side(Point{hw, hh - r})
+	corner(Point{hw, hh - k}, Point{hw - k, hh}, Point{hw - r, hh})
+	return pts
+}
+
 // insideShape reports whether a point, relative to the center of a node in
 // the final orientation, is inside the node's outline.
 func insideShape(n *NodeResult, d Point) bool {
-	hw, hh := n.W/2, n.H/2
+	hw, hh := half(n.W), half(n.H)
 	if hw <= 0 || hh <= 0 {
 		return false
 	}
@@ -55,7 +85,16 @@ func insideShape(n *NodeResult, d Point) bool {
 		x, y := d.X/hw, d.Y/hh
 		return float64(x*x)+float64(y*y) <= 1
 	case "box", "rect", "rectangle", "plaintext":
-		return math.Abs(d.X) <= hw && math.Abs(d.Y) <= hh
+		if math.Abs(d.X) > hw || math.Abs(d.Y) > hh {
+			return false
+		}
+		if !n.Rounded {
+			return true
+		}
+		// Outside the quarter circle of a rounded corner.
+		r := CornerRadius(n.W, n.H)
+		cx, cy := math.Abs(d.X)-(hw-r), math.Abs(d.Y)-(hh-r)
+		return cx <= 0 || cy <= 0 || float64(cx*cx)+float64(cy*cy) <= float64(r*r)
 	case "diamond":
 		return math.Abs(d.X)/hw+math.Abs(d.Y)/hh <= 1
 	}

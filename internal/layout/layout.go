@@ -28,6 +28,10 @@ type NodeResult struct {
 	Color     string
 	// ColorSet is set when the color attribute gives the color.
 	ColorSet bool
+	// Style is the supported style of the node: "solid" or "rounded".
+	Style string
+	// Rounded is set for a rectangle with rounded corners.
+	Rounded bool
 }
 
 // EdgeResult is a laid-out edge.
@@ -105,9 +109,12 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 		}
 		w, h := nodeSize(shape, text, nodeValue(g, n, "width"), nodeValue(g, n, "height"))
 		color := nodeColor(nodeValue(g, n, "color"))
+		style := supported(graph.NodeKind, "style", nodeValue(g, n, "style"), "solid")
 		res.Nodes = append(res.Nodes, NodeResult{
 			Node: n, W: w, H: h, Shape: shape, Label: text, LabelText: label.Expand(labelText, obj),
 			Color: color, ColorSet: color == nodeValue(g, n, "color").S,
+			Style:   style,
+			Rounded: isRectangular(shape) && shape != "plaintext" && style == "rounded",
 		})
 		lw[i], lh[i] = w, h
 		if p.lr {

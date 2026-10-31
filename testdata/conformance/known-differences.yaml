@@ -12,3 +12,9 @@
 - id: dot-language/node-lists
   reason: "x coordinates: the optimum of the positioning is not unique, and gogv takes another one than the reference (d, e, f, g, h are 9 points apart)"
   change: tune-layout-heuristics
+- id: state-diagram/history-style-1
+  reason: "x coordinates: the optimum of the positioning is not unique, and gogv takes another one than the reference (the rounded states are 4 to 14 points apart)"
+  change: tune-layout-heuristics
+- id: vega-nonreg/group2681-history_style_all_forms-1
+  reason: "the same graph as state-diagram/history-style-1"
+  change: tune-layout-heuristics

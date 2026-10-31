@@ -56,6 +56,7 @@ var supported = [3]map[string]spec{
 		"width":     anyValue,
 		"height":    anyValue,
 		"color":     colorValue,
+		"style":     oneOf("solid", "solid", "rounded"),
 	},
 	graph.EdgeKind: {
 		"minlen":     anyValue,

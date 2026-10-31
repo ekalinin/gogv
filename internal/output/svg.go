@@ -95,18 +95,41 @@ func writeNode(b *bytes.Buffer, n *layout.NodeResult, id int) {
 		fmt.Fprintf(b, "<ellipse fill=\"%s\" stroke=\"%s\" cx=\"%s\" cy=\"%s\" rx=\"%s\" ry=\"%s\"/>\n",
 			color, color, svgNumber(n.X), y(n.Y), svgNumber(n.W/2), svgNumber(n.H/2))
 	case "plaintext":
-	default:
-		var pts []string
-		vs := layout.PolygonVertices(n.Shape, n.W, n.H)
-		for _, v := range append(vs, vs[0]) {
-			pts = append(pts, svgNumber(n.X+v.X)+","+y(n.Y+v.Y))
+	case "box", "rect", "rectangle":
+		if !n.Rounded {
+			writePolygon(b, n, color)
+			break
 		}
-		fmt.Fprintf(b, "<polygon fill=\"none\" stroke=\"%s\" points=\"%s\"/>\n", color, strings.Join(pts, " "))
+		var d strings.Builder
+		for i, p := range layout.RoundedOutline(n.W, n.H) {
+			switch i {
+			case 0:
+				d.WriteString("M")
+			case 1:
+				d.WriteString("C")
+			default:
+				d.WriteString(" ")
+			}
+			d.WriteString(svgNumber(n.X+p.X) + "," + y(n.Y+p.Y))
+		}
+		fmt.Fprintf(b, "<path fill=\"none\" stroke=\"%s\" d=\"%s\"/>\n", color, d.String())
+	default:
+		writePolygon(b, n, color)
 	}
 	if n.Shape != "point" {
 		writeText(b, n.Label, layout.Point{X: n.X, Y: n.Y})
 	}
 	b.WriteString("</g>\n")
+}
+
+// writePolygon writes the outline of a polygonal node.
+func writePolygon(b *bytes.Buffer, n *layout.NodeResult, color string) {
+	var pts []string
+	vs := layout.PolygonVertices(n.Shape, n.W, n.H)
+	for _, v := range append(vs, vs[0]) {
+		pts = append(pts, svgNumber(n.X+v.X)+","+y(n.Y+v.Y))
+	}
+	fmt.Fprintf(b, "<polygon fill=\"none\" stroke=\"%s\" points=\"%s\"/>\n", color, strings.Join(pts, " "))
 }
 
 // writeText writes the lines of a label centered on c: each line on its own

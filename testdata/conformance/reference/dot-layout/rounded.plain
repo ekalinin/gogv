@@ -1,0 +1,10 @@
+graph 1 2.7576 3.2
+node a 0.5 2.95 0.75 0.5 a rounded rect black lightgrey
+node b 0.5 1.95 0.75 0.5 b rounded rect black lightgrey
+node c 0.5 0.95 1 0.5 "" rounded rect black lightgrey
+node d 0.5 0.1 0.2 0.2 "" rounded rect black lightgrey
+node e 1.9444 2.95 1.6262 0.5 "wide rounded box" rounded box black lightgrey
+edge a b 4 0.5 2.6958 0.5 2.5945 0.5 2.474 0.5 2.3602 solid black
+edge b c 4 0.5 1.6958 0.5 1.5945 0.5 1.474 0.5 1.3602 solid black
+edge c d 4 0.5 0.69386 0.5 0.58955 0.5 0.46767 0.5 0.36264 solid black
+stop

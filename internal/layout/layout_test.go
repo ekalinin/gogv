@@ -342,3 +342,21 @@ func TestOutlines(t *testing.T) {
 		}
 	}
 }
+
+func TestRoundedRectangle(t *testing.T) {
+	n := layoutOf(t, `digraph { a [shape=rect, style=rounded, label="", width=1, height=0.5]; b [shape=diamond, style=rounded] }`)
+	a := n["a"]
+	if !a.Rounded || !approx(a.W, 72) || !approx(a.H, 36) || !approx(CornerRadius(a.W, a.H), 12) {
+		t.Errorf("rounded rect: %+v", a)
+	}
+	if n["b"].Rounded {
+		t.Error("a diamond got rounded corners")
+	}
+	// Inside the bounding box but outside the rounded corner.
+	if insideShape(&a, Point{35.5, 17.5}) || !insideShape(&a, Point{35.5, 0}) {
+		t.Error("corner of the rounded rectangle")
+	}
+	if got := CornerRadius(14.4, 36); !approx(got, 4.8) {
+		t.Errorf("radius of a 14.4 x 36 rectangle: %v", got)
+	}
+}
