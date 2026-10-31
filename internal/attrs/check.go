@@ -5,7 +5,6 @@ package attrs
 
 import (
 	"regexp"
-	"strings"
 
 	"github.com/ekalinin/gogv/internal/graph"
 	"github.com/ekalinin/gogv/internal/textmetrics"
@@ -16,7 +15,7 @@ import (
 type Warning struct {
 	// Object names the graph, subgraph, node or edge, as "node a".
 	Object string
-	// Feature names what is not supported: "shape=record", "clusters".
+	// Feature names what is not supported: "shape=record", "HTML labels".
 	Feature string
 	// Plural is set when Feature is a plural noun ("clusters are ...").
 	Plural bool
@@ -73,11 +72,8 @@ func EdgeName(g *graph.Graph, e *graph.Edge) string {
 	return "edge " + e.Tail.Name + op + e.Head.Name
 }
 
-// IsCluster reports whether a subgraph is a cluster: its name starts with
-// "cluster".
-func IsCluster(g *graph.Graph) bool {
-	return !g.IsRoot() && strings.HasPrefix(g.Name, "cluster")
-}
+// IsCluster reports whether a subgraph is a cluster.
+func IsCluster(g *graph.Graph) bool { return g.IsCluster() }
 
 // Check returns the warnings for the features of g that gogv does not
 // support yet, in a stable order: the graph, its subgraphs, the nodes, then
@@ -94,12 +90,21 @@ func Check(g *graph.Graph) []Warning {
 	}
 	for _, sg := range root.Graphs()[1:] {
 		if IsCluster(sg) {
-			c.add(Warning{Object: GraphName(sg), Feature: "clusters", Plural: true})
-		}
-		if s := root.Symbol(graph.GraphKind, "rank"); s != nil {
+			// A cluster draws the graph attributes that differ from those of
+			// the cluster or graph it is drawn in.
+			outer := sg.Parent
+			for !outer.IsRoot() && !IsCluster(outer) {
+				outer = outer.Parent
+			}
+			for _, s := range root.Symbols(graph.GraphKind) {
+				if v := sg.AttrAt(s); sg.AttrSetHere(s) || v != outer.AttrAt(s) {
+					c.value(graph.GraphKind, GraphName(sg), s.Name, v)
+				}
+			}
+		} else if s := root.Symbol(graph.GraphKind, "rank"); s != nil {
 			v := sg.AttrAt(s)
 			if v.S != "" && v != sg.Parent.AttrAt(s) {
-				c.add(Warning{Object: GraphName(sg), Feature: feature("rank", v.S)})
+				c.value(graph.GraphKind, GraphName(sg), "rank", v)
 			}
 		}
 	}
@@ -136,7 +141,7 @@ func (c *checker) add(w Warning) {
 	c.warnings = append(c.warnings, w)
 }
 
-// value checks one attribute value of the root graph, a node or an edge.
+// value checks one attribute value of a graph, a cluster, a node or an edge.
 func (c *checker) value(k graph.Kind, object, name string, v graph.Value) {
 	if v.S == "" && !v.HTML {
 		return

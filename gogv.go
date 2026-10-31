@@ -87,6 +87,9 @@ func Render(ctx context.Context, src string, format string) ([]byte, []Warning, 
 	var out bytes.Buffer
 	for _, decl := range file.Graphs {
 		g := dotlang.Build(decl)
+		for _, w := range g.ResolveClusters() {
+			warnings = append(warnings, Warning{text: w})
+		}
 		for _, w := range attrs.Check(g) {
 			warnings = append(warnings, Warning{Object: w.Object, Feature: w.Feature, Default: w.Default, text: w.String()})
 		}
