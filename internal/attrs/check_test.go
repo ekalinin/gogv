@@ -63,7 +63,8 @@ func TestSupportedValues(t *testing.T) {
 		{graph.EdgeKind, "arrowhead", "vee", false},
 		{graph.EdgeKind, "style", "invis", true},
 		{graph.EdgeKind, "style", "dashed", false},
-		{graph.EdgeKind, "label", "x", false},
+		{graph.EdgeKind, "label", "x", true},
+		{graph.EdgeKind, "labelangle", "30", false},
 	} {
 		if got := IsSupported(tt.kind, tt.name, tt.value); got != tt.want {
 			t.Errorf("IsSupported(%v, %q, %q) = %v", tt.kind, tt.name, tt.value, got)
@@ -94,6 +95,19 @@ func TestClusterAttributesGiveNoWarning(t *testing.T) {
 	}
 }
 
+func TestLabelAttributesGiveNoWarning(t *testing.T) {
+	table := `<<TABLE BGCOLOR="#000009" FIXEDSIZE="TRUE" WIDTH="57" HEIGHT="17"><TR><TD></TD></TR></TABLE>>`
+	for _, src := range []string{
+		`digraph { a [xlabel="X"]; a -> b [label="L", xlabel="X", headlabel="H", taillabel="T", fontname="Helvetica", fontsize=10, fontcolor="#0000FF", sametail=t] }`,
+		"digraph { a [label=" + table + ", xlabel=" + table + "]; a -> b [label=" + table + ", xlabel=" + table + ", headlabel=" + table + ", taillabel=" + table + "] }",
+		"digraph { subgraph cluster_a { label=" + table + "; a } }",
+	} {
+		if w := check(t, src); len(w) != 0 {
+			t.Errorf("%s: warnings %q", src, w)
+		}
+	}
+}
+
 func TestUnknownAttributeGivesNoWarning(t *testing.T) {
 	if w := check(t, "digraph { a [foo=bar]; a -> b [baz=1] }"); len(w) != 0 {
 		t.Errorf("warnings %q", w)
@@ -116,7 +130,11 @@ func TestNotSupportedYetWarnings(t *testing.T) {
 		{`digraph { a [fontname="Verdana"] }`, "node a: fontname=Verdana is not supported yet, using Times"},
 		{"digraph { a [color=red] }", "node a: color=red is not supported yet, using black"},
 		{"digraph { splines=ortho; a }", "graph: splines=ortho is not supported yet, using spline"},
-		{`digraph { a -> b [label="some text"] }`, "edge a->b: label is not supported yet"},
+		{`digraph { a -> b [labelangle=30, headlabel="H"] }`, "edge a->b: labelangle=30 is not supported yet"},
+		{"digraph { a -> b [label=<<TABLE><TR><TD>x</TD></TR></TABLE>>] }", "edge a->b: HTML labels are not supported yet"},
+		{"digraph { a [label=<<TABLE><TR><TD PORT=\"p\"></TD></TR></TABLE>>] }", `node a: HTML labels are not supported yet, using \N`},
+		{`digraph { label=<<TABLE WIDTH="10"><TR><TD></TD></TR></TABLE>>; a }`, "graph: HTML labels are not supported yet"},
+		{"digraph { a:p -> b }", "edge a->b: tailport=p is not supported yet"},
 		{"digraph { a [style=filled] }", "node a: style=filled is not supported yet"},
 		{"digraph { a [shape=diamond, style=rounded] }", "node a: style=rounded with shape=diamond is not supported yet, using solid"},
 	}

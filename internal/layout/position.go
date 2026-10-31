@@ -17,11 +17,12 @@ var omegaTable = [3]int{1, 1, 8}
 // placeX assigns integer x coordinates by the network simplex on the
 // auxiliary graph of section 4.2: an extra node for each edge pulls its ends
 // together with weight omega times the number of edges it stands for, and an
-// edge between neighbors in a rank keeps them apart by their half widths
-// plus nodesep, rounded. extra, when not nil, adds nodes from next on and
+// edge between neighbors in a rank keeps them apart by how far they reach
+// towards each other (half their widths, for nodes centered on their x) plus
+// nodesep, rounded. extra, when not nil, adds nodes from next on and
 // their edges; the result holds their x coordinates after those of the
 // ranked nodes.
-func (g *ranked) placeX(ctx context.Context, width []float64, nodesep float64, search int, extra func(next int) ([]nsEdge, int)) ([]float64, error) {
+func (g *ranked) placeX(ctx context.Context, left, right []float64, nodesep float64, search int, extra func(next int) ([]nsEdge, int)) ([]float64, error) {
 	n := len(g.nodes)
 	var edges []nsEdge
 	next := n
@@ -51,7 +52,7 @@ func (g *ranked) placeX(ctx context.Context, width []float64, nodesep float64, s
 	for _, nodes := range g.ranks {
 		for i := 0; i+1 < len(nodes); i++ {
 			v, w := nodes[i], nodes[i+1]
-			sep := int(math.Round(half(width[v]) + half(width[w]) + nodesep))
+			sep := int(math.Round(right[v] + left[w] + nodesep + g.labelSep[[2]int{v, w}]))
 			edges = append(edges, nsEdge{tail: v, head: w, minlen: sep, weight: 0})
 		}
 	}

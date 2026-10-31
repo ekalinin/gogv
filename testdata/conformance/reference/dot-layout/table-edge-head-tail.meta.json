@@ -1,0 +1,14 @@
+{
+  "canon": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of edge a -> b\n"
+  },
+  "plain": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of edge a -> b\n"
+  },
+  "svg": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of edge a -> b\n"
+  }
+}

@@ -1,0 +1,4 @@
+digraph {
+	node [label="\N"];
+	a -> b	[label=<<TABLE BGCOLOR="#000009" FIXEDSIZE="TRUE" WIDTH="57" HEIGHT="17"><TR><TD></TD></TR></TABLE>>];
+}

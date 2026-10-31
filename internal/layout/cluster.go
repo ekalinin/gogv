@@ -166,11 +166,11 @@ func (t *clusterTree) readLabels() {
 		c.color = supported(graph.GraphKind, "color", graphValue(c.g, "color"), "black")
 		c.labelJust = supported(graph.GraphKind, "labeljust", graphValue(c.g, "labeljust"), "c")
 		v := graphValue(c.g, "label")
-		if v.S == "" || v.HTML {
+		if v.S == "" {
 			continue
 		}
-		c.label = makeText(v.S, label.Object{Graph: c.g.Name}, graphValue(c.g, "fontname"), graphValue(c.g, "fontcolor"), graphValue(c.g, "fontsize"))
-		if len(c.label.Lines) > 0 {
+		c.label = labelOf(v, "", label.Object{Graph: c.g.Name}, graphValue(c.g, "fontname"), graphValue(c.g, "fontcolor"), graphValue(c.g, "fontsize"))
+		if c.label.Present() {
 			c.labelW, c.labelH = c.label.Width+labelMarginX, c.label.Height+labelMarginY
 		}
 	}
@@ -438,7 +438,7 @@ const clusterCompactness = 2
 // border, and so do two neighboring clusters. In rankdir=LR the label lies
 // at the right, beyond the nodes. It returns the edges and the next free
 // node number.
-func (t *clusterTree) xEdges(g *ranked, width []float64, next int, lr bool) ([]nsEdge, int) {
+func (t *clusterTree) xEdges(g *ranked, left, right []float64, next int, lr bool) ([]nsEdge, int) {
 	var es []nsEdge
 	sep := func(d float64) int { return int(math.Round(d)) }
 	for c := 1; c < len(t.clusters); c++ {
@@ -471,8 +471,8 @@ func (t *clusterTree) xEdges(g *ranked, width []float64, next int, lr bool) ([]n
 		}
 		cl := t.clusters[c]
 		es = append(es,
-			nsEdge{tail: cl.ln, head: v, minlen: sep(clusterMargin + half(width[v]))},
-			nsEdge{tail: v, head: cl.rn, minlen: sep(clusterMargin + half(width[v]) + labelSide(c))})
+			nsEdge{tail: cl.ln, head: v, minlen: sep(clusterMargin + left[v])},
+			nsEdge{tail: v, head: cl.rn, minlen: sep(clusterMargin + right[v] + labelSide(c))})
 	}
 	for _, nodes := range g.ranks {
 		for i := 0; i+1 < len(nodes); i++ {
@@ -481,11 +481,11 @@ func (t *clusterTree) xEdges(g *ranked, width []float64, next int, lr bool) ([]n
 			common := t.common(cu, cv)
 			outerA, outerB := -1, -1
 			for a := cu; a != common; a = t.clusters[a].parent {
-				es = append(es, nsEdge{tail: t.clusters[a].rn, head: v, minlen: sep(clusterMargin + half(width[v]))})
+				es = append(es, nsEdge{tail: t.clusters[a].rn, head: v, minlen: sep(clusterMargin + left[v])})
 				outerA = a
 			}
 			for b := cv; b != common; b = t.clusters[b].parent {
-				es = append(es, nsEdge{tail: u, head: t.clusters[b].ln, minlen: sep(half(width[u]) + clusterMargin)})
+				es = append(es, nsEdge{tail: u, head: t.clusters[b].ln, minlen: sep(right[u] + clusterMargin)})
 				outerB = b
 			}
 			if outerA >= 0 && outerB >= 0 {

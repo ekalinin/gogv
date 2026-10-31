@@ -1,0 +1,1 @@
+digraph { a -> b [taillabel=<<TABLE BGCOLOR="#00000A" FIXEDSIZE="TRUE" WIDTH="8" HEIGHT="15"><TR><TD></TD></TR></TABLE>>, headlabel=<<TABLE BGCOLOR="#00000B" FIXEDSIZE="TRUE" WIDTH="20" HEIGHT="15"><TR><TD></TD></TR></TABLE>>] }

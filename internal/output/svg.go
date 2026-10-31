@@ -120,7 +120,10 @@ func writeNode(b *bytes.Buffer, n *layout.NodeResult, id int) {
 		writePolygon(b, n, color)
 	}
 	if n.Shape != "point" {
-		writeText(b, n.Label, layout.Point{X: n.X, Y: n.Y})
+		writeLabel(b, n.Label, layout.Point{X: n.X, Y: n.Y}, color)
+	}
+	if n.XLabel.Present() {
+		writeLabel(b, n.XLabel, n.XLabelPos, color)
 	}
 	b.WriteString("</g>\n")
 }
@@ -132,8 +135,8 @@ func writeCluster(b *bytes.Buffer, c *layout.ClusterResult, id int) {
 	x0, y0, x1, y1 := svgNumber(c.X0), y(c.Y0), svgNumber(c.X1), y(c.Y1)
 	fmt.Fprintf(b, "<polygon fill=\"none\" stroke=\"%s\" points=\"%s,%s %s,%s %s,%s %s,%s %s,%s\"/>\n",
 		svgColor(c.Color), x0, y0, x0, y1, x1, y1, x1, y0, x0, y0)
-	if len(c.Label.Lines) > 0 {
-		writeText(b, c.Label, c.LabelPos)
+	if c.Label.Present() {
+		writeLabel(b, c.Label, c.LabelPos, svgColor(c.Color))
 	}
 	b.WriteString("</g>\n")
 }
@@ -146,6 +149,32 @@ func writePolygon(b *bytes.Buffer, n *layout.NodeResult, color string) {
 		pts = append(pts, svgNumber(n.X+v.X)+","+y(n.Y+v.Y))
 	}
 	fmt.Fprintf(b, "<polygon fill=\"none\" stroke=\"%s\" points=\"%s\"/>\n", color, strings.Join(pts, " "))
+}
+
+// writeLabel writes a label centered on c: its lines, or a single-cell
+// table as the reference draws one: a polygon filled with its background
+// color, the border of the table and the border of its empty cell at the
+// upper left, the borders in pen, the color of the object's outline.
+func writeLabel(b *bytes.Buffer, t layout.Text, c layout.Point, pen string) {
+	if t.Table == nil {
+		writeText(b, t, c)
+		return
+	}
+	box := func(fill, stroke string, x0, y0, x1, y1 float64) {
+		fmt.Fprintf(b, "<polygon fill=\"%s\" stroke=\"%s\" points=\"%s,%s %s,%s %s,%s %s,%s %s,%s\"/>\n", fill, stroke,
+			svgNumber(x0), y(y0), svgNumber(x0), y(y1), svgNumber(x1), y(y1), svgNumber(x1), y(y0), svgNumber(x0), y(y0))
+	}
+	// Halves held apart from the sums, so that they are not fused into a
+	// multiply-add.
+	hw, hh := float64(t.Width/2), float64(t.Height/2)
+	x0, x1 := c.X-hw, c.X+hw
+	y0, y1 := c.Y-hh, c.Y+hh
+	if t.Table.BgColor != "" {
+		box(svgColor(t.Table.BgColor), "none", x0, y0, x1, y1)
+	}
+	box("none", pen, x0, y0, x1, y1)
+	cx, cy := x0+label.CellInset, y1-label.CellInset
+	box("none", pen, cx, cy-label.EmptyCell, cx+label.EmptyCell, cy)
 }
 
 // writeText writes the lines of a label centered on c: each line on its own
@@ -211,6 +240,14 @@ func writeEdge(b *bytes.Buffer, e *layout.EdgeResult, id int, directed bool) {
 			fill = "none"
 		}
 		fmt.Fprintf(b, "<polygon fill=\"%s\" stroke=\"%s\" points=\"%s\"/>\n", fill, color, strings.Join(s, " "))
+	}
+	for _, l := range []struct {
+		t layout.Text
+		c layout.Point
+	}{{e.Label, e.LabelPos}, {e.XLabel, e.XLabelPos}, {e.HeadLabel, e.HeadLabelPos}, {e.TailLabel, e.TailLabelPos}} {
+		if l.t.Present() {
+			writeLabel(b, l.t, l.c, color)
+		}
 	}
 	b.WriteString("</g>\n")
 }

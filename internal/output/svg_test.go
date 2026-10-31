@@ -6,6 +6,7 @@ package output
 import (
 	"context"
 	"regexp"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -125,5 +126,28 @@ func TestSVGClusters(t *testing.T) {
 	box := regexp.MustCompile(`<g id="clust1" class="cluster">\n<title>cluster_a</title>\n<polygon fill="none" stroke="#ff0000" points="[^"]+"/>\n<text [^>]*>A</text>\n</g>`)
 	if !box.MatchString(svg) {
 		t.Errorf("cluster box:\n%s", svg)
+	}
+}
+
+func TestSVGEdgeLabels(t *testing.T) {
+	svg := render(t, `digraph { a -> b [label="x"] }`, SVG)
+	if !regexp.MustCompile(`(?s)<g id="edge1" class="edge">.*<polygon fill="black"[^>]*/>\n<text [^>]*>x</text>\n</g>`).MatchString(svg) {
+		t.Errorf("edge label after the arrowhead:\n%s", svg)
+	}
+	svg = render(t, `digraph { a -> b [label=<<TABLE BGCOLOR="#000009" FIXEDSIZE="TRUE" WIDTH="57" HEIGHT="17"><TR><TD></TD></TR></TABLE>>] }`, SVG)
+	m := regexp.MustCompile(`<polygon fill="#000009" stroke="none" points="([-\d.]+),([-\d.]+) [-\d.]+,([-\d.]+) ([-\d.]+),[-\d.]+ [^"]*"/>\n<polygon fill="none" stroke="black" points="[^"]+"/>\n<polygon fill="none" stroke="black" points="[^"]+"/>`).FindStringSubmatch(svg)
+	if m == nil {
+		t.Fatalf("table label polygons:\n%s", svg)
+	}
+	num := func(s string) float64 { v, _ := strconv.ParseFloat(s, 64); return v }
+	if w, h := num(m[4])-num(m[1]), num(m[2])-num(m[3]); w != 57 || h != 17 {
+		t.Errorf("table box %v x %v, want 57 x 17", w, h)
+	}
+}
+
+func TestPlainEdgeLabel(t *testing.T) {
+	plain := render(t, `digraph { a -> b [label="x"] }`, Plain)
+	if !regexp.MustCompile(`(?m)^edge a b 4( [-\d.]+){8} x [-\d.]+ [-\d.]+ solid black$`).MatchString(plain) {
+		t.Errorf("edge line:\n%s", plain)
 	}
 }

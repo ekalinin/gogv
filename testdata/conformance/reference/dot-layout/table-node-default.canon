@@ -1,0 +1,5 @@
+digraph {
+	node [label="\N"];
+	z	[label=<<TABLE BGCOLOR="#000007" FIXEDSIZE="TRUE" WIDTH="18" HEIGHT="11"><TR><TD></TD></TR></TABLE>>,
+		shape=rect];
+}

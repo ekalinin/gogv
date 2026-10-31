@@ -1,0 +1,1 @@
+digraph { a -> b [headlabel="1", taillabel="*"]; a -> c [headlabel="0..1", taillabel="1"] }

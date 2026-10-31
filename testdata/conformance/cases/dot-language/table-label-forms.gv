@@ -1,0 +1,1 @@
+digraph { a [shape=rect, label=<<table bgcolor="#00000A" fixedsize="true" width="40" height="20"> <tr> <td></td> </tr> </table>>]; b [label=<<TABLE><TR><TD>x</TD></TR></TABLE>>]; c [label=<<TABLE><TR><TD PORT="p"></TD></TR></TABLE>>]; d [label=<<TABLE><TR><TD></TD><TD></TD></TR></TABLE>>]; e [label=<<TABLE BORDER="0"><TR><TD></TD></TR></TABLE>>] }

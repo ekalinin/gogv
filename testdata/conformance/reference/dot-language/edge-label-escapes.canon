@@ -1,0 +1,5 @@
+digraph G {
+	node [label="\N"];
+	a -> b	[label="\T to \H"];
+	b -> c	[label="\E in \G"];
+}

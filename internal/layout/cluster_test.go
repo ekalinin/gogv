@@ -222,6 +222,12 @@ func TestEdgeAroundCluster(t *testing.T) {
 	}
 }
 
+// flat reports whether an edge joins two nodes at the same height.
+func flat(res *Result, e EdgeResult) bool {
+	n := nodesOf(res)
+	return approx(n[e.Edge.Tail.Name].Y, n[e.Edge.Head.Name].Y)
+}
+
 // memberOf reports whether the drawn cluster c has node n.
 func memberOf(c ClusterResult, n *graph.Node) bool { return c.Graph.HasNode(n) }
 
@@ -248,8 +254,9 @@ func clusterCases(t *testing.T) []conformance.Case {
 }
 
 // No node outside a cluster lies in its box, so the nodes of each cluster
-// are next to each other on each of its ranks; no edge with no end in a
-// cluster crosses its box.
+// are next to each other on each of its ranks; no edge between two ranks
+// with no end in a cluster crosses its box. A flat edge can: the reference
+// draws one across the box of a cluster that holds its rank, too.
 func TestClustersKeepOthersOut(t *testing.T) {
 	for _, cs := range clusterCases(t) {
 		res := layoutResolved(t, string(cs.Source))
@@ -260,7 +267,7 @@ func TestClustersKeepOthersOut(t *testing.T) {
 				}
 			}
 			for _, e := range res.Edges {
-				if e.Invisible || memberOf(c, e.Edge.Tail) || memberOf(c, e.Edge.Head) {
+				if e.Invisible || memberOf(c, e.Edge.Tail) || memberOf(c, e.Edge.Head) || flat(res, e) {
 					continue
 				}
 				if curveInside(e, c) {
