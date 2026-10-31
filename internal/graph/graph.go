@@ -60,6 +60,8 @@ type root struct {
 	edges            []*Edge
 	graphs           []*Graph // the root and every subgraph, in creation order
 	anonymous        int
+	// rankedIn is the cluster that a rank subgraph took each node out of.
+	rankedIn map[*Node]*Graph
 }
 
 // Graph is the root graph or a subgraph.

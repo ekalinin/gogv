@@ -82,6 +82,18 @@ func TestSupportedAttributesGiveNoWarning(t *testing.T) {
 	}
 }
 
+func TestClusterAttributesGiveNoWarning(t *testing.T) {
+	for _, src := range []string{
+		`digraph { subgraph cluster_a { label="A"; labeljust=l; style=solid; color="#FF0000"; a; { rank=source; b } } }`,
+		`digraph { rank=same; labeljust=r; color="#00ff00"; subgraph cluster_a { labeljust=c; fontname="Helvetica"; fontsize=10; fontcolor="#0000ff"; a } }`,
+		"digraph { { rank=same; a } { rank=min; b } { rank=max; c } { rank=source; d } { rank=sink; e } }",
+	} {
+		if w := check(t, src); len(w) != 0 {
+			t.Errorf("%s: warnings %q", src, w)
+		}
+	}
+}
+
 func TestUnknownAttributeGivesNoWarning(t *testing.T) {
 	if w := check(t, "digraph { a [foo=bar]; a -> b [baz=1] }"); len(w) != 0 {
 		t.Errorf("warnings %q", w)
@@ -94,8 +106,10 @@ func TestNotSupportedYetWarnings(t *testing.T) {
 		want string
 	}{
 		{"digraph { a [shape=record] }", "node a: shape=record is not supported yet, using ellipse"},
-		{"digraph { subgraph cluster_x { a b } }", "subgraph cluster_x: clusters are not supported yet"},
-		{"digraph { { rank=same; a b } }", "subgraph: rank=same is not supported yet"},
+		{"digraph { subgraph cluster_x { style=filled; a } }", "subgraph cluster_x: style=filled is not supported yet, using solid"},
+		{"digraph { subgraph cluster_x { label=<<b>x</b>>; a } }", "subgraph cluster_x: HTML labels are not supported yet"},
+		{`digraph { subgraph s { pencolor="#ff0000"; subgraph cluster_x { a } } }`, "subgraph cluster_x: pencolor=#ff0000 is not supported yet"},
+		{"digraph { { rank=first; a b } }", "subgraph: rank=first is not supported yet"},
 		{"digraph { a:p1:n -> b }", "edge a->b: tailport=p1:n is not supported yet"},
 		{"digraph { a [label=<<b>x</b>>] }", `node a: HTML labels are not supported yet, using \N`},
 		{"graph G { a -- b }", "graph G: undirected graphs are not supported yet, using dir=none"},

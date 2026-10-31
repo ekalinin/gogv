@@ -1,0 +1,1 @@
+digraph { subgraph cluster_a { label="Long cluster title"; a } }

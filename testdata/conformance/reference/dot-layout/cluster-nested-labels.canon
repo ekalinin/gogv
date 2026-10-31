@@ -1,0 +1,14 @@
+digraph G {
+	node [label="\N"];
+	subgraph cluster_a {
+		graph [color="#ff0000",
+			label="Group A"
+		];
+		subgraph cluster_in {
+			c;
+		}
+		a -> b;
+		a -> c;
+	}
+	b -> d;
+}

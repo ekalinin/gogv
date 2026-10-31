@@ -1,0 +1,8 @@
+digraph {
+	graph [label=Title,
+		labeljust=l
+	];
+	node [label="\N"];
+	a -> b;
+	a -> c;
+}

@@ -1,0 +1,1 @@
+digraph { rankdir=LR; subgraph cluster_a { label="T"; a -> b } }

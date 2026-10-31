@@ -1,0 +1,21 @@
+digraph {
+	nodesep=0.486111;
+	ranksep=0.833333;
+	remincross=true;
+	searchsize=500;
+	subgraph cluster6 {
+		style=solid; color="#000006"; labeljust="c";
+		{ rank=source; s1; }
+		s1 [shape=rect, label="", width=0.166667, height=0.166667];
+		s1 -> x1;
+		x1 [shape=rect, label="", width=1, height=0.5];
+		x1 -> x2;
+		x2 [shape=rect, label="", width=1, height=0.5];
+		{ rank=sink; s2; }
+		s2 [shape=rect, label="", width=0.166667, height=0.166667];
+		x2 -> s2;
+	}
+	y [shape=rect, label="", width=1, height=0.5];
+	s1 -> y [arrowhead=none];
+	y -> s2;
+}

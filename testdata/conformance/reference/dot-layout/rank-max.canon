@@ -1,0 +1,9 @@
+digraph {
+	node [label="\N"];
+	{
+		graph [rank=max];
+		d;
+	}
+	a -> b;
+	b -> c;
+}

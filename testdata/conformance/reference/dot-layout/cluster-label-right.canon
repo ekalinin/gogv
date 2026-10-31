@@ -1,0 +1,9 @@
+digraph {
+	node [label="\N"];
+	subgraph cluster_a {
+		graph [label=T,
+			labeljust=r
+		];
+		a;
+	}
+}

@@ -1,0 +1,7 @@
+digraph {
+	node [label="\N"];
+	subgraph cluster_a {
+		graph [label=Group];
+		a;
+	}
+}

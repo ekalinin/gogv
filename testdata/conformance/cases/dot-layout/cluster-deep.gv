@@ -1,0 +1,19 @@
+digraph {
+	subgraph cluster_p0 {
+		label="";
+		subgraph cluster_p {
+			style=solid;
+			color="#000006";
+			labeljust="c";
+			label="";
+			subgraph cluster_p1 {
+				label="";
+				a [shape=rect, label="", width=1.2, height=0.6];
+				b [shape=rect, label="", width=0.8, height=0.6];
+			}
+		}
+	}
+	c [shape=rect, label="", width=1, height=0.5];
+	a -> c;
+	c -> b;
+}

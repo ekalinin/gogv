@@ -25,12 +25,16 @@ reference:
 	$(GO) run ./tools/refgen -image $(REFERENCE_IMAGE) -cases testdata/conformance/cases -out testdata/conformance/reference
 
 # Collects the DOT that gopuml generates for its conformance cases into
-# .cache/gopuml-dot (GOPUML is a gopuml checkout), and records its references.
+# .cache/gopuml-dot (GOPUML is a gopuml checkout), writes the variant of its
+# graphs with clusters into .cache/gopuml-cluster-dot, and records the
+# references of both.
 GOPUML ?= ../plantuml-in-go
 
 harvest:
 	$(GO) run ./tools/harvest -gopuml $(GOPUML) -image $(REFERENCE_IMAGE)
 	$(GO) run ./tools/refgen -image $(REFERENCE_IMAGE) -cases .cache/gopuml-dot -out .cache/reference/gopuml-dot
+	$(GO) run ./tools/clustervariant -in .cache/gopuml-dot -out .cache/gopuml-cluster-dot
+	$(GO) run ./tools/refgen -image $(REFERENCE_IMAGE) -cases .cache/gopuml-cluster-dot -out .cache/reference/gopuml-cluster-dot
 
 # Runs the conformance suite and writes conformance-report.md.
 conformance:

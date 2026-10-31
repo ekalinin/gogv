@@ -18,3 +18,12 @@
 - id: vega-nonreg/group2681-history_style_all_forms-1
   reason: "the same graph as state-diagram/history-style-1"
   change: tune-layout-heuristics
+- id: dot-layout/cluster-edges-between
+  reason: "order within ranks: the chain of x -> c1 goes right of the clusters instead of left, and cluster_c goes under cluster_b instead of cluster_a; the orders have as many crossings, and how the reference breaks this tie is not known yet"
+  change: tune-layout-heuristics
+- id: dot-layout/cluster-two-chains
+  reason: "x coordinates: the optimum of the positioning is not unique, and gogv takes another one than the reference (top is 12 points to the right)"
+  change: tune-layout-heuristics
+- id: dot-language/canon-canon-03
+  reason: "the flat edge a -> c goes over b and the box of cluster_x lower than the reference draws it, so the drawing is 18 points lower"
+  change: tune-layout-heuristics

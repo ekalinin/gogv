@@ -32,25 +32,28 @@ that the output is the same, byte for byte, on every platform.
 
 ## Status
 
-This is the first slice of version 1. It supports:
+This is the second slice of version 1. It supports:
 
 - the whole DOT grammar, read as the reference reads it
-- the layout of graphs without clusters, edge labels and HTML-like labels:
+- the layout of graphs without edge labels and HTML-like labels:
   shapes `rect`, `box`, `rectangle`, `plaintext`, `point`, `ellipse`, `oval`,
   `circle`, `diamond`, `hexagon`, `octagon`; plain-text labels; `width`,
   `height`, `color`, `fontname`, `fontsize`, `fontcolor`; `minlen`,
   `constraint`, `style=invis`, `arrowhead` and `arrowtail` (`normal`, `empty`,
   `none`), `dir`, `arrowsize`; `nodesep`, `ranksep`, `rankdir=LR`,
-  `splines=spline|polyline`, a graph label
+  `splines=spline|polyline`, a graph label placed by `labeljust`
+- clusters, nested, with a plain-text label placed by `labeljust` (`c`, `l`,
+  `r`), `style=solid` and `color`; `rank=same|min|max|source|sink` on
+  subgraphs
 - the output formats `svg`, `plain` and `canon`
 
 A Graphviz feature that is not supported yet gives a warning that says so and
 names the default used instead; attributes that Graphviz does not document
 are ignored, as Graphviz ignores them.
 
-The next slices of version 1 add clusters and rank constraints, edge labels
-and external labels, HTML tables and node ports, and the formats
-`svg_inline`, `plain-ext`, `dot`, `gv`, `xdot*` and `json*`.
+The next slices of version 1 add edge labels and external labels, HTML
+tables and node ports, and the formats `svg_inline`, `plain-ext`, `dot`,
+`gv`, `xdot*` and `json*`.
 
 ## Building
 

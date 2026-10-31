@@ -49,6 +49,9 @@ func SVG(res *layout.Result) []byte {
 	if len(res.Label.Lines) > 0 {
 		writeText(&b, res.Label, res.LabelPos)
 	}
+	for i := range res.Clusters {
+		writeCluster(&b, &res.Clusters[i], i+1)
+	}
 
 	written := map[*layout.NodeResult]bool{}
 	byNode := map[any]*layout.NodeResult{}
@@ -118,6 +121,19 @@ func writeNode(b *bytes.Buffer, n *layout.NodeResult, id int) {
 	}
 	if n.Shape != "point" {
 		writeText(b, n.Label, layout.Point{X: n.X, Y: n.Y})
+	}
+	b.WriteString("</g>\n")
+}
+
+// writeCluster writes the box of a cluster, from its lower left corner
+// upward and around, and its label.
+func writeCluster(b *bytes.Buffer, c *layout.ClusterResult, id int) {
+	fmt.Fprintf(b, "<g id=\"clust%d\" class=\"cluster\">\n<title>%s</title>\n", id, xmlText(c.Graph.Name))
+	x0, y0, x1, y1 := svgNumber(c.X0), y(c.Y0), svgNumber(c.X1), y(c.Y1)
+	fmt.Fprintf(b, "<polygon fill=\"none\" stroke=\"%s\" points=\"%s,%s %s,%s %s,%s %s,%s %s,%s\"/>\n",
+		svgColor(c.Color), x0, y0, x0, y1, x1, y1, x1, y0, x0, y0)
+	if len(c.Label.Lines) > 0 {
+		writeText(b, c.Label, c.LabelPos)
 	}
 	b.WriteString("</g>\n")
 }
