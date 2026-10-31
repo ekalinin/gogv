@@ -1,0 +1,1 @@
+digraph { a -> b [color=red, label=x]; a -> b [label=y]; edge [weight=2]; c -> d [color=red] }

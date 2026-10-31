@@ -1,0 +1,8 @@
+digraph A {
+	a -> b;
+}
+graph B {
+	c -- d;
+}
+
+digraph C { e } trailing text is ignored

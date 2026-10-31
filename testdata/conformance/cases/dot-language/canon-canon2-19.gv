@@ -1,0 +1,1 @@
+digraph { graph [label=L]; subgraph s { label=M; x } }

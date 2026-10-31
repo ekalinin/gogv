@@ -1,0 +1,1 @@
+digraph { subgraph s { a; node [shape=box]; b } subgraph t { color=red; subgraph u { color=blue; e } f } }

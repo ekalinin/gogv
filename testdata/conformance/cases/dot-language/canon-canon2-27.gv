@@ -1,0 +1,2 @@
+digraph { x [label="a,b"]; y [label="a;b"]; z [label="{x}"]; w [label="12"]; v [label="-1"]; u [label="1.5.6"]; t [label="_a"]; s [label="é"]; r [label=" "]; q [label="a\lb\rc"]; p [label="real
+newline"]; o [label="tab	x"]; n [label="A1"]; m [label="1e5"] }

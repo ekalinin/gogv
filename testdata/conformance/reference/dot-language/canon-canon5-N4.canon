@@ -1,0 +1,5 @@
+digraph {
+	graph [label=B];
+	node [label="\N"];
+	x;
+}

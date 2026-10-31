@@ -1,0 +1,8 @@
+digraph {
+	node [shape=rect, style=rounded];
+	a -> b;
+	c [label="", width=1, height=0.5];
+	d [label="", width=0.2, height=0.2];
+	e [shape=box, label="wide rounded box"];
+	b -> c -> d;
+}

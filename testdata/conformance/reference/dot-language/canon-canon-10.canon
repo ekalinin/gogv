@@ -1,0 +1,5 @@
+graph {
+	node [label="\N"];
+	a -- b;
+	b -- c	[color=red];
+}

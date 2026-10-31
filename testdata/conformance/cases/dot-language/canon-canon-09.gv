@@ -1,0 +1,1 @@
+digraph { graph [nodesep=1]; ranksep=2; subgraph s { color=blue; e } }

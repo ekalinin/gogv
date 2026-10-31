@@ -1,0 +1,1 @@
+digraph { a [color="#FF0000", fontcolor="#0000ff"]; a -> b [color="#00aa00"] }

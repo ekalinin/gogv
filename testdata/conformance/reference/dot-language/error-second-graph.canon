@@ -1,0 +1,4 @@
+digraph A {
+	node [label="\N"];
+	a;
+}

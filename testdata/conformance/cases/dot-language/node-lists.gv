@@ -1,0 +1,5 @@
+digraph {
+	a, b [shape=box];
+	c -> d, e -> f;
+	g, h -> i;
+}

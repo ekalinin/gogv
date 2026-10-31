@@ -1,0 +1,4 @@
+digraph {
+	node [label="\N"];
+	a -> b	[label=<<b>long html text that goes on and on and on and on and on and on and on and on and on and on and on</b>>];
+}

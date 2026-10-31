@@ -1,0 +1,16 @@
+graph 1 2.7507 2.5
+node Animal 1.4034 2.25 0.80546 0.5 Animal solid rect black lightgrey
+node Dog 1.3757 1.25 0.75 0.5 Dog solid rect black lightgrey
+node Cat 0.37567 1.25 0.75 0.5 Cat solid rect black lightgrey
+node Bird 2.3757 1.25 0.75 0.5 Bird solid rect black lightgrey
+node Puppy 1.3757 0.25 0.75 0.5 Puppy solid rect black lightgrey
+node Kitten 0.37567 0.25 0.75 0.5 Kitten solid rect black lightgrey
+node Owner 0.37567 2.25 0.75134 0.5 Owner solid rect black lightgrey
+edge Animal Dog 4 1.3966 1.9958 1.3937 1.8945 1.3902 1.774 1.387 1.6602 solid black
+edge Animal Cat 4 1.1494 1.9958 1.0271 1.8801 0.87815 1.7392 0.74373 1.6121 solid black
+edge Animal Bird 4 1.6438 1.9958 1.7592 1.8804 1.8996 1.74 2.0265 1.6131 solid black
+edge Dog Puppy 4 1.3757 0.99579 1.3757 0.89454 1.3757 0.77398 1.3757 0.66022 solid black
+edge Cat Kitten 4 0.37567 0.99579 0.37567 0.89454 0.37567 0.77398 0.37567 0.66022 solid black
+edge Owner Dog 4 0.62286 1.9958 0.74065 1.8813 0.88384 1.7421 1.0136 1.6159 solid black
+edge Owner Cat 4 0.37567 1.9958 0.37567 1.8945 0.37567 1.774 0.37567 1.6602 solid black
+stop

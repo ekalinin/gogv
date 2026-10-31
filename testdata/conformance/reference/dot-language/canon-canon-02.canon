@@ -1,0 +1,8 @@
+digraph G {
+	graph [rankdir=LR];
+	node [label="\N",
+		shape=box
+	];
+	a	[color=red];
+	a -> b	[label=x];
+}

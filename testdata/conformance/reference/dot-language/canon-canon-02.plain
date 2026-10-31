@@ -1,0 +1,5 @@
+graph 1 2.0972 0.5
+node a 0.375 0.25 0.75 0.5 a solid box red red
+node b 1.7222 0.25 0.75 0.5 b solid box black lightgrey
+edge a b 4 0.75643 0.25 0.88939 0.25 1.0422 0.25 1.1859 0.25 x 1.0486 0.36667 solid black
+stop

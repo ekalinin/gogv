@@ -1,0 +1,29 @@
+strict digraph "full grammar" {
+	graph [label=concatenated,
+		nodesep=0.5,
+		rankdir=LR,
+		ranksep=1
+	];
+	node [label="\N",
+		shape=box
+	];
+	edge [color="#336699"];
+	subgraph s1 {
+		n4	[label=multiline];
+	}
+	n2:sw -> n3:c	[minlen=1,
+		weight=2];
+	-1.5 -> .25;
+	.25 -> 12.;
+	"quoted \"id\"" -> n1:p:ne;
+	n5 -> n7;
+	n5 -> n8;
+	n6 -> n7;
+	n6 -> n8;
+	n9	[label=<<b>bold</b> &amp; html>];
+	n10	[label="\N with \\ backslash",
+		xlabel=x];
+	_under;
+	é;
+	ñandú;
+}

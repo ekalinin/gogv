@@ -1,0 +1,13 @@
+digraph {
+	node [label="\N"];
+	subgraph cluster_x {
+		graph [label=L];
+		a;
+	}
+	{
+		graph [rank=same];
+		b;
+		c;
+	}
+	a -> c;
+}

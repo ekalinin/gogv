@@ -1,0 +1,9 @@
+digraph {
+	node [label="\N"];
+	subgraph s {
+		subgraph t {
+			a;
+		}
+		b;
+	}
+}

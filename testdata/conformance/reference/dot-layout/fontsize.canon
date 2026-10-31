@@ -1,0 +1,6 @@
+digraph {
+	node [label="\N"];
+	a	[fontsize=28];
+	b	[fontsize=8];
+	a -> b;
+}

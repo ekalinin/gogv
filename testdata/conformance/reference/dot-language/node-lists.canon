@@ -1,0 +1,11 @@
+digraph {
+	node [label="\N"];
+	a	[shape=box];
+	b	[shape=box];
+	c -> d;
+	c -> e;
+	d -> f;
+	e -> f;
+	g -> i;
+	h -> i;
+}

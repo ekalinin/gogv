@@ -1,0 +1,7 @@
+digraph {
+	node [label="\N"];
+	a	[height=1,
+		label="",
+		shape=rect,
+		width=2];
+}

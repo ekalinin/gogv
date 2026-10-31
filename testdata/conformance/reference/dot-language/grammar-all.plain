@@ -1,0 +1,27 @@
+graph 1 5.4126 11.094
+node n1 3.2876 0.59444 0.75 0.5 n1 solid box black lightgrey
+node n2 1.0049 1.8444 0.75 0.5 n2 solid box black lightgrey
+node n3 3.2876 1.5944 0.75 0.5 n3 solid box black lightgrey
+node -1.5 1.0049 2.8444 0.75 0.5 -1.5 solid box black lightgrey
+node .25 3.2876 2.8444 0.75 0.5 .25 solid box black lightgrey
+node 12. 5.0376 2.8444 0.75 0.5 12. solid box black lightgrey
+node "quoted \"id\"" 1.0049 0.59444 1.11 0.5 "quoted \"id\"" solid box black lightgrey
+node n4 1.0049 3.8444 0.92433 0.5 multiline solid box black lightgrey
+node n5 1.0049 5.8444 0.75 0.5 n5 solid box black lightgrey
+node n6 1.0049 4.8444 0.75 0.5 n6 solid box black lightgrey
+node n7 3.2876 5.8444 0.75 0.5 n7 solid box black lightgrey
+node n8 3.2876 4.8444 0.75 0.5 n8 solid box black lightgrey
+node n9 1.0049 6.8444 1.1947 0.5 <<b>bold</b> &amp; html> solid box black lightgrey
+node n10 1.0049 7.8444 1.8154 0.5 "n10 with \\ backslash" solid box black lightgrey
+node _under 1.0049 8.8444 0.76217 0.5 _under solid box black lightgrey
+node é 1.0049 9.8444 0.75 0.5 é solid box black lightgrey
+node ñandú 1.0049 10.844 0.75 0.5 ñandú solid box black lightgrey
+edge n2 n3 4 0.6438 1.5944 0.021199 0.97184 1.829 1.2872 2.7588 1.4808 solid #336699
+edge -1.5 .25 4 1.3861 2.8444 1.7563 2.8444 2.3311 2.8444 2.7492 2.8444 solid #336699
+edge .25 12. 4 3.6667 2.8444 3.9088 2.8444 4.2301 2.8444 4.4993 2.8444 solid #336699
+edge "quoted \"id\"" n1 4 1.5646 0.59444 1.9247 0.59444 2.3938 0.59444 2.7494 0.59444 solid #336699
+edge n5 n7 4 1.3861 5.8444 1.7563 5.8444 2.3311 5.8444 2.7492 5.8444 solid #336699
+edge n5 n8 4 1.3861 5.6816 1.7612 5.5152 2.3464 5.2557 2.7658 5.0697 solid #336699
+edge n6 n7 4 1.3861 5.0073 1.7612 5.1737 2.3464 5.4332 2.7658 5.6192 solid #336699
+edge n6 n8 4 1.3861 4.8444 1.7563 4.8444 2.3311 4.8444 2.7492 4.8444 solid #336699
+stop

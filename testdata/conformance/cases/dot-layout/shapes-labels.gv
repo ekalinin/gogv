@@ -1,0 +1,1 @@
+digraph { node [label="long label text"]; r [shape=rect]; e [shape=ellipse]; c [shape=circle]; d [shape=diamond]; h [shape=hexagon]; g [shape=octagon]; p [shape=plaintext] }

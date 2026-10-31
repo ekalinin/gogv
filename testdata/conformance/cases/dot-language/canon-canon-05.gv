@@ -1,0 +1,1 @@
+strict digraph { a -> b; a -> b [color=red]; a -> a; b -> a }

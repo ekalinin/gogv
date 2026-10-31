@@ -1,0 +1,7 @@
+digraph G {
+	node [label="\N"];
+	subgraph "cluster x" {
+		y;
+	}
+	"graph" -> x;
+}

@@ -1,0 +1,14 @@
+graph 1 10.111 1.8171
+node "a b" 0.375 1.4086 0.75 0.5 "a b" solid ellipse black lightgrey
+node "c\"d" 0.375 0.25 0.75 0.5 "c\"d" solid ellipse black lightgrey
+node "1x" 1.375 1.4086 0.75 0.5 "1x" solid ellipse black lightgrey
+node 12 2.375 1.4086 0.75 0.5 12 solid ellipse black lightgrey
+node -3.5 3.375 1.4086 0.75 0.5 -3.5 solid ellipse black lightgrey
+node "node" 4.4167 1.4086 0.828 0.5 "node" solid ellipse black lightgrey
+node "Node" 5.5278 1.4086 0.8876 0.5 "Node" solid ellipse black lightgrey
+node x 6.5972 1.4086 0.75 0.5 <<b>hi</b>> solid ellipse black lightgrey
+node y 7.6667 1.4086 0.89486 0.8171 "multi\nline" solid ellipse black lightgrey
+node z 8.7361 1.4086 0.75 0.5 "" solid ellipse black lightgrey
+node w 9.7361 1.4086 0.75 0.5 "a\\b" solid ellipse black lightgrey
+edge "a b" "c\"d" 4 0.375 1.1549 0.375 1.0109 0.375 0.82431 0.375 0.65908 solid black
+stop

@@ -1,0 +1,5 @@
+digraph {
+	graph [ranksep=1.2];
+	node [label="\N"];
+	a -> b;
+}

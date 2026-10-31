@@ -1,0 +1,7 @@
+digraph {
+	node [label="\N",
+		shape=circle
+	];
+	a	[shape=box];
+	b;
+}

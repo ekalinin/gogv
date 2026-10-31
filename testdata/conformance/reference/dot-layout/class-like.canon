@@ -1,0 +1,12 @@
+digraph {
+	node [label="\N",
+		shape=rect
+	];
+	Animal -> Dog;
+	Animal -> Cat;
+	Animal -> Bird;
+	Dog -> Puppy;
+	Cat -> Kitten;
+	Owner -> Dog;
+	Owner -> Cat;
+}

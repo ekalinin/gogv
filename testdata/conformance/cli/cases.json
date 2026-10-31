@@ -1,0 +1,15 @@
+[
+  {"id": "cli/stdin", "args": ["-Tcanon"], "stdin": "digraph { a -> b }\n"},
+  {"id": "cli/separate-format", "args": ["-T", "canon"], "stdin": "digraph { a -> b }\n"},
+  {"id": "cli/engine-dot", "args": ["-Kdot", "-Tcanon"], "stdin": "digraph { a }\n"},
+  {"id": "cli/missing-file", "args": ["-Tcanon", "missing.gv"], "stdin": ""},
+  {"id": "cli/unknown-format", "args": ["-Tfoo"], "stdin": "digraph { a }\n"},
+  {"id": "cli/missing-format", "args": ["-T"], "stdin": "digraph { a }\n"},
+  {"id": "cli/missing-output", "args": ["-Tcanon", "-o"], "stdin": "digraph { a }\n"},
+  {"id": "cli/version", "args": ["-V"], "stdin": "not read\n"},
+  {"id": "cli/syntax-error", "args": ["-Tcanon"], "stdin": "digraph { a -> }\n"},
+  {"id": "cli/ambiguous-number", "args": ["-Tcanon"], "stdin": "digraph { 2abc }\n"},
+  {"id": "cli/later-format", "args": ["-Txdot"], "stdin": "digraph { a }\n"},
+  {"id": "cli/other-engine", "args": ["-Kneato", "-Tcanon"], "stdin": "digraph { a }\n"},
+  {"id": "cli/default-attribute-flag", "args": ["-Gnodesep=1", "-Tcanon"], "stdin": "digraph { a }\n"}
+]

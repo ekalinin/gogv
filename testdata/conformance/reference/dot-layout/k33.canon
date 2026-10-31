@@ -1,0 +1,12 @@
+digraph {
+	node [label="\N"];
+	a -> x;
+	a -> y;
+	a -> z;
+	b -> x;
+	b -> y;
+	b -> z;
+	c -> x;
+	c -> y;
+	c -> z;
+}

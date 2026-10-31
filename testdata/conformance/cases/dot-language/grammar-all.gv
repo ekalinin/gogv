@@ -1,0 +1,20 @@
+/* A block comment
+   over two lines */
+# a preprocessor line
+STRICT DiGraph "full grammar" {
+	// a line comment
+	graph [rankdir=LR, nodesep=0.5; ranksep=1]
+	Node [shape=box]
+	EDGE [color="#336699"]
+	label = "con" + "cat" + "enated"
+	n1; n2, n3
+	-1.5 -> .25 -> 12.
+	"quoted \"id\"" -> n1:p:ne
+	n2:sw -> n3:c [weight=2] [minlen=1]
+	subgraph s1 { n4 [label="multi\
+line"] }
+	{ n5 n6 } -> { n7 n8 }
+	n9 [label=<<b>bold</b> &amp; html>]
+	n10 [label="\N with \\ backslash", xlabel="x"]
+	_under; "é"; ñandú
+}

@@ -1,0 +1,67 @@
+{
+  "cli/ambiguous-number": {
+    "stdout": "digraph {\n\tnode [label=\"\\N\"];\n\t2;\n\tabc;\n}\n",
+    "stderr": "Warning: syntax ambiguity - badly delimited number '2a' in line 1 of <stdin> splits into two tokens\n",
+    "status": 0
+  },
+  "cli/default-attribute-flag": {
+    "stdout": "digraph {\n\tgraph [nodesep=1];\n\tnode [label=\"\\N\"];\n\ta;\n}\n",
+    "stderr": "",
+    "status": 0
+  },
+  "cli/engine-dot": {
+    "stdout": "digraph {\n\tnode [label=\"\\N\"];\n\ta;\n}\n",
+    "stderr": "",
+    "status": 0
+  },
+  "cli/later-format": {
+    "stdout": "digraph {\n\tgraph [_draw_=\"c 9 -#fffffe00 C 7 -#ffffff P 4 0 0 0 36 54 36 54 0 \",\n\t\tbb=\"0,0,54,36\",\n\t\txdotversion=1.7\n\t];\n\tnode [label=\"\\N\"];\n\ta\t[_draw_=\"c 7 -#000000 e 27 18 27 18 \",\n\t\t_ldraw_=\"F 14 11 -Times-Roman c 7 -#000000 T 27 13.8 0 6.21 1 -a \",\n\t\theight=0.5,\n\t\tpos=\"27,18\",\n\t\twidth=0.75];\n}\n",
+    "stderr": "",
+    "status": 0
+  },
+  "cli/missing-file": {
+    "stdout": "",
+    "stderr": "Error: dot: can't open missing.gv: No such file or directory\n",
+    "status": 2
+  },
+  "cli/missing-format": {
+    "stdout": "",
+    "stderr": "Missing argument for -T flag\nUsage: /opt/graphviz/bin/dot [-Vv?] [-(GNEA)name=val] [-(KTlso)<val>] <dot files>\n(additional options for neato)    [-x] [-n<v>]\n(additional options for fdp)      [-L(gO)] [-L(nUCT)<val>]\n(additional options for config)  [-cv]\n\n -V          - Print version and exit\n -v[n]       - Enable verbose mode at level 1, or set to the level 'n' if provided\n -Gname=val  - Set graph attribute 'name' to 'val'\n -Nname=val  - Set node attribute 'name' to 'val'\n -Ename=val  - Set edge attribute 'name' to 'val'\n -Aname=val  - Set attribute 'name' to 'val' for graph, node, and edge\n -Tv         - Set output format to 'v'\n -Kv         - Set layout engine to 'v' (overrides default based on command name)\n -lv         - Use external library 'v'\n -ofile      - Write output to 'file'\n -O          - Automatically generate an output filename based on the input filename with a .'format' appended. (Causes all -ofile options to be ignored.) \n -P          - Internally generate a graph of the current plugins. \n -q[l]       - Set level of message suppression (=1)\n -s[v]       - Scale input by 'v' (=72)\n -y          - Invert y coordinate in output\n\n -n[v]       - No layout mode 'v' (=1)\n -x          - Reduce graph\n\n -Lg         - Don't use grid\n -LO         - Use old attractive force\n -Lm<l>      - Set m-limit to l\n -Ln<i>      - Set number of iterations to i\n -LU<i>      - Set unscaled factor to i\n -LC<v>      - Set overlap expansion factor to v\n -LT[*]<v>   - Set temperature (temperature factor) to v\n\n -c          - Configure plugins (Writes $prefix/lib/graphviz/config \n               with available plugin information.  Needs write privilege.)\n -?          - Print usage and exit\n",
+    "status": 1
+  },
+  "cli/missing-output": {
+    "stdout": "",
+    "stderr": "Missing argument for -o flag\nUsage: /opt/graphviz/bin/dot [-Vv?] [-(GNEA)name=val] [-(KTlso)<val>] <dot files>\n(additional options for neato)    [-x] [-n<v>]\n(additional options for fdp)      [-L(gO)] [-L(nUCT)<val>]\n(additional options for config)  [-cv]\n\n -V          - Print version and exit\n -v[n]       - Enable verbose mode at level 1, or set to the level 'n' if provided\n -Gname=val  - Set graph attribute 'name' to 'val'\n -Nname=val  - Set node attribute 'name' to 'val'\n -Ename=val  - Set edge attribute 'name' to 'val'\n -Aname=val  - Set attribute 'name' to 'val' for graph, node, and edge\n -Tv         - Set output format to 'v'\n -Kv         - Set layout engine to 'v' (overrides default based on command name)\n -lv         - Use external library 'v'\n -ofile      - Write output to 'file'\n -O          - Automatically generate an output filename based on the input filename with a .'format' appended. (Causes all -ofile options to be ignored.) \n -P          - Internally generate a graph of the current plugins. \n -q[l]       - Set level of message suppression (=1)\n -s[v]       - Scale input by 'v' (=72)\n -y          - Invert y coordinate in output\n\n -n[v]       - No layout mode 'v' (=1)\n -x          - Reduce graph\n\n -Lg         - Don't use grid\n -LO         - Use old attractive force\n -Lm<l>      - Set m-limit to l\n -Ln<i>      - Set number of iterations to i\n -LU<i>      - Set unscaled factor to i\n -LC<v>      - Set overlap expansion factor to v\n -LT[*]<v>   - Set temperature (temperature factor) to v\n\n -c          - Configure plugins (Writes $prefix/lib/graphviz/config \n               with available plugin information.  Needs write privilege.)\n -?          - Print usage and exit\n",
+    "status": 1
+  },
+  "cli/other-engine": {
+    "stdout": "digraph {\n\tnode [label=\"\\N\"];\n\ta;\n}\n",
+    "stderr": "",
+    "status": 0
+  },
+  "cli/separate-format": {
+    "stdout": "digraph {\n\tnode [label=\"\\N\"];\n\ta -> b;\n}\n",
+    "stderr": "",
+    "status": 0
+  },
+  "cli/stdin": {
+    "stdout": "digraph {\n\tnode [label=\"\\N\"];\n\ta -> b;\n}\n",
+    "stderr": "",
+    "status": 0
+  },
+  "cli/syntax-error": {
+    "stdout": "",
+    "stderr": "Error: <stdin>: syntax error in line 1 near '}'\n",
+    "status": 1
+  },
+  "cli/unknown-format": {
+    "stdout": "",
+    "stderr": "Format: \"foo\" not recognized. Use one of: canon cmap cmapx cmapx_np dot dot_json eps fig gv imap imap_np ismap json json0 pic plain plain-ext pov ps ps2 svg svg_inline svgz tk xdot xdot1.2 xdot1.4 xdot_json\n",
+    "status": 1
+  },
+  "cli/version": {
+    "stdout": "",
+    "stderr": "dot - graphviz version 16.1.0 (20260904.0139)\n",
+    "status": 0
+  }
+}

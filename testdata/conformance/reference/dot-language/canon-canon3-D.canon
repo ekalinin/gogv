@@ -1,0 +1,9 @@
+digraph {
+	node [label="\N",
+		shape=box
+	];
+	subgraph s {
+		b	[shape=""];
+		c;
+	}
+}

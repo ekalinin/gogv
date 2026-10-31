@@ -1,0 +1,10 @@
+digraph {
+	node [label="\N"];
+	subgraph s {
+		a;
+	}
+	subgraph t {
+		a;
+	}
+	a -> b;
+}
