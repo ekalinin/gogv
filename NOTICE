@@ -1,0 +1,39 @@
+gogv
+====
+
+This project is a Go implementation of the Graphviz `dot` program
+(https://graphviz.org). It is not affiliated with or endorsed by the Graphviz
+project.
+
+Clean-room origin
+-----------------
+
+gogv is written from published papers, the Graphviz documentation and the
+observed behavior of Graphviz 16.1.0 used as a black box. It contains no code
+from Graphviz or from its ports and bindings. Every Go source file names its
+sources in "Provenance:" header lines:
+
+    Provenance: original                  original work of this project
+    Provenance: paper <citation>          a published paper
+    Provenance: doc <URL>                 a page of the Graphviz documentation
+    Provenance: observed dot 16.1.0       the observed behavior of Graphviz dot
+    Provenance: gopuml <path>             code taken from gopuml
+                                          (https://github.com/ekalinin/gopuml,
+                                          MIT License, (c) 2026 Eugene Kalinin)
+    Provenance: fdlibm 5.3 <file>         a translation of fdlibm, taken from
+                                          gopuml, with Sun's notice:
+
+    Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
+    Developed at SunSoft, a Sun Microsystems, Inc. business.
+    Permission to use, copy, modify, and distribute this software is freely
+    granted, provided that this notice is preserved.
+    Provenance: liberation-fonts 2.1.5    advance-width tables generated from
+                                          the Liberation 2.1.5 fonts; the
+                                          fonts themselves are not included:
+
+    Digitized data copyright (c) 2010 Google Corporation
+        with Reserved Font Arimo, Tinos and Cousine.
+    Copyright (c) 2012 Red Hat, Inc.
+        with Reserved Font Name Liberation.
+    Licensed under the SIL Open Font License, Version 1.1
+    (https://openfontlicense.org).
