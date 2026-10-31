@@ -1,0 +1,1 @@
+digraph { c -> a; a -> b [minlen=0, label="flat"] }

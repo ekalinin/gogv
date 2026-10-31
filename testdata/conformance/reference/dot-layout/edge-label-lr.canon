@@ -1,0 +1,6 @@
+digraph {
+	graph [rankdir=LR];
+	node [label="\N"];
+	a -> b	[label=x];
+	a -> c	[label=longer];
+}

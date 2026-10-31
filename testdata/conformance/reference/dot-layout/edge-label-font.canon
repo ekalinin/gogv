@@ -1,0 +1,7 @@
+digraph {
+	node [label="\N"];
+	a -> b	[fontcolor="#FF0000",
+		fontname=Helvetica,
+		fontsize=20,
+		label=x];
+}

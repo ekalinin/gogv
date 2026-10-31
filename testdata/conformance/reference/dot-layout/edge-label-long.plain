@@ -1,0 +1,7 @@
+graph 1 1.8611 1.7333
+node a 0.93056 1.4833 0.75 0.5 a solid ellipse black lightgrey
+node b 0.375 0.25 0.75 0.5 b solid ellipse black lightgrey
+node c 1.4861 0.25 0.75 0.5 c solid ellipse black lightgrey
+edge a b 7 0.66269 1.3038 0.5555 1.2218 0.44361 1.1126 0.38458 0.98333 0.3391 0.88373 0.32364 0.76799 0.32298 0.65883 "a long label" 0.83812 0.86667 solid black
+edge a c 7 1.1108 1.2629 1.1754 1.1804 1.244 1.0817 1.2917 0.98333 1.3404 0.88283 1.3784 0.76829 1.4073 0.66062 solid black
+stop

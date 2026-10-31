@@ -1,0 +1,5 @@
+graph 1 0.75 1.2639
+node z 0.375 1.1319 0.47222 0.26389 <<TABLE BGCOLOR="#000007" FIXEDSIZE="TRUE" WIDTH="18" HEIGHT="11"><TR><TD></TD></TR></TABLE>> solid rect black lightgrey
+node y 0.375 0.25 0.75 0.5 y solid ellipse black lightgrey
+edge z y 4 0.375 0.99567 0.375 0.90814 0.375 0.78498 0.375 0.66462 solid black
+stop

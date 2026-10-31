@@ -1,0 +1,1 @@
+digraph { a -> b [sametail=t]; a -> c [sametail=t]; a -> d }

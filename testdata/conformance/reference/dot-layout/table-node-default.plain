@@ -1,0 +1,3 @@
+graph 1 0.75 0.5
+node z 0.375 0.25 0.75 0.5 <<TABLE BGCOLOR="#000007" FIXEDSIZE="TRUE" WIDTH="18" HEIGHT="11"><TR><TD></TD></TR></TABLE>> solid rect black lightgrey
+stop

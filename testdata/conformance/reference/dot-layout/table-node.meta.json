@@ -1,0 +1,14 @@
+{
+  "canon": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of node z\n"
+  },
+  "plain": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of node z\n"
+  },
+  "svg": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of node z\n"
+  }
+}
