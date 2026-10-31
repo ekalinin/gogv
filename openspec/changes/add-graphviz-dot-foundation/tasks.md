@@ -46,6 +46,7 @@
 - [x] 6.8 Implement arrowheads: `dir`, `arrowhead`, `arrowtail` with `normal`, `empty` and `none`, `arrowsize`, and edges ending where their arrowhead begins; verify the arrowhead scenarios
 - [x] 6.9 Implement invisible edges and the graph label below the drawing; verify their scenarios
 - [x] 6.10 Add curated layout cases for every dot-layout scenario and run them against the reference; verify each passes or is listed in known differences with a reason
+- [x] 6.11 Implement `style=rounded` on `rect`, `box` and `rectangle` (corner radius a third of the smaller side, at most 12 points; drawn as an SVG path; `rounded` in plain) and the "not supported yet" warning for it on `diamond`, `hexagon` and `octagon`; verify the rounded rectangle scenario and curated cases against the reference
 
 ## 7. SVG and plain output
 

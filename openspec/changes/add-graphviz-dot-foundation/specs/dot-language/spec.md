@@ -102,7 +102,7 @@ The default label of a node SHALL be `\N`.
 The system SHALL act on the following attributes and values:
 
 - graphs: `label`, `fontname`, `fontsize`, `fontcolor`, `nodesep`, `ranksep`, `rankdir` (`TB`, `LR`), `splines` (`spline`, `polyline`), `remincross`, `searchsize`
-- nodes: `label`, `fontname`, `fontsize`, `fontcolor`, `shape` (`rect` and its synonyms `box` and `rectangle`, `plaintext`, `point`, `ellipse` and its synonym `oval`, `circle`, `diamond`, `hexagon`, `octagon`), `width`, `height`, `color`
+- nodes: `label`, `fontname`, `fontsize`, `fontcolor`, `shape` (`rect` and its synonyms `box` and `rectangle`, `plaintext`, `point`, `ellipse` and its synonym `oval`, `circle`, `diamond`, `hexagon`, `octagon`), `width`, `height`, `color`, `style` (`solid`, and `rounded` except on `diamond`, `hexagon` and `octagon`)
 - edges: `minlen`, `color`, `style` (`solid`, `invis`), `constraint`, `arrowhead` and `arrowtail` (`none`, `empty`, `normal`), `dir` (`forward`, `back`, `both`, `none`), `arrowsize`
 
 Colors SHALL be accepted in the form `#rrggbb`, in either letter case.
@@ -122,6 +122,7 @@ For a feature that Graphviz documents but this system does not support yet, the 
 - a port or compass point on a node ID: the edge attaches to the node itself
 - an HTML label: the object takes its default label
 - an undirected graph: its edges take the documented default `dir=none`
+- `style=rounded` on a `diamond`, `hexagon` or `octagon` node: the node is drawn without rounded corners
 - a `fontname` for which the reference has metrics that this system does not have yet (`DejaVu Sans`, `Verdana`, `Georgia`, `Consolas`, `Calibri`, `Trebuchet MS`, `Open Sans`, compared without regard to case): the text takes the Times metrics
 
 The warning SHALL start with `Warning:`, SHALL name the object and the feature, SHALL say `not supported yet`, and SHALL name the default used when there is one. Attributes that Graphviz does not document SHALL be kept without a warning, as Graphviz keeps them.

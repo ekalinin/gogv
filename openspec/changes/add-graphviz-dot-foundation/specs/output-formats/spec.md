@@ -24,7 +24,7 @@ Writes laid-out graphs in the reference `dot`'s `svg`, `plain` and `canon` forma
 
 ### Requirement: SVG drawing
 
-Node outlines SHALL be `polygon` elements for polygonal shapes and `ellipse` elements for `ellipse`, `circle` and `point`. Edges SHALL be `path` elements whose `d` attribute is a move followed by cubic Bezier segments (`M x,y C ...`), and arrowheads SHALL be `polygon` elements. Labels SHALL be `text` elements, one per line, with the font family, the font size and the color of the label. A color given as `#RRGGBB` SHALL be written in lower case in the `stroke` and `fill` attributes, and the default color SHALL be black.
+Node outlines SHALL be `polygon` elements for polygonal shapes, `ellipse` elements for `ellipse`, `circle` and `point`, and `path` elements of cubic Bezier segments for rounded rectangles. Edges SHALL be `path` elements whose `d` attribute is a move followed by cubic Bezier segments (`M x,y C ...`), and arrowheads SHALL be `polygon` elements. Labels SHALL be `text` elements, one per line, with the font family, the font size and the color of the label. A color given as `#RRGGBB` SHALL be written in lower case in the `stroke` and `fill` attributes, and the default color SHALL be black.
 
 #### Scenario: Node color
 

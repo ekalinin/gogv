@@ -87,6 +87,8 @@ A node SHALL be at least `width` wide and `height` high (in inches, defaults 0.7
 - `point`: a small filled circle, sized only by `width` and `height`, without its label
 - `plaintext`: the label without an outline
 
+With `style=rounded`, a `rect`, `box` or `rectangle` node SHALL have rounded corners whose radius is a third of its smaller side, at most 12 points.
+
 #### Scenario: Label wider than the node
 
 - **WHEN** a node has `label="a fairly long label"` and the default `width`
@@ -96,6 +98,11 @@ A node SHALL be at least `width` wide and `height` high (in inches, defaults 0.7
 
 - **WHEN** a node has `shape=rect, label="", width=2, height=1`
 - **THEN** the node is a rectangle 144 points wide and 72 points high
+
+#### Scenario: Rounded rectangle
+
+- **WHEN** a node has `shape=rect, style=rounded, label="", width=1, height=0.5`
+- **THEN** its outline is a 72 by 36 points rectangle whose corners are rounded with a radius of 12 points
 
 #### Scenario: Point
 

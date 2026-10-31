@@ -20,7 +20,7 @@ Project-wide decisions:
 The v1 language is the DOT attribute subset that gopuml emits, plus plain-text labels:
 
 - graphs: `digraph`, subgraphs, nested clusters, `rank=same|min|max|source|sink`; `nodesep`, `ranksep`, `rankdir=LR`, `splines=spline|polyline`, `remincross`, `searchsize`
-- nodes: shapes `rect`, `plaintext`, `point`, `ellipse`, `circle`, `diamond`, `hexagon`, `octagon`; `width`, `height`, `color`
+- nodes: shapes `rect`, `plaintext`, `point`, `ellipse`, `circle`, `diamond`, `hexagon`, `octagon`; `width`, `height`, `color`; `style=rounded` on `rect`
 - edges: node ports (`a:port`), `minlen`, `color`, `style=invis`, `constraint=false`, `sametail`, `arrowhead` and `arrowtail` (`none`, `empty`, `normal`), `dir`, `arrowsize`
 - clusters: `label`, `labeljust`, `style=solid`, `color`
 - labels: plain-text `label` on nodes, edges, graphs and clusters, with the escapes `\N`, `\G`, `\E`, `\T`, `\H`, `\L` and the line breaks `\n`, `\l`, `\r`; `fontname`, `fontsize`, `fontcolor`; `xlabel`, `taillabel`, `headlabel`
