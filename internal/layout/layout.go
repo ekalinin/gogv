@@ -32,6 +32,10 @@ type NodeResult struct {
 	Style string
 	// Rounded is set for a rectangle with rounded corners.
 	Rounded bool
+	// XLabel is the node's external label, centered on XLabelPos; it has
+	// no lines and no table when the node has none.
+	XLabel    Text
+	XLabelPos Point
 }
 
 // EdgeResult is a laid-out edge.
@@ -47,6 +51,21 @@ type EdgeResult struct {
 	// end has none; Tip is where the arrow points, Base where the curve
 	// ends.
 	Head, Tail Arrow
+	// Label is the edge's label, centered on LabelPos; it has no lines
+	// and no table when the edge has none. LabelText is its text after the
+	// escapes that name objects are replaced.
+	Label     Text
+	LabelPos  Point
+	LabelText string
+	// XLabel, HeadLabel and TailLabel are the external labels, centered
+	// on their positions; they have no lines and no table when the edge
+	// has none.
+	XLabel, HeadLabel, TailLabel          Text
+	XLabelPos, HeadLabelPos, TailLabelPos Point
+	// tailEnd and headEnd are where the edge meets its nodes, and middle
+	// is halfway along it, in the layout orientation until the end of the
+	// layout.
+	tailEnd, headEnd, middle Point
 }
 
 // Arrow is an arrowhead.
@@ -83,6 +102,19 @@ type ClusterResult struct {
 	LabelPos       Point
 }
 
+// Observed on the reference: in a graph with edge labels, how far a label
+// node reaches beyond the edge and the label, and the width of the other
+// virtual nodes on the ranks of labels; and the room loops keep.
+const (
+	labelPad         = 2.5
+	labelRankVirtual = 7
+	// loopGap is the room that loops keep beyond their reach, whatever the
+	// size of the node and nodesep.
+	loopGap = 18
+	// flatLabelLift is how far the label of a flat edge is above it.
+	flatLabelLift = 3
+)
+
 // params are the graph attributes the layout reads.
 type params struct {
 	nodesep, ranksep float64
@@ -116,15 +148,20 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 		shape := nodeShape(nodeValue(g, n, "shape"))
 		obj := label.Object{Graph: g.Name, Node: n.Name}
 		labelText := nodeLabelText(nodeValue(g, n, "label"))
-		text := makeText(labelText, obj, nodeValue(g, n, "fontname"), nodeValue(g, n, "fontcolor"), nodeValue(g, n, "fontsize"))
+		text := labelOf(nodeValue(g, n, "label"), graph.LabelDefault, obj, nodeValue(g, n, "fontname"), nodeValue(g, n, "fontcolor"), nodeValue(g, n, "fontsize"))
 		if shape == "point" {
-			text.Lines = nil
+			text.Lines, text.Table = nil, nil
 		}
 		w, h := nodeSize(shape, text, nodeValue(g, n, "width"), nodeValue(g, n, "height"))
 		color := nodeColor(nodeValue(g, n, "color"))
 		style := supported(graph.NodeKind, "style", nodeValue(g, n, "style"), "solid")
+		lt := label.Expand(labelText, obj)
+		if text.Table != nil {
+			// plain writes a table label as it is written.
+			lt = nodeValue(g, n, "label").S
+		}
 		res.Nodes = append(res.Nodes, NodeResult{
-			Node: n, W: w, H: h, Shape: shape, Label: text, LabelText: label.Expand(labelText, obj),
+			Node: n, W: w, H: h, Shape: shape, Label: text, LabelText: lt,
 			Color: color, ColorSet: color == nodeValue(g, n, "color").S,
 			Style:   style,
 			Rounded: isRectangular(shape) && shape != "plaintext" && style == "rounded",
@@ -133,6 +170,23 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 		if p.lr {
 			lw[i], lh[i] = h, w
 		}
+	}
+
+	// Edge labels. As in the reference, a graph with an edge label gets a
+	// rank between every two of its ranks, half ranksep apart, for the
+	// labels to lie on.
+	elabels := make([]Text, len(g.Edges()))
+	own := make([]bool, len(g.Edges()))
+	doubled := false
+	for i, e := range g.Edges() {
+		obj := label.Object{Graph: g.Name, Edge: true, Tail: e.Tail.Name, Head: e.Head.Name, DirectedEdgeName: g.Directed()}
+		elabels[i] = labelOf(edgeValue(g, e, "label"), "", obj, edgeValue(g, e, "fontname"), edgeValue(g, e, "fontcolor"), edgeValue(g, e, "fontsize"))
+		own[i] = elabels[i].Present()
+		doubled = doubled || own[i]
+	}
+	ranksep := p.ranksep
+	if doubled {
+		ranksep = half(ranksep)
 	}
 
 	var rankEdges []rankEdge
@@ -144,6 +198,9 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 			continue
 		}
 		minlen := int(number(edgeValue(g, e, "minlen"), 1, 0))
+		if doubled {
+			minlen *= 2
+		}
 		rankEdges = append(rankEdges, rankEdge{tail: t, head: h, minlen: minlen, weight: 1})
 	}
 	tree := buildClusterTree(g, index)
@@ -158,7 +215,18 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 		return nil, err
 	}
 
-	rg, chains := buildRanked(ranks, ends)
+	rg, chains := buildRanked(ranks, ends, own)
+	// The label of an edge belongs to the virtual node halfway along its
+	// chain.
+	labelNode := make([]int, len(g.Edges()))
+	labelEdge := map[int]int{}
+	for i := range labelNode {
+		labelNode[i] = -1
+		if own[i] && len(chains[i]) >= 3 {
+			labelNode[i] = chains[i][len(chains[i])/2]
+			labelEdge[labelNode[i]] = i
+		}
+	}
 	rg.joins = tree.joins()
 	if tree.drawn() {
 		err = rg.orderClusters(ctx, tree, 24, p.lr)
@@ -168,24 +236,97 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 	if err != nil {
 		return nil, err
 	}
-	width := make([]float64, len(rg.nodes))
+	// How far each ranked node reaches left and right of its x, and its
+	// height, in the layout orientation.
+	left := make([]float64, len(rg.nodes))
+	right := make([]float64, len(rg.nodes))
 	height := make([]float64, len(rg.nodes))
+	labelSize := func(t Text) (along, across float64) {
+		// The extent of a label along the ranks' order and across it.
+		if p.lr {
+			return t.Height, t.Width
+		}
+		return t.Width, t.Height
+	}
 	for v, rn := range rg.nodes {
-		if rn.real >= 0 {
-			width[v], height[v] = lw[rn.real], lh[rn.real]
-		} else {
+		i, isLabel := labelEdge[v]
+		switch {
+		case rn.real >= 0:
+			left[v], right[v], height[v] = half(lw[rn.real]), half(lw[rn.real]), lh[rn.real]
+		case isLabel:
+			// Observed on the reference: on a rank of labels, the edge
+			// passes half nodesep plus 2.5 points right of the node's left
+			// side, and the label reaches its width plus 2.5 points minus
+			// half nodesep beyond; on a rank of nodes, nodesep and the
+			// label's width.
+			along, across := labelSize(elabels[i])
+			if rn.rank%2 == 1 {
+				left[v] = half(p.nodesep) + labelPad
+				right[v] = along + labelPad - half(p.nodesep)
+			} else {
+				left[v], right[v] = p.nodesep, along
+			}
+			height[v] = across
+		case doubled && rn.rank%2 == 1:
+			// A virtual node on a rank of labels is 7 points wide.
+			left[v], right[v], height[v] = labelRankVirtual/2, labelRankVirtual/2, 1
+		default:
 			// A virtual node keeps nodesep free for each edge it carries,
 			// plus 2 points; an empty rank is 1 point high.
-			width[v] = float64(float64(rn.count)*p.nodesep) + 2
-			height[v] = 1
+			w := float64(float64(rn.count)*p.nodesep) + 2
+			left[v], right[v], height[v] = half(w), half(w), 1
+		}
+	}
+	// Loops take room right of their node, as the reference reserves it,
+	// from its neighbors and from the border of its cluster: loopGap, the
+	// widths of their labels, and nodesep for each loop but the first.
+	loopRoom := make([]float64, len(nodes))
+	loopLabels := make([]float64, len(ends))
+	for i, e := range ends {
+		if e[0] != e[1] {
+			continue
+		}
+		if own[i] {
+			loopLabels[i], _ = labelSize(elabels[i])
+		}
+		if loopRoom[e[0]] == 0 {
+			loopRoom[e[0]] = loopGap - p.nodesep
+		}
+		loopRoom[e[0]] += p.nodesep + loopLabels[i]
+	}
+	for v := range nodes {
+		right[v] += loopRoom[v]
+	}
+	// The labels of loops are as high as their rank.
+	for i, e := range ends {
+		if e[0] == e[1] && own[i] {
+			_, across := labelSize(elabels[i])
+			height[e[0]] = max(height[e[0]], across)
+		}
+	}
+	// A labeled flat edge between neighbors keeps them apart by its label.
+	for i, e := range ends {
+		if !own[i] || chains[i] != nil || e[0] == e[1] {
+			continue
+		}
+		l, r := e[0], e[1]
+		if rg.nodes[l].order > rg.nodes[r].order {
+			l, r = r, l
+		}
+		if rg.nodes[r].order-rg.nodes[l].order == 1 {
+			along, _ := labelSize(elabels[i])
+			if rg.labelSep == nil {
+				rg.labelSep = map[[2]int]float64{}
+			}
+			rg.labelSep[[2]int{l, r}] = max(rg.labelSep[[2]int{l, r}], along)
 		}
 	}
 	var extra func(next int) ([]nsEdge, int)
 	if tree.drawn() {
 		tree.readLabels()
-		extra = func(next int) ([]nsEdge, int) { return tree.xEdges(rg, width, next, p.lr) }
+		extra = func(next int) ([]nsEdge, int) { return tree.xEdges(rg, left, right, next, p.lr) }
 	}
-	xs, err := rg.placeX(ctx, width, p.nodesep, p.search, extra)
+	xs, err := rg.placeX(ctx, left, right, p.nodesep, p.search, extra)
 	if err != nil {
 		return nil, err
 	}
@@ -193,7 +334,7 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 	if tree.drawn() {
 		gaps = tree.yGaps(rg, height, p.lr)
 	}
-	ys := rg.placeY(height, p.ranksep, gaps)
+	ys := rg.placeY(height, ranksep, gaps)
 	if tree.drawn() {
 		tree.boxes(xs, ys, p.lr)
 	}
@@ -203,7 +344,42 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 	for v, rn := range rg.nodes {
 		pos[v] = Point{xs[v], ys[rn.rank]}
 	}
-	rt := &router{g: rg, pos: pos, width: width, ys: ys, nodesep: p.nodesep, lr: p.lr, nodes: res.Nodes}
+	rt := &router{g: rg, pos: pos, left: left, right: right, ys: ys, nodesep: p.nodesep, lr: p.lr, nodes: res.Nodes, labelAlong: map[int]float64{}}
+	for v, i := range labelEdge {
+		rt.labelAlong[v], _ = labelSize(elabels[i])
+	}
+	rt.loopLabels = loopLabels
+	// The sametail groups: edges with the same tail and sametail value.
+	rt.sameTail = map[int][]int{}
+	sameTails := map[[2]string][]int{}
+	for i, e := range g.Edges() {
+		if v := edgeValue(g, e, "sametail"); v.S != "" && ends[i][0] != ends[i][1] {
+			k := [2]string{e.Tail.Name, v.S}
+			sameTails[k] = append(sameTails[k], i)
+		}
+	}
+	for _, group := range sameTails {
+		for _, i := range group {
+			rt.sameTail[i] = group
+		}
+	}
+	// The labeled flat edges between neighbors, numbered by pair.
+	rt.flatLabels, rt.flatAcross = map[int]int{}, map[int]float64{}
+	flatCount := map[[2]int]int{}
+	for i, e := range ends {
+		if !own[i] || chains[i] != nil || e[0] == e[1] {
+			continue
+		}
+		l, r := e[0], e[1]
+		if rg.nodes[l].order > rg.nodes[r].order {
+			l, r = r, l
+		}
+		if rg.nodes[r].order-rg.nodes[l].order == 1 {
+			rt.flatLabels[i] = flatCount[[2]int{l, r}]
+			flatCount[[2]int{l, r}]++
+			_, rt.flatAcross[i] = labelSize(elabels[i])
+		}
+	}
 	if tree.drawn() {
 		rt.tree = tree
 	}
@@ -214,6 +390,59 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 		rt.bandDn[rn.rank] = max(rt.bandDn[rn.rank], height[v]/2)
 	}
 	res.Edges = rt.routeEdges(g, ends, chains, p.polyline)
+
+	// Edge labels, in the layout orientation. As observed on the reference,
+	// a label lies on the rank of its node, its left side on the rightmost
+	// point of the edge across the label's height.
+	labelPos := make([]Point, len(res.Edges))
+	// The labels of flat edges stay out of the drawing's box, as in the
+	// reference.
+	outside := make([]bool, len(res.Edges))
+	flatLabels := map[[2]int]int{}
+	for i, v := range labelNode {
+		res.Edges[i].Label = elabels[i]
+		if lv := edgeValue(g, g.Edges()[i], "label"); !lv.HTML {
+			e := g.Edges()[i]
+			res.Edges[i].LabelText = label.Expand(lv.S, label.Object{Graph: g.Name, Edge: true, Tail: e.Tail.Name, Head: e.Head.Name, DirectedEdgeName: g.Directed()})
+		}
+		if !own[i] {
+			continue
+		}
+		along, across := labelSize(elabels[i])
+		t, h := ends[i][0], ends[i][1]
+		switch {
+		case v >= 0:
+			y := pos[v].Y
+			x := rightmostAt(res.Edges[i].Points, y-half(across), y+half(across), pos[v].X)
+			labelPos[i] = Point{x + half(along), y}
+		case t == h:
+			// Beyond the far side of the loop.
+			x := rightmostAt(res.Edges[i].Points, math.Inf(-1), math.Inf(1), pos[t].X+right[t])
+			labelPos[i] = Point{x + half(along), pos[t].Y}
+		default:
+			// A flat edge: centered between its ends, above the edge; the
+			// label of a second flat edge between them goes below it.
+			l, r := t, h
+			if rg.nodes[l].order > rg.nodes[r].order {
+				l, r = r, l
+			}
+			x := half(pos[l].X + right[l] + pos[r].X - left[r])
+			// The first label is above the edge; the next ones alternate
+			// below and above, a label's height plus 6 points further at
+			// each level.
+			dy := half(across) + flatLabelLift
+			if k := flatLabels[[2]int{l, r}]; k > 0 {
+				sign, level := flatLevel(k)
+				if sign < 0 {
+					level--
+				}
+				dy = sign * (dy + float64(float64(level)*(across+6)))
+			}
+			flatLabels[[2]int{l, r}]++
+			labelPos[i] = Point{x, pos[l].Y + dy}
+			outside[i] = true
+		}
+	}
 
 	// The bounding box of nodes, edges and arrowheads, in the layout
 	// orientation.
@@ -237,6 +466,13 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 					grow(q, q)
 				}
 			}
+		}
+	}
+	for i, e := range res.Edges {
+		if e.Label.Present() && !outside[i] {
+			along, across := labelSize(e.Label)
+			d := Point{half(along), half(across)}
+			grow(sub(labelPos[i], d), add(labelPos[i], d))
 		}
 	}
 	for _, cl := range tree.clusters[1:] {
@@ -269,6 +505,8 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 				a.Base, a.Tip = final(a.Base), final(a.Tip)
 			}
 		}
+		e.LabelPos = final(labelPos[i])
+		e.tailEnd, e.headEnd, e.middle = final(e.tailEnd), final(e.headEnd), final(e.middle)
 	}
 	for _, cl := range tree.clusters[1:] {
 		a, b := final(cl.box[0]), final(cl.box[1])
@@ -276,7 +514,7 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 			Graph: cl.g, Color: cl.color, Label: cl.label,
 			X0: min(a.X, b.X), Y0: min(a.Y, b.Y), X1: max(a.X, b.X), Y1: max(a.Y, b.Y),
 		}
-		if len(cl.label.Lines) > 0 {
+		if cl.label.Present() {
 			cr.LabelPos = Point{half(cr.X0 + cr.X1), cr.Y1 - half(cl.labelH)}
 			switch cl.labelJust {
 			case "l":
@@ -291,8 +529,28 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 	if p.lr {
 		res.Width, res.Height = layoutH, layoutW
 	}
+	placeExternalLabels(g, res)
 	placeGraphLabel(g, res)
 	return res, nil
+}
+
+// rightmostAt returns the largest x of a piecewise cubic curve between
+// heights lo and hi, or def when the curve does not reach them.
+func rightmostAt(pts []Point, lo, hi, def float64) float64 {
+	x, found := math.Inf(-1), false
+	for _, seg := range segments(pts) {
+		const steps = 64
+		for k := 0; k <= steps; k++ {
+			q := cubic(seg, float64(k)/steps)
+			if q.Y >= lo && q.Y <= hi {
+				x, found = max(x, q.X), true
+			}
+		}
+	}
+	if !found {
+		return def
+	}
+	return x
 }
 
 // placeGraphLabel puts the graph label below the drawing, centered or at
@@ -346,5 +604,10 @@ func (res *Result) translate(d Point) {
 				a.Base, a.Tip = add(a.Base, d), add(a.Tip, d)
 			}
 		}
+		e.LabelPos = add(e.LabelPos, d)
+		e.XLabelPos, e.HeadLabelPos, e.TailLabelPos = add(e.XLabelPos, d), add(e.HeadLabelPos, d), add(e.TailLabelPos, d)
+	}
+	for i := range res.Nodes {
+		res.Nodes[i].XLabelPos = add(res.Nodes[i].XLabelPos, d)
 	}
 }

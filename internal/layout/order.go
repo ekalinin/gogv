@@ -56,6 +56,9 @@ type ranked struct {
 	// joins are pairs of nodes in one rank subgraph: they belong to the same
 	// component, as the reference merges them when it ranks.
 	joins [][2]int
+	// labelSep is the room that the label of a flat edge needs between two
+	// neighbors, by left and right node.
+	labelSep map[[2]int]float64
 }
 
 func (g *ranked) addEdge(upper, lower, count int) {
@@ -71,8 +74,10 @@ type chainKey struct{ upper, lower int }
 
 // buildRanked creates the ranked graph from the real nodes and their ranks,
 // and the chains of the edges: chains[i] lists the ranked nodes of edge i
-// from its upper to its lower end (nil for loops and flat edges).
-func buildRanked(rank []int, edges [][2]int) (*ranked, [][]int) {
+// from its upper to its lower end (nil for loops and flat edges). Edge i
+// has a chain of its own when own[i] is set, as a labeled edge does, and
+// shares it with the edges between the same nodes otherwise.
+func buildRanked(rank []int, edges [][2]int, own []bool) (*ranked, [][]int) {
 	g := &ranked{}
 	for v, r := range rank {
 		g.nodes = append(g.nodes, rnode{real: v, rank: r})
@@ -112,6 +117,10 @@ func buildRanked(rank []int, edges [][2]int) (*ranked, [][]int) {
 			upper, lower = h, t
 		}
 		k := chainKey{upper, lower}
+		if own != nil && own[i] {
+			// A chain of its own: a key that no other edge has.
+			k = chainKey{upper, -1 - i}
+		}
 		if c, ok := shared[k]; ok {
 			chains[i] = c
 			count[k]++

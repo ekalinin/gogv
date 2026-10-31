@@ -23,6 +23,30 @@ type Text struct {
 	Face      textmetrics.Face
 	// Width and Height are the size of the lines, without margins.
 	Width, Height float64
+	// Table is set for a single-cell table label, which has no lines;
+	// Width and Height are then the table's size.
+	Table *label.Table
+}
+
+// Present reports whether there is a label to draw.
+func (t Text) Present() bool { return len(t.Lines) > 0 || t.Table != nil }
+
+// labelOf resolves a label attribute: plain text with its escapes expanded,
+// a single-cell table, or def in place of an HTML label that is not
+// supported yet. The font attributes set the text and, for a table, are
+// kept for nothing but the outputs.
+func labelOf(v graph.Value, def string, obj label.Object, fontname, fontcolor, fontsize graph.Value) Text {
+	if !v.HTML {
+		return makeText(v.S, obj, fontname, fontcolor, fontsize)
+	}
+	tb, ok := label.ParseTable(v.S)
+	if !ok {
+		return makeText(def, obj, fontname, fontcolor, fontsize)
+	}
+	t := makeText("", obj, fontname, fontcolor, fontsize)
+	t.Table = &tb
+	t.Width, t.Height = tb.Size()
+	return t
 }
 
 // The margins around a node label, in points, as the reference applies
@@ -150,7 +174,7 @@ func nodeSize(shape string, text Text, width, height graph.Value) (w, h float64)
 
 	// The label with its margins.
 	var lw, lh float64
-	if len(text.Lines) > 0 {
+	if text.Present() {
 		lw, lh = text.Width+labelMarginX, text.Height+labelMarginY
 	}
 

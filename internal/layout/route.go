@@ -110,17 +110,55 @@ func insideShape(n *NodeResult, d Point) bool {
 
 // router routes the edges in the layout orientation.
 type router struct {
-	g       *ranked
-	pos     []Point   // ranked node positions
-	width   []float64 // ranked node widths
-	bandUp  []float64 // by rank: how far the rank's band reaches above its y
-	bandDn  []float64 // and below
-	ys      []float64
-	nodesep float64
-	lr      bool
-	nodes   []NodeResult
+	g   *ranked
+	pos []Point // ranked node positions
+	// left and right are how far each ranked node reaches from its x.
+	left, right []float64
+	bandUp      []float64 // by rank: how far the rank's band reaches above its y
+	bandDn      []float64 // and below
+	ys          []float64
+	nodesep     float64
+	lr          bool
+	nodes       []NodeResult
 	// tree holds the clusters, when the graph has them.
 	tree *clusterTree
+	// labelAlong is, for the ranked nodes that hold an edge label, the
+	// label's extent along the rank.
+	labelAlong map[int]float64
+	// loopLabels is, by edge, the extent along the rank of the label of a
+	// loop.
+	loopLabels []float64
+	// flatLabels numbers the labeled flat edges between two neighbors, by
+	// edge, and flatAcross is the height of their labels.
+	flatLabels map[int]int
+	flatAcross map[int]float64
+	// sameTail lists, by edge, the edges of its sametail group.
+	sameTail map[int][]int
+}
+
+// sameTailPoint returns the point of the tail's outline that the edges of
+// edge i's sametail group share: in the mean direction from the tail to
+// their heads, as documented for sametail.
+func (r *router) sameTailPoint(i int, ends [][2]int) (Point, bool) {
+	group := r.sameTail[i]
+	if len(group) < 2 {
+		return Point{}, false
+	}
+	t := ends[i][0]
+	c := r.pos[t]
+	var d Point
+	for _, j := range group {
+		d = add(d, normalize(sub(r.pos[ends[j][1]], c)))
+	}
+	if d == (Point{}) {
+		return Point{}, false
+	}
+	d = normalize(d)
+	// Out along d until the point leaves the outline.
+	far := max(r.left[t], r.right[t], r.nodes[r.g.nodes[t].real].W, r.nodes[r.g.nodes[t].real].H) * 2
+	seg := [4]Point{c, c, add(c, scale(d, far)), add(c, scale(d, far))}
+	in := func(q Point) bool { return r.inside(t, c, q) }
+	return cubic(seg, boundary(seg, in, 0, 1)), true
 }
 
 // toFinal turns an offset in the layout orientation into one in the final
@@ -170,7 +208,7 @@ func (r *router) bounds(v int, ends [2]int) (lo, hi, down, up float64) {
 			a := r.tree.childToward(r.tree.common(cv, cu), cu)
 			lo = max(lo, box(a)[1].X+half(clusterMargin))
 		} else {
-			lo = max(lo, r.pos[u].X+half(r.width[u])+half(r.nodesep))
+			lo = max(lo, r.pos[u].X+r.right[u]+half(r.nodesep))
 		}
 	}
 	if rn.order+1 < len(rank) {
@@ -178,12 +216,27 @@ func (r *router) bounds(v int, ends [2]int) (lo, hi, down, up float64) {
 		if cu := r.clusterOf(u); cu >= 0 && r.tree.common(cv, cu) != cu {
 			a := r.tree.childToward(r.tree.common(cv, cu), cu)
 			hi = min(hi, box(a)[0].X-half(clusterMargin))
+		} else if along, ok := r.labelAlong[v]; ok {
+			// Observed on the reference: the label, right of the edge,
+			// keeps a quarter of nodesep from the edge of a virtual node
+			// that comes next, and half nodesep from the side of a real
+			// one.
+			next := r.pos[u].X - math.Floor(r.nodesep/4)
+			if r.g.nodes[u].real >= 0 {
+				next = r.pos[u].X - r.left[u] - half(r.nodesep)
+			}
+			hi = min(hi, next-along)
 		} else {
-			hi = min(hi, r.pos[u].X-half(r.width[u])-half(r.nodesep))
+			hi = min(hi, r.pos[u].X-r.left[u]-half(r.nodesep))
 		}
+	}
+	if _, ok := r.labelAlong[v]; ok && labelMode == 1 {
+		hi = min(hi, r.pos[v].X)
 	}
 	return lo, hi, down, up
 }
+
+var labelMode = 2
 
 // clusterOf returns the innermost cluster of a ranked node, or -1 when the
 // graph has no clusters.
@@ -295,6 +348,30 @@ func splineThrough(path []Point) []Point {
 			path[i+1])
 	}
 	return out
+}
+
+// curveMiddle returns the point halfway along a piecewise curve.
+func curveMiddle(segs [][4]Point) Point {
+	const steps = 32
+	var pts []Point
+	for _, sg := range segs {
+		for k := 0; k <= steps; k++ {
+			pts = append(pts, cubic(sg, float64(k)/steps))
+		}
+	}
+	var total float64
+	for i := 1; i < len(pts); i++ {
+		total += dist(pts[i-1], pts[i])
+	}
+	var run float64
+	for i := 1; i < len(pts); i++ {
+		d := dist(pts[i-1], pts[i])
+		if run+d >= half(total) && d > 0 {
+			return lerp(pts[i-1], pts[i], (half(total)-run)/d)
+		}
+		run += d
+	}
+	return pts[0]
 }
 
 // segments splits a piecewise curve into its cubic segments.
@@ -495,19 +572,45 @@ func (r *router) routeEdges(g *graph.Graph, ends [][2]int, chains [][]int, polyl
 		var pts []Point
 		switch {
 		case t == h:
-			pts = r.loop(t, idx)
+			// Nested loops reach past the loops inside them: nodesep
+			// beyond an unlabeled one, past the label of a labeled one.
+			var inner float64
+			for _, j := range group[:idx] {
+				if r.loopLabels[j] > 0 {
+					inner += r.loopLabels[j]
+				} else {
+					inner += r.nodesep
+				}
+			}
+			pts = r.loop(t, inner)
 		case chains[i] == nil:
-			pts = r.flat(t, h, off)
+			if k, ok := r.flatLabels[i]; ok {
+				pts = r.labeledFlat(t, h, k, r.flatAcross[i])
+			} else {
+				pts = r.flat(t, h, off)
+			}
 		default:
 			pts = r.chain(chains[i], float64(off*r.nodesep), polyline)
 			if r.g.nodes[t].rank > r.g.nodes[h].rank {
 				pts = reverseCurve(pts)
 			}
 		}
+		if p, ok := r.sameTailPoint(i, ends); ok && t != h && len(pts) > 1 {
+			// The curve leaves from the shared point, its first control
+			// point moved with it.
+			pts[1] = add(pts[1], sub(p, pts[0]))
+			pts[0] = p
+		}
 		segs := segments(pts)
 		tc, hc := r.pos[t], r.pos[h]
 		segs = clipStart(segs, func(q Point) bool { return r.inside(t, tc, q) })
 		segs = clipEnd(segs, func(q Point) bool { return r.inside(h, hc, q) })
+		if len(segs) > 0 {
+			// Where the edge meets its nodes, before the arrowheads, and
+			// its middle, for the external labels.
+			res.tailEnd, res.headEnd = segs[0][0], segs[len(segs)-1][3]
+			res.middle = curveMiddle(segs)
+		}
 		if a.head != "" && len(segs) > 0 {
 			segs, res.Head = arrowAtEnd(segs, a.head, a.size)
 		}
@@ -566,14 +669,45 @@ func (r *router) flat(t, h int, off float64) []Point {
 	return []Point{a, add(a, Point{0, lift}), add(b, Point{0, lift}), b}
 }
 
-// loop returns a loop from a node to itself on its right side, in the final
-// orientation: it leaves above the center, reaches nodesep beyond the right
-// side, and comes back below the center. Further loops are wider.
-func (r *router) loop(v, idx int) []Point {
+// labeledFlat returns the curve of the k-th labeled flat edge between two
+// neighbors, whose labels are across high: as observed on the reference,
+// the first is straight, and the next ones bend away from it, alternately
+// below and above, a label's height plus 4.3 points further at each level.
+func (r *router) labeledFlat(t, h, k int, across float64) []Point {
+	a, b := r.pos[t], r.pos[h]
+	if k == 0 {
+		return []Point{a, a, b, b}
+	}
+	sign, level := flatLevel(k)
+	// A cubic reaches three quarters of the displacement of its control
+	// points.
+	d := Point{0, float64(sign*float64(level)*(across+4.3)) / 0.75}
+	return []Point{a, add(a, d), add(b, d), b}
+}
+
+// flatLevel returns the side (1 above, -1 below) and the level of the k-th
+// labeled flat edge between two neighbors.
+func flatLevel(k int) (sign float64, level int) {
+	sign = 1
+	if k%2 == 1 {
+		sign = -1
+	}
+	return sign, (k + 1) / 2
+}
+
+// loop returns a loop from a node to itself beyond its right side in the
+// layout orientation, as the reference draws it: right of the node with
+// rankdir=TB, above it with rankdir=LR. It leaves a third of the node's
+// half height off the center, reaches nodesep beyond the node, and comes
+// back on the other side. A loop around others reaches inner further.
+func (r *router) loop(v int, inner float64) []Point {
 	n := &r.nodes[r.g.nodes[v].real]
 	hw, hh := half(n.W), half(n.H)
+	if r.lr {
+		hw, hh = hh, hw
+	}
 	dy := hh / 3
-	reach := hw + float64(float64(idx+1)*r.nodesep)
+	reach := hw + r.nodesep + inner
 	local := []Point{
 		{0, dy}, {hw + half(r.nodesep), dy}, {reach, float64(dy * 0.75)}, {reach, 0},
 		{reach, float64(-dy * 0.75)}, {hw + half(r.nodesep), -dy}, {0, -dy},
@@ -581,10 +715,6 @@ func (r *router) loop(v, idx int) []Point {
 	c := r.pos[v]
 	out := make([]Point, len(local))
 	for i, q := range local {
-		// Back from the final orientation to the layout one.
-		if r.lr {
-			q = Point{q.Y, -q.X}
-		}
 		out[i] = add(c, q)
 	}
 	return out
