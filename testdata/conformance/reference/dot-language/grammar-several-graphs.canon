@@ -1,0 +1,12 @@
+digraph A {
+	node [label="\N"];
+	a -> b;
+}
+graph B {
+	node [label="\N"];
+	c -- d;
+}
+digraph C {
+	node [label="\N"];
+	e;
+}

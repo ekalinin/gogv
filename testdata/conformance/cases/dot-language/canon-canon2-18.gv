@@ -1,0 +1,1 @@
+digraph { a -> b [tailport=n]; c -> d [headport=s]; e:n -> f [tailport=s] }

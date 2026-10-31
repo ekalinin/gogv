@@ -1,0 +1,8 @@
+digraph {
+	node [label="\N"];
+	{
+		node [shape=box];
+		a;
+	}
+	b;
+}

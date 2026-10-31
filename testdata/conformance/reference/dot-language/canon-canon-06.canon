@@ -1,0 +1,13 @@
+digraph {
+	node [label="\N"];
+	"a b" -> "c\"d";
+	"1x";
+	12;
+	-3.5;
+	"node";
+	"Node";
+	x	[label=<<b>hi</b>>];
+	y	[label="multi\nline"];
+	z	[label=""];
+	w	[label="a\\b"];
+}

@@ -1,0 +1,17 @@
+graph 1 14.292 1.1471
+node x 0.375 0.57354 0.75 0.5 "a,b" solid ellipse black lightgrey
+node y 1.375 0.57354 0.75 0.5 "a;b" solid ellipse black lightgrey
+node z 2.375 0.57354 0.75 0.5 "{x}" solid ellipse black lightgrey
+node w 3.375 0.57354 0.75 0.5 12 solid ellipse black lightgrey
+node v 4.375 0.57354 0.75 0.5 -1 solid ellipse black lightgrey
+node u 5.4167 0.57354 0.84307 0.5 "1.5.6" solid ellipse black lightgrey
+node t 6.4583 0.57354 0.75 0.5 _a solid ellipse black lightgrey
+node s 7.4583 0.57354 0.75 0.5 é solid ellipse black lightgrey
+node r 8.4583 0.57354 0.75 0.5 " " solid ellipse black lightgrey
+node q 9.4583 0.57354 0.75 1.1471 "a\lb\rc" solid ellipse black lightgrey
+node p 10.681 0.57354 1.1847 0.8171 "real
+newline" solid ellipse black lightgrey
+node o 11.903 0.57354 0.76841 0.5 "tab	x" solid ellipse black lightgrey
+node n 12.917 0.57354 0.75 0.5 A1 solid ellipse black lightgrey
+node m 13.917 0.57354 0.75 0.5 "1e5" solid ellipse black lightgrey
+stop

@@ -1,0 +1,8 @@
+digraph {
+	graph [splines=polyline];
+	node [label="\N"];
+	a -> b;
+	a -> c;
+	a -> d;
+	b -> c;
+}

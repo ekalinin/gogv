@@ -1,0 +1,1 @@
+digraph { a [color=red, shape=box]; a [color=blue]; b [foo=bar] }

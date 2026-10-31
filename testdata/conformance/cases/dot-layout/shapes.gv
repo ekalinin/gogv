@@ -1,0 +1,1 @@
+digraph { r [shape=rect]; b [shape=box]; e [shape=ellipse]; o [shape=oval]; c [shape=circle]; d [shape=diamond]; h [shape=hexagon]; g [shape=octagon]; p [shape=plaintext]; t [shape=point] }

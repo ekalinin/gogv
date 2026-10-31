@@ -1,0 +1,6 @@
+digraph {
+	node [label="\N"];
+	a	[label="one\ntwo\nthree"];
+	b	[label="left\lright\r"];
+	a -> b;
+}

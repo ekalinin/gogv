@@ -1,0 +1,9 @@
+digraph {
+	node [label="\N"];
+	r -> a;
+	r -> b;
+	r -> c;
+	r -> d;
+	r -> e;
+	r -> f;
+}

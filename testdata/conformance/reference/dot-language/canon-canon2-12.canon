@@ -1,0 +1,8 @@
+digraph {
+	node [label="\N"];
+	subgraph s {
+		node [shape=circle];
+		b;
+	}
+	c;
+}

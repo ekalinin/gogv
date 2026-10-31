@@ -1,0 +1,15 @@
+digraph {
+	graph [bgcolor=green];
+	node [color=red,
+		label="\N"
+	];
+	edge [color=blue];
+	subgraph s {
+		graph [bgcolor=red];
+		node [color=blue];
+		edge [color=red];
+		a;
+		b;
+		a -> b;
+	}
+}

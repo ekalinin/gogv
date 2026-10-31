@@ -1,0 +1,14 @@
+# Cases whose outputs differ from the reference beyond the similarity
+# contract. Each entry names the case, the reason and the follow-up change that
+# resolves it:
+#
+# - id: <capability>/<case>
+#   reason: <why the outputs differ>
+#   change: <change name>
+
+- id: dot-layout/long-edges
+  reason: "order within ranks: the chain of b -> e goes right of c and d instead of left; both orders have no crossing, and how the reference breaks this tie is not known yet"
+  change: tune-layout-heuristics
+- id: dot-language/node-lists
+  reason: "x coordinates: the optimum of the positioning is not unique, and gogv takes another one than the reference (d, e, f, g, h are 9 points apart)"
+  change: tune-layout-heuristics

@@ -1,0 +1,1 @@
+digraph { a [width=3]; b [height=2]; c; a -> c; b -> c }

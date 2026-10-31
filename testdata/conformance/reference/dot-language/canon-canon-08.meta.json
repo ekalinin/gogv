@@ -1,0 +1,14 @@
+{
+  "canon": {
+    "status": 0,
+    "stderr": "Warning: node a, port p1 unrecognized\n"
+  },
+  "plain": {
+    "status": 0,
+    "stderr": "Warning: node a, port p1 unrecognized\n"
+  },
+  "svg": {
+    "status": 0,
+    "stderr": "Warning: node a, port p1 unrecognized\n"
+  }
+}

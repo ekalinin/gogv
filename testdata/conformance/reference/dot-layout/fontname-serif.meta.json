@@ -1,0 +1,14 @@
+{
+  "canon": {
+    "status": 0,
+    "stderr": "Warning: Warning: no hard-coded metrics for 'Serif'.  Falling back to 'Times' metrics\n"
+  },
+  "plain": {
+    "status": 0,
+    "stderr": "Warning: Warning: no hard-coded metrics for 'Serif'.  Falling back to 'Times' metrics\n"
+  },
+  "svg": {
+    "status": 0,
+    "stderr": "Warning: Warning: no hard-coded metrics for 'Serif'.  Falling back to 'Times' metrics\n"
+  }
+}

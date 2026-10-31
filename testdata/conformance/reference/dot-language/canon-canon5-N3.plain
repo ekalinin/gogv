@@ -1,0 +1,5 @@
+graph 1 1.2378 1.5
+node "my node" 0.61892 1.25 1.2378 0.5 "my node" solid ellipse black lightgrey
+node b 0.61892 0.25 0.75 0.5 b solid ellipse black lightgrey
+edge "my node" b 4 0.61892 0.99579 0.61892 0.89454 0.61892 0.77398 0.61892 0.66022 solid black
+stop

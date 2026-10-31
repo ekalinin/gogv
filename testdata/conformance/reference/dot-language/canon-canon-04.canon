@@ -1,0 +1,9 @@
+digraph {
+	node [label="\N",
+		shape=box
+	];
+	edge [color=red];
+	a	[shape=""];
+	a -> b	[color=""];
+	b -> c;
+}

@@ -1,0 +1,6 @@
+digraph {
+	graph [nodesep=1];
+	node [label="\N"];
+	a;
+	b;
+}

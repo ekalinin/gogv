@@ -1,0 +1,4 @@
+digraph {
+	node [label="\N"];
+	a -> b	[dir=back];
+}

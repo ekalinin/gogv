@@ -1,0 +1,6 @@
+strict digraph {
+	node [label="\N"];
+	a -> a;
+	a -> b	[color=red];
+	b -> a;
+}

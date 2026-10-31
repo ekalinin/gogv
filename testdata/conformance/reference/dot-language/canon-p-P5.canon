@@ -1,0 +1,7 @@
+digraph {
+	node [label="\N"];
+	subgraph s {
+		edge [color=red];
+		a -> b;
+	}
+}

@@ -1,0 +1,5 @@
+strict graph {
+	node [label="\N"];
+	a -- a;
+	a -- b;
+}

@@ -1,0 +1,9 @@
+graph 1 14.571 1.8411
+node r 0.66729 0.92057 1.3346 0.5 "long label text" solid rect black lightgrey
+node e 2.5006 0.92057 1.8411 0.5 "long label text" solid ellipse black lightgrey
+node c 4.5978 0.92057 1.8411 1.8411 "long label text" solid circle black lightgrey
+node d 7.0701 0.92057 2.6038 0.5 "long label text" solid diamond black lightgrey
+node h 9.6812 0.92057 2.126 0.5 "long label text" solid hexagon black lightgrey
+node g 11.987 0.92057 1.9928 0.5 "long label text" solid octagon black lightgrey
+node p 13.903 0.92057 1.3346 0.5 "long label text" solid plaintext black lightgrey
+stop

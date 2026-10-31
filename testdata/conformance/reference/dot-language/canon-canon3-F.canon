@@ -1,0 +1,10 @@
+digraph {
+	node [label="\N"];
+	edge [weight=2];
+	a -> b	[color=red,
+		label=x,
+		weight=""];
+	a -> b	[label=y,
+		weight=""];
+	c -> d	[color=red];
+}

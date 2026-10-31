@@ -1,0 +1,16 @@
+digraph {
+	node [label="\N"];
+	subgraph s {
+		node [shape=box];
+		a	[shape=""];
+		b;
+	}
+	subgraph t {
+		graph [color=red];
+		subgraph u {
+			graph [color=blue];
+			e;
+		}
+		f;
+	}
+}

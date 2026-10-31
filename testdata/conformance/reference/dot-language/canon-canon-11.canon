@@ -1,0 +1,6 @@
+digraph {
+	node [label="\N"];
+	a	[color=blue,
+		shape=box];
+	b	[foo=bar];
+}

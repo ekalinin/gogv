@@ -1,0 +1,11 @@
+digraph {
+	node [color=red,
+		label="\N"
+	];
+	subgraph s {
+		a	[color=""];
+		b	[color=""];
+		a -> b;
+		c -> a;
+	}
+}
