@@ -18,11 +18,11 @@ import (
 )
 
 // Formats are the output formats Render writes.
-var Formats = []string{"canon", "plain", "svg"}
+var Formats = []string{"canon", "plain", "plain-ext", "svg", "svg_inline", "dot", "gv", "xdot", "xdot1.2", "xdot1.4", "json", "json0", "dot_json", "xdot_json"}
 
 // laterFormats are the output formats of version 1 that are not supported
-// yet.
-var laterFormats = []string{"svg_inline", "plain-ext", "dot", "gv", "xdot", "xdot1.2", "xdot1.4", "json", "json0", "dot_json", "xdot_json"}
+// yet: none since its last slice.
+var laterFormats []string
 
 // Warning reports something the caller may want to know about an input:
 // mostly a Graphviz feature that is not supported yet, with the default
@@ -96,8 +96,12 @@ func Render(ctx context.Context, src string, format string) ([]byte, []Warning, 
 		for _, w := range attrs.UnknownPorts(g) {
 			warnings = append(warnings, Warning{text: w})
 		}
-		if format == "canon" {
+		switch format {
+		case "canon":
 			out.Write(output.Canon(g))
+			continue
+		case "dot_json", "xdot_json":
+			out.Write(output.GraphJSON(g))
 			continue
 		}
 		res, err := layout.Layout(ctx, g)
@@ -107,8 +111,22 @@ func Render(ctx context.Context, src string, format string) ([]byte, []Warning, 
 		switch format {
 		case "plain":
 			out.Write(output.Plain(res))
+		case "plain-ext":
+			out.Write(output.PlainExt(res))
 		case "svg":
 			out.Write(output.SVG(res))
+		case "svg_inline":
+			out.Write(output.SVGInline(res))
+		case "dot", "gv":
+			out.Write(output.Dot(res))
+		case "xdot":
+			out.Write(output.Xdot(res, "1.7"))
+		case "xdot1.2", "xdot1.4":
+			out.Write(output.Xdot(res, strings.TrimPrefix(format, "xdot")))
+		case "json":
+			out.Write(output.JSON(res, true))
+		case "json0":
+			out.Write(output.JSON(res, false))
 		}
 	}
 	if parseErr != nil {

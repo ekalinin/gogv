@@ -34,12 +34,24 @@ func TestRenderSyntaxError(t *testing.T) {
 }
 
 func TestRenderFormats(t *testing.T) {
-	var fe *FormatError
-	if _, _, err := Render(context.Background(), "digraph {}", "xdot"); !errors.As(err, &fe) || !fe.NotSupportedYet {
-		t.Errorf("xdot: %v", err)
+	src := `digraph G { subgraph cluster_x { a } a -> b [label="x"] }`
+	for _, f := range Formats {
+		out, warnings, err := Render(context.Background(), src, f)
+		if err != nil || len(warnings) != 0 || len(out) == 0 {
+			t.Errorf("%s: %d bytes, warnings %v, error %v", f, len(out), warnings, err)
+		}
 	}
+	if len(Formats) != 14 {
+		t.Errorf("%d formats, v1 has 14", len(Formats))
+	}
+	dot, _, _ := Render(context.Background(), src, "dot")
+	gv, _, _ := Render(context.Background(), src, "gv")
+	if !bytes.Equal(dot, gv) {
+		t.Error("gv differs from dot")
+	}
+	var fe *FormatError
 	if _, _, err := Render(context.Background(), "digraph {}", "foo"); !errors.As(err, &fe) || fe.NotSupportedYet ||
-		err.Error() != `Format: "foo" not recognized. Use one of: canon plain svg` {
+		err.Error() != `Format: "foo" not recognized. Use one of: canon plain plain-ext svg svg_inline dot gv xdot xdot1.2 xdot1.4 json json0 dot_json xdot_json` {
 		t.Errorf("foo: %v", err)
 	}
 }

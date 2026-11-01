@@ -17,8 +17,15 @@ import (
 
 // Canon writes g back in DOT, without layout, as the reference's -Tcanon
 // does.
-func Canon(g *graph.Graph) []byte {
-	c := &canon{root: g.Root()}
+func Canon(g *graph.Graph) []byte { return writeDOT(g, false) }
+
+// writeDOT writes g back in DOT. laidOut is set for a graph that went
+// through the layout, as for -Tdot: the reference then writes every
+// anonymous subgraph of the root or of a cluster, even one with nothing of
+// its own, and the graph attributes of the layout only where the layout set
+// them.
+func writeDOT(g *graph.Graph, laidOut bool) []byte {
+	c := &canon{root: g.Root(), laidOut: laidOut}
 	var b bytes.Buffer
 	if g.Strict() {
 		b.WriteString("strict ")
@@ -39,7 +46,8 @@ func Canon(g *graph.Graph) []byte {
 }
 
 type canon struct {
-	root *graph.Graph
+	root    *graph.Graph
+	laidOut bool
 }
 
 // written collects what a subgraph wrote, so that its ancestors do not write
@@ -74,6 +82,9 @@ func sortAttrs(as []attr) []attr {
 func (c *canon) header(g *graph.Graph) (graphAttrs, nodeDefaults, edgeDefaults []attr) {
 	for _, s := range c.root.Symbols(graph.GraphKind) {
 		v := g.AttrAt(s)
+		if c.laidOut && laidOutGraphAttr[s.Name] && !g.AttrSetHere(s) {
+			continue
+		}
 		if g.IsRoot() && s.SetAtRoot || !g.IsRoot() && (g.AttrSetHere(s) || v != g.Parent.AttrAt(s)) {
 			graphAttrs = append(graphAttrs, attr{s.Name, c.value(v)})
 		}
@@ -167,7 +178,8 @@ func (c *canon) body(b *bytes.Buffer, g *graph.Graph, indent string) written {
 // to write: then its contents belong to its parent.
 func (c *canon) subgraph(b *bytes.Buffer, sg *graph.Graph, indent string) written {
 	graphAttrs, nodeDefaults, edgeDefaults := c.header(sg)
-	if sg.Anonymous && len(graphAttrs)+len(nodeDefaults)+len(edgeDefaults) == 0 {
+	kept := c.laidOut && (sg.Parent.IsRoot() || sg.Parent.IsCluster())
+	if sg.Anonymous && !kept && len(graphAttrs)+len(nodeDefaults)+len(edgeDefaults) == 0 {
 		w := newWritten()
 		for _, child := range sg.Subgraphs {
 			w.merge(c.subgraph(b, child, indent))

@@ -39,14 +39,15 @@ func TestMissingFile(t *testing.T) {
 }
 
 func TestFormats(t *testing.T) {
-	if _, errs, status := run(t, "digraph {}", "-Txdot"); status != 1 || !strings.Contains(errs, `"xdot" is not supported yet`) {
-		t.Errorf("-Txdot: %d %q", status, errs)
+	if out, errs, status := run(t, "digraph { a }", "-Txdot"); status != 0 || errs != "" || !strings.Contains(out, "xdotversion=1.7") {
+		t.Errorf("-Txdot: %d %q %q", status, errs, out)
 	}
-	if _, errs, status := run(t, "digraph {}", "-Tfoo"); status != 1 || errs != "Format: \"foo\" not recognized. Use one of: canon plain svg\n" {
+	if _, errs, status := run(t, "digraph {}", "-Tfoo"); status != 1 ||
+		errs != "Format: \"foo\" not recognized. Use one of: canon plain plain-ext svg svg_inline dot gv xdot xdot1.2 xdot1.4 json json0 dot_json xdot_json\n" {
 		t.Errorf("-Tfoo: %d %q", status, errs)
 	}
-	if _, errs, status := run(t, "digraph {}"); status != 1 || !strings.Contains(errs, `"dot" is not supported yet`) {
-		t.Errorf("default format: %d %q", status, errs)
+	if out, errs, status := run(t, "digraph G { a }"); status != 0 || errs != "" || !strings.HasPrefix(out, "digraph G {\n\tgraph [bb=\"0,0,54,36\"];\n") {
+		t.Errorf("default format: %d %q %q", status, errs, out)
 	}
 }
 
