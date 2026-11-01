@@ -1,0 +1,9 @@
+digraph {
+	graph [bb="0,0,54,36"];
+	node [label="\N"];
+	a	[height=0.5,
+		label=<<TABLE CELLPADDING="4"><TR><TD BGCOLOR="#000007" BORDER="3" CELLPADDING="1"></TD><TD BGCOLOR="#000008" CELLSPACING="6"></TD><TD BORDER="0" BGCOLOR="#000009"></TD></TR></TABLE>>,
+		pos="27,18",
+		shape=plaintext,
+		width=0.75];
+}

@@ -3,11 +3,23 @@
     "status": 0,
     "stderr": "Warning: node b, port X unrecognized\nWarning: node b, port Y unrecognized\nWarning: node a, port Z unrecognized\nWarning: node b, port W unrecognized\n"
   },
+  "dot": {
+    "status": 0,
+    "stderr": "Warning: node b, port X unrecognized\nWarning: node b, port Y unrecognized\nWarning: node a, port Z unrecognized\nWarning: node b, port W unrecognized\n"
+  },
+  "json": {
+    "status": 0,
+    "stderr": "Warning: node b, port X unrecognized\nWarning: node b, port Y unrecognized\nWarning: node a, port Z unrecognized\nWarning: node b, port W unrecognized\n"
+  },
   "plain": {
     "status": 0,
     "stderr": "Warning: node b, port X unrecognized\nWarning: node b, port Y unrecognized\nWarning: node a, port Z unrecognized\nWarning: node b, port W unrecognized\n"
   },
   "svg": {
+    "status": 0,
+    "stderr": "Warning: node b, port X unrecognized\nWarning: node b, port Y unrecognized\nWarning: node a, port Z unrecognized\nWarning: node b, port W unrecognized\n"
+  },
+  "xdot": {
     "status": 0,
     "stderr": "Warning: node b, port X unrecognized\nWarning: node b, port Y unrecognized\nWarning: node a, port Z unrecognized\nWarning: node b, port W unrecognized\n"
   }

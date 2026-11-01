@@ -3,11 +3,23 @@
     "status": 0,
     "stderr": "Warning: Warning: no value for width of non-ASCII character 195. Falling back to width of space character\nWarning: node n1, port p unrecognized\n"
   },
+  "dot": {
+    "status": 0,
+    "stderr": "Warning: Warning: no value for width of non-ASCII character 195. Falling back to width of space character\nWarning: node n1, port p unrecognized\n"
+  },
+  "json": {
+    "status": 0,
+    "stderr": "Warning: Warning: no value for width of non-ASCII character 195. Falling back to width of space character\nWarning: node n1, port p unrecognized\n"
+  },
   "plain": {
     "status": 0,
     "stderr": "Warning: Warning: no value for width of non-ASCII character 195. Falling back to width of space character\nWarning: node n1, port p unrecognized\n"
   },
   "svg": {
+    "status": 0,
+    "stderr": "Warning: Warning: no value for width of non-ASCII character 195. Falling back to width of space character\nWarning: node n1, port p unrecognized\n"
+  },
+  "xdot": {
     "status": 0,
     "stderr": "Warning: Warning: no value for width of non-ASCII character 195. Falling back to width of space character\nWarning: node n1, port p unrecognized\n"
   }

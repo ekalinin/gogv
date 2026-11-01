@@ -1,0 +1,14 @@
+{
+  "name": "%1",
+  "directed": true,
+  "strict": false,
+  "_subgraph_cnt": 0,
+  "objects": [
+    {
+      "_gvid": 0,
+      "name": "a",
+      "label": "<TABLE><TR><TD PORT=\"p\" BGCOLOR=\"#000001\"><\/TD><TD WIDTH=\"20\"><\/TD><\/TR><\/TABLE>",
+      "shape": "plaintext"
+    }
+  ]
+}

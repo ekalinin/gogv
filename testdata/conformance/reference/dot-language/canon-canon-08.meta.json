@@ -3,11 +3,23 @@
     "status": 0,
     "stderr": "Warning: node a, port p1 unrecognized\n"
   },
+  "dot": {
+    "status": 0,
+    "stderr": "Warning: node a, port p1 unrecognized\n"
+  },
+  "json": {
+    "status": 0,
+    "stderr": "Warning: node a, port p1 unrecognized\n"
+  },
   "plain": {
     "status": 0,
     "stderr": "Warning: node a, port p1 unrecognized\n"
   },
   "svg": {
+    "status": 0,
+    "stderr": "Warning: node a, port p1 unrecognized\n"
+  },
+  "xdot": {
     "status": 0,
     "stderr": "Warning: node a, port p1 unrecognized\n"
   }

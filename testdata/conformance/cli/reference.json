@@ -9,13 +9,13 @@
     "stderr": "",
     "status": 0
   },
-  "cli/engine-dot": {
-    "stdout": "digraph {\n\tnode [label=\"\\N\"];\n\ta;\n}\n",
+  "cli/default-format": {
+    "stdout": "digraph G {\n\tgraph [bb=\"0,0,54,36\"];\n\tnode [label=\"\\N\"];\n\ta\t[height=0.5,\n\t\tpos=\"27,18\",\n\t\twidth=0.75];\n}\n",
     "stderr": "",
     "status": 0
   },
-  "cli/later-format": {
-    "stdout": "digraph {\n\tgraph [_draw_=\"c 9 -#fffffe00 C 7 -#ffffff P 4 0 0 0 36 54 36 54 0 \",\n\t\tbb=\"0,0,54,36\",\n\t\txdotversion=1.7\n\t];\n\tnode [label=\"\\N\"];\n\ta\t[_draw_=\"c 7 -#000000 e 27 18 27 18 \",\n\t\t_ldraw_=\"F 14 11 -Times-Roman c 7 -#000000 T 27 13.8 0 6.21 1 -a \",\n\t\theight=0.5,\n\t\tpos=\"27,18\",\n\t\twidth=0.75];\n}\n",
+  "cli/engine-dot": {
+    "stdout": "digraph {\n\tnode [label=\"\\N\"];\n\ta;\n}\n",
     "stderr": "",
     "status": 0
   },
@@ -62,6 +62,11 @@
   "cli/version": {
     "stdout": "",
     "stderr": "dot - graphviz version 16.1.0 (20260904.0139)\n",
+    "status": 0
+  },
+  "cli/xdot": {
+    "stdout": "digraph {\n\tgraph [_draw_=\"c 9 -#fffffe00 C 7 -#ffffff P 4 0 0 0 36 54 36 54 0 \",\n\t\tbb=\"0,0,54,36\",\n\t\txdotversion=1.7\n\t];\n\tnode [label=\"\\N\"];\n\ta\t[_draw_=\"c 7 -#000000 e 27 18 27 18 \",\n\t\t_ldraw_=\"F 14 11 -Times-Roman c 7 -#000000 T 27 13.8 0 6.21 1 -a \",\n\t\theight=0.5,\n\t\tpos=\"27,18\",\n\t\twidth=0.75];\n}\n",
+    "stderr": "",
     "status": 0
   }
 }

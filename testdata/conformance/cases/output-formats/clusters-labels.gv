@@ -1,0 +1,1 @@
+digraph G { label="Title"; subgraph cluster_x { label="C"; color="#00FF00"; a; subgraph cluster_y { b } } a -> b [headlabel="H", taillabel="T"]; b -> c [xlabel="X"]; c [xlabel="N"] }

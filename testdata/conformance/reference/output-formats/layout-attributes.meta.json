@@ -1,0 +1,58 @@
+{
+  "canon": {
+    "status": 0,
+    "stderr": ""
+  },
+  "dot": {
+    "status": 0,
+    "stderr": ""
+  },
+  "dot_json": {
+    "status": 0,
+    "stderr": ""
+  },
+  "gv": {
+    "status": 0,
+    "stderr": ""
+  },
+  "json": {
+    "status": 0,
+    "stderr": ""
+  },
+  "json0": {
+    "status": 0,
+    "stderr": ""
+  },
+  "plain": {
+    "status": 0,
+    "stderr": ""
+  },
+  "plain-ext": {
+    "status": 0,
+    "stderr": ""
+  },
+  "svg": {
+    "status": 0,
+    "stderr": ""
+  },
+  "svg_inline": {
+    "status": 0,
+    "stderr": ""
+  },
+  "xdot": {
+    "status": 0,
+    "stderr": ""
+  },
+  "xdot1.2": {
+    "status": 0,
+    "stderr": ""
+  },
+  "xdot1.4": {
+    "status": 0,
+    "stderr": ""
+  },
+  "xdot_json": {
+    "status": 0,
+    "stderr": ""
+  }
+}

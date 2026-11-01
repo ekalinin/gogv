@@ -1,0 +1,71 @@
+{
+  "name": "%1",
+  "directed": true,
+  "strict": false,
+  "bb": "0,0,270,36",
+  "_subgraph_cnt": 4,
+  "objects": [
+    {
+      "name": "%3",
+      "rank": "same",
+      "_gvid": 0,
+      "nodes": [
+        4
+      ]
+    },
+    {
+      "name": "%5",
+      "rank": "same",
+      "_gvid": 1,
+      "nodes": [
+        5
+      ]
+    },
+    {
+      "name": "x",
+      "_gvid": 2,
+      "nodes": [
+        6
+      ]
+    },
+    {
+      "name": "%7",
+      "_gvid": 3,
+      "nodes": [
+        7
+      ]
+    },
+    {
+      "_gvid": 4,
+      "name": "a",
+      "height": "0.5",
+      "label": "\\N",
+      "pos": "27,18",
+      "width": "0.75"
+    },
+    {
+      "_gvid": 5,
+      "name": "b",
+      "height": "0.5",
+      "label": "\\N",
+      "pos": "99,18",
+      "width": "0.75"
+    },
+    {
+      "_gvid": 6,
+      "name": "c",
+      "height": "0.5",
+      "label": "\\N",
+      "pos": "171,18",
+      "width": "0.75"
+    },
+    {
+      "_gvid": 7,
+      "name": "d",
+      "height": "0.5",
+      "label": "\\N",
+      "pos": "243,18",
+      "width": "0.75"
+    }
+  ]
+}

@@ -3,11 +3,23 @@
     "status": 0,
     "stderr": "Warning: b was already in a rankset, deleted from cluster %1\n"
   },
+  "dot": {
+    "status": 0,
+    "stderr": "Warning: b was already in a rankset, deleted from cluster %1\n"
+  },
+  "json": {
+    "status": 0,
+    "stderr": "Warning: b was already in a rankset, deleted from cluster %1\n"
+  },
   "plain": {
     "status": 0,
     "stderr": "Warning: b was already in a rankset, deleted from cluster %1\n"
   },
   "svg": {
+    "status": 0,
+    "stderr": "Warning: b was already in a rankset, deleted from cluster %1\n"
+  },
+  "xdot": {
     "status": 0,
     "stderr": "Warning: b was already in a rankset, deleted from cluster %1\n"
   }

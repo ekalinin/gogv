@@ -1,0 +1,23 @@
+digraph {
+	graph [bb="0,0,100,160"];
+	node [label="\N"];
+	subgraph cluster_t {
+		graph [bb="8,81,78,152",
+			label=<<TABLE BGCOLOR="#000007" FIXEDSIZE="TRUE" WIDTH="51" HEIGHT="11"><TR><TD></TD></TR></TABLE>>,
+			lheight=0.15,
+			lp="43,142.5",
+			lwidth=0.71
+		];
+		a	[height=0.5,
+			pos="43,107",
+			width=0.75];
+	}
+	b	[height=0.5,
+		label=<<TABLE BORDER="2" CELLBORDER="3" CELLSPACING="4" COLOR="#00000F"><TR><TD BGCOLOR="#000001"></TD><TD COLOR="#00000E"></TD></TR></TABLE>>,
+		pos="43,18",
+		shape=plaintext,
+		width=0.75];
+	a -> b	[label=<<TABLE BGCOLOR="#000009" FIXEDSIZE="TRUE" WIDTH="57" HEIGHT="17"><TR><TD></TD></TR></TABLE>>,
+		lp="71.5,62.5",
+		pos="e,43,35.857 43,88.812 43,76.938 43,60.876 43,47.151"];
+}

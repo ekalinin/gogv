@@ -1,0 +1,28 @@
+digraph {
+	graph [_draw_="c 9 -#fffffe00 C 7 -#ffffff P 4 0 0 0 110 126 110 126 0 ",
+		bb="0,0,126,110",
+		xdotversion=1.7
+	];
+	node [label="\N"];
+	a	[height=0.52778,
+		label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD FIXEDSIZE="TRUE" WIDTH="40" HEIGHT="20" PORT="l"></TD><TD FIXEDSIZE="TRUE" WIDTH="60" HEIGHT="30" PORT="r"></TD></TR></TABLE>>,
+		pos="68,19",
+		shape=plaintext,
+		width=1.6111];
+	b	[_draw_="c 7 -#000000 e 99 92 27 18 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 99 87.8 0 7 1 -b ",
+		height=0.5,
+		pos="99,92",
+		width=0.75];
+	b -> a:r	[_draw_="c 7 -#000000 B 4 93.89 74.01 91.82 66.1 89.68 56.26 88.65 46.43 ",
+		_hdraw_="S 5 -solid c 7 -#000000 C 7 -#000000 P 3 92.14 46.3 88.09 36.51 85.15 46.69 ",
+		pos="e,88,35 93.886,74.013 91.822,66.096 89.684,56.264 88.645,46.43"];
+	c	[_draw_="c 7 -#000000 e 27 92 27 18 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 27 87.8 0 6.21 1 -c ",
+		height=0.5,
+		pos="27,92",
+		width=0.75];
+	c -> a:l	[_draw_="c 7 -#000000 B 4 32.11 74.01 34.18 66.1 36.32 56.26 37.35 46.43 ",
+		_hdraw_="S 5 -solid c 7 -#000000 C 7 -#000000 P 3 40.85 46.69 37.91 36.51 33.86 46.3 ",
+		pos="e,38,35 32.114,74.013 34.178,66.096 36.316,56.264 37.355,46.43"];
+}

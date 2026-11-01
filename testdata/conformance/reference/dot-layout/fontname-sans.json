@@ -1,0 +1,68 @@
+{
+  "name": "%1",
+  "directed": true,
+  "strict": false,
+  "_draw_": 
+  [
+    {
+      "op": "c",
+      "grad": "none",
+      "color": "#fffffe00"
+    },
+    {
+      "op": "C",
+      "grad": "none",
+      "color": "#ffffff"
+    },
+    {
+      "op": "P",
+      "points": [[0.000,0.000],[0.000,36.000],[252.720,36.000],[252.720,0.000]]
+    }
+  ],
+  "bb": "0,0,252.72,36",
+  "xdotversion": "1.7",
+  "_subgraph_cnt": 0,
+  "objects": [
+    {
+      "_gvid": 0,
+      "name": "a",
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "e",
+          "rect": [126.360,18.000,126.360,18.000]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Sans"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [126.360,13.800],
+          "align": "c",
+          "width": 167.190,
+          "text": "abcdefghijklmnopqrstuvwxyz"
+        }
+      ],
+      "fontname": "Sans",
+      "height": "0.5",
+      "label": "abcdefghijklmnopqrstuvwxyz",
+      "pos": "126.36,18",
+      "width": "3.51"
+    }
+  ]
+}

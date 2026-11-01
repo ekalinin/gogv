@@ -1,0 +1,15 @@
+digraph {
+	graph [bb="0,0,96,125"];
+	node [label="\N"];
+	a	[height=0.5,
+		label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD BGCOLOR="#000002" FIXEDSIZE="TRUE" WIDTH="50.9" HEIGHT="20.5"></TD><TD BGCOLOR="#000003" WIDTH="30.7" HEIGHT="10.2"></TD></TR></TABLE>>,
+		pos="48,107",
+		shape=plaintext,
+		width=1.3333];
+	b	[height=0.5,
+		pos="48,18",
+		width=0.75];
+	a -> b	[label=<<TABLE WIDTH="41.9" HEIGHT="17.9" FIXEDSIZE="TRUE" BGCOLOR="#000001"><TR><TD></TD></TR></TABLE>>,
+		lp="68.5,62.5",
+		pos="e,48,36.318 48,89.226 48,77.463 48,61.444 48,47.675"];
+}

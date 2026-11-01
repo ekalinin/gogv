@@ -1,0 +1,38 @@
+digraph {
+	graph [_draw_="c 9 -#fffffe00 C 7 -#ffffff P 4 0 0 0 160 100 160 100 0 ",
+		bb="0,0,100,160",
+		xdotversion=1.4
+	];
+	node [label="\N"];
+	subgraph cluster_t {
+		graph [_draw_="c 7 -#000000 p 4 8 81 8 152 78 152 78 81 ",
+			_ldraw_="S 5 -solid c 9 -#fffffe00 C 7 -#000007 P 4 17.5 137 17.5 148 68.5 148 68.5 137 S 5 -solid c 7 -#000000 p 4 17.5 137 17.5 148 68.5 \
+148 68.5 137 S 5 -solid c 7 -#000000 p 4 20.5 139 20.5 145 26.5 145 26.5 139 ",
+			bb="8,81,78,152",
+			label=<<TABLE BGCOLOR="#000007" FIXEDSIZE="TRUE" WIDTH="51" HEIGHT="11"><TR><TD></TD></TR></TABLE>>,
+			lheight=0.15,
+			lp="43,142.5",
+			lwidth=0.71
+		];
+		a	[_draw_="c 7 -#000000 e 43 107 27 18 ",
+			_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 43 102.8 0 6.21 1 -a ",
+			height=0.5,
+			pos="43,107",
+			width=0.75];
+	}
+	b	[_ldraw_="S 15 -setlinewidth(2) S 5 -solid c 7 -#00000f p 4 26 8 26 28 60 28 60 8 S 5 -solid c 9 -#fffffe00 C 7 -#000001 P 4 31 13 31 23 41 \
+23 41 13 S 15 -setlinewidth(3) S 5 -solid c 7 -#00000f p 4 32.5 14.5 32.5 21.5 39.5 21.5 39.5 14.5 S 5 -solid c 7 -#00000e p 4 46.5 \
+14.5 46.5 21.5 53.5 21.5 53.5 14.5 ",
+		height=0.5,
+		label=<<TABLE BORDER="2" CELLBORDER="3" CELLSPACING="4" COLOR="#00000F"><TR><TD BGCOLOR="#000001"></TD><TD COLOR="#00000E"></TD></TR></TABLE>>,
+		pos="43,18",
+		shape=plaintext,
+		width=0.75];
+	a -> b	[_draw_="c 7 -#000000 B 4 43 88.81 43 76.94 43 60.88 43 47.15 ",
+		_hdraw_="S 5 -solid c 7 -#000000 C 7 -#000000 P 3 46.5 47.37 43 37.37 39.5 47.37 ",
+		_ldraw_="S 5 -solid c 9 -#fffffe00 C 7 -#000009 P 4 43 54 43 71 100 71 100 54 S 5 -solid c 7 -#000000 p 4 43 54 43 71 100 71 100 54 S 5 -solid \
+c 7 -#000000 p 4 46 62 46 68 52 68 52 62 ",
+		label=<<TABLE BGCOLOR="#000009" FIXEDSIZE="TRUE" WIDTH="57" HEIGHT="17"><TR><TD></TD></TR></TABLE>>,
+		lp="71.5,62.5",
+		pos="e,43,35.857 43,88.812 43,76.938 43,60.876 43,47.151"];
+}

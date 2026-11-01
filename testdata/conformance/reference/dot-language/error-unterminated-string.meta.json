@@ -3,11 +3,23 @@
     "status": 1,
     "stderr": "Error: <stdin>: syntax error in line 4 scanning a quoted string (missing endquote? longer than 16384?)\nString starting:\"open];\n}\n\n"
   },
+  "dot": {
+    "status": 1,
+    "stderr": "Error: <stdin>: syntax error in line 4 scanning a quoted string (missing endquote? longer than 16384?)\nString starting:\"open];\n}\n\n"
+  },
+  "json": {
+    "status": 1,
+    "stderr": "Error: <stdin>: syntax error in line 4 scanning a quoted string (missing endquote? longer than 16384?)\nString starting:\"open];\n}\n\n"
+  },
   "plain": {
     "status": 1,
     "stderr": "Error: <stdin>: syntax error in line 4 scanning a quoted string (missing endquote? longer than 16384?)\nString starting:\"open];\n}\n\n"
   },
   "svg": {
+    "status": 1,
+    "stderr": "Error: <stdin>: syntax error in line 4 scanning a quoted string (missing endquote? longer than 16384?)\nString starting:\"open];\n}\n\n"
+  },
+  "xdot": {
     "status": 1,
     "stderr": "Error: <stdin>: syntax error in line 4 scanning a quoted string (missing endquote? longer than 16384?)\nString starting:\"open];\n}\n\n"
   }

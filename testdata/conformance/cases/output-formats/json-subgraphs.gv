@@ -1,0 +1,1 @@
+digraph G { subgraph cluster_x { label="C"; a; subgraph cluster_y { b } } { rank=same; c; d } a -> b }

@@ -1,0 +1,13 @@
+digraph G {
+	node [color="#123456",
+		label="\N",
+		shape=box
+	];
+	edge [color="#654321"];
+	subgraph cluster_x {
+		node [shape=ellipse];
+		c;
+	}
+	a -> b;
+	b -> c;
+}

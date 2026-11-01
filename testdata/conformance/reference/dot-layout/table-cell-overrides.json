@@ -1,0 +1,140 @@
+{
+  "name": "%1",
+  "directed": true,
+  "strict": false,
+  "_draw_": 
+  [
+    {
+      "op": "c",
+      "grad": "none",
+      "color": "#fffffe00"
+    },
+    {
+      "op": "C",
+      "grad": "none",
+      "color": "#ffffff"
+    },
+    {
+      "op": "P",
+      "points": [[0.000,0.000],[0.000,36.000],[54.000,36.000],[54.000,0.000]]
+    }
+  ],
+  "bb": "0,0,54,36",
+  "xdotversion": "1.7",
+  "_subgraph_cnt": 0,
+  "objects": [
+    {
+      "_gvid": 0,
+      "name": "a",
+      "_ldraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[9.000,10.000],[9.000,26.000],[45.000,26.000],[45.000,10.000]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000007"
+        },
+        {
+          "op": "P",
+          "points": [[12.000,13.000],[12.000,23.000],[20.000,23.000],[20.000,13.000]]
+        },
+        {
+          "op": "S",
+          "style": "setlinewidth(3)"
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[13.500,14.500],[13.500,21.500],[18.500,21.500],[18.500,14.500]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000008"
+        },
+        {
+          "op": "P",
+          "points": [[22.000,13.000],[22.000,23.000],[32.000,23.000],[32.000,13.000]]
+        },
+        {
+          "op": "S",
+          "style": "setlinewidth(1)"
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[22.000,13.000],[22.000,23.000],[32.000,23.000],[32.000,13.000]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000009"
+        },
+        {
+          "op": "P",
+          "points": [[34.000,13.000],[34.000,23.000],[42.000,23.000],[42.000,13.000]]
+        }
+      ],
+      "height": "0.5",
+      "label": "<TABLE CELLPADDING=\"4\"><TR><TD BGCOLOR=\"#000007\" BORDER=\"3\" CELLPADDING=\"1\"><\/TD><TD BGCOLOR=\"#000008\" CELLSPACING=\"6\"><\/TD><TD BORDER=\"0\" BGCOLOR=\"#000009\"><\/TD><\/TR><\/TABLE>",
+      "pos": "27,18",
+      "shape": "plaintext",
+      "width": "0.75"
+    }
+  ]
+}

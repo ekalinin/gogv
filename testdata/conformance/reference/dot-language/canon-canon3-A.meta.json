@@ -3,11 +3,23 @@
     "status": 0,
     "stderr": ""
   },
+  "dot": {
+    "status": 0,
+    "stderr": ""
+  },
+  "json": {
+    "status": 0,
+    "stderr": ""
+  },
   "plain": {
     "status": 0,
     "stderr": ""
   },
   "svg": {
+    "status": 0,
+    "stderr": ""
+  },
+  "xdot": {
     "status": 0,
     "stderr": ""
   }

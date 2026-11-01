@@ -1,0 +1,5 @@
+graph 1 0.75 2.2778
+node a 0.375 1.8722 0.75 0.81111 "left\lright\rcenter\n" solid box black lightgrey
+node b 0.375 0.25 0.75 0.5 b solid ellipse black lightgrey
+edge a b 4 0.375 1.4601 0.375 1.2158 0.375 0.90411 0.375 0.66015 "one\ltwo\r" 0.52083 0.98333 solid black
+stop

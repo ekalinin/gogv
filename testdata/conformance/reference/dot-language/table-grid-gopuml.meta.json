@@ -3,11 +3,23 @@
     "status": 0,
     "stderr": "Warning: fixed cell size with unspecified width or height\nin label of node a\n"
   },
+  "dot": {
+    "status": 0,
+    "stderr": "Warning: fixed cell size with unspecified width or height\nin label of node a\n"
+  },
+  "json": {
+    "status": 0,
+    "stderr": "Warning: fixed cell size with unspecified width or height\nin label of node a\n"
+  },
   "plain": {
     "status": 0,
     "stderr": "Warning: fixed cell size with unspecified width or height\nin label of node a\n"
   },
   "svg": {
+    "status": 0,
+    "stderr": "Warning: fixed cell size with unspecified width or height\nin label of node a\n"
+  },
+  "xdot": {
     "status": 0,
     "stderr": "Warning: fixed cell size with unspecified width or height\nin label of node a\n"
   }

@@ -1,0 +1,25 @@
+digraph {
+	graph [bb="0,0,64.11,136.8"];
+	node [label="\N"];
+	a	[height=0.5,
+		pos="37.11,102",
+		width=0.75,
+		xlabel=X,
+		xlp="5.0552,128.4"];
+	b	[height=0.5,
+		pos="37.11,18",
+		width=0.75];
+	a -> b	[fontcolor="#0000FF",
+		fontname=Helvetica,
+		fontsize=10,
+		head_lp="33.5,42.365",
+		headlabel=H,
+		label=L,
+		lp="39.891,60",
+		pos="e,37.11,36.365 37.11,83.61 37.11,73.173 37.11,59.64 37.11,47.658",
+		sametail=t,
+		tail_lp="34.056,77.61",
+		taillabel=T,
+		xlabel=X,
+		xlp="33.775,65.79"];
+}

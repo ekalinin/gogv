@@ -1,0 +1,17 @@
+digraph {
+	graph [bb="0,0,210,38"];
+	node [label="\N"];
+	a	[height=0.52778,
+		label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD></TD><TD FIXEDSIZE="TRUE" WIDTH="1" HEIGHT="5"></TD><TD></TD></TR><TR><TD FIXEDSIZE="TRUE" WIDTH="20" HEIGHT="1"></TD><TD BGCOLOR="#000001" FIXEDSIZE="TRUE" WIDTH="40" HEIGHT="20" PORT="h"></TD><TD FIXEDSIZE="TRUE" WIDTH="20" HEIGHT="1"></TD></TR><TR><TD></TD><TD FIXEDSIZE="TRUE" WIDTH="1" HEIGHT="5"></TD><TD></TD></TR></TABLE>>,
+		pos="48,19",
+		shape=plaintext,
+		width=1.3333];
+	b	[height=0.52778,
+		label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD></TD><TD FIXEDSIZE="TRUE" WIDTH="1" HEIGHT="5"></TD><TD></TD></TR><TR><TD FIXEDSIZE="TRUE" WIDTH="20" HEIGHT="1"></TD><TD BGCOLOR="#000002" FIXEDSIZE="TRUE" WIDTH="40" HEIGHT="20" PORT="h"></TD><TD FIXEDSIZE="TRUE" WIDTH="20" HEIGHT="1"></TD></TR><TR><TD></TD><TD FIXEDSIZE="TRUE" WIDTH="1" HEIGHT="5"></TD><TD></TD></TR></TABLE>>,
+		pos="162,19",
+		shape=plaintext,
+		width=1.3333];
+	a:h -> b:h	[arrowhead=none,
+		minlen=0,
+		pos="67.999,19 88.72,19 121.67,19 142.28,19"];
+}

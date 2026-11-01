@@ -1,0 +1,75 @@
+{
+  "name": "%1",
+  "directed": true,
+  "strict": false,
+  "_draw_": 
+  [
+    {
+      "op": "c",
+      "grad": "none",
+      "color": "#fffffe00"
+    },
+    {
+      "op": "C",
+      "grad": "none",
+      "color": "#ffffff"
+    },
+    {
+      "op": "P",
+      "points": [[0.000,0.000],[0.000,38.000],[116.000,38.000],[116.000,0.000]]
+    }
+  ],
+  "bb": "0,0,116,38",
+  "xdotversion": "1.7",
+  "_subgraph_cnt": 0,
+  "objects": [
+    {
+      "_gvid": 0,
+      "name": "a",
+      "_ldraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000001"
+        },
+        {
+          "op": "P",
+          "points": [[8.000,4.000],[8.000,34.000],[48.000,34.000],[48.000,4.000]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000002"
+        },
+        {
+          "op": "P",
+          "points": [[48.000,4.000],[48.000,34.000],[108.000,34.000],[108.000,4.000]]
+        }
+      ],
+      "height": "0.52778",
+      "label": "<TABLE BORDER=\"0\" CELLBORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD FIXEDSIZE=\"TRUE\" WIDTH=\"40\" HEIGHT=\"20\" BGCOLOR=\"#000001\"><\/TD><TD FIXEDSIZE=\"TRUE\" WIDTH=\"60\" HEIGHT=\"30\" BGCOLOR=\"#000002\"><\/TD><\/TR><\/TABLE>",
+      "pos": "58,19",
+      "shape": "plaintext",
+      "width": "1.6111"
+    }
+  ]
+}

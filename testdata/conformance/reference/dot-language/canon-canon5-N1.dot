@@ -1,0 +1,10 @@
+digraph {
+	graph [bb="0,0,2693.4,36"];
+	node [label="\N"];
+	a	[height=0.5,
+		label="word word word word word word word word word word word word word word word word word word word word word word word word word word \
+word word word word word word word word word word word word word word word word word word word word word word word word word word \
+word word word word word word word word ",
+		pos="1346.7,18",
+		width=37.408];
+}

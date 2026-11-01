@@ -1,0 +1,13 @@
+digraph {
+	graph [bb="0,0,108,36"];
+	node [label="\N"];
+	subgraph s {
+		node [shape=circle];
+		b	[height=0.5,
+			pos="18,18",
+			width=0.5];
+	}
+	c	[height=0.5,
+		pos="81,18",
+		width=0.75];
+}

@@ -1,0 +1,24 @@
+digraph {
+	graph [bb="0,0,142,212"];
+	node [label="\N"];
+	subgraph cluster_c {
+		graph [bb="8,8,78,204"];
+		{
+			graph [rank=sink];
+			c	[height=0.5,
+				pos="43,34",
+				width=0.75];
+		}
+		a	[height=0.5,
+			pos="43,178",
+			width=0.75];
+		b	[height=0.5,
+			pos="43,106",
+			width=0.75];
+		a -> b	[pos="e,43,124.1 43,159.7 43,152.41 43,143.73 43,135.54"];
+	}
+	y	[height=0.5,
+		pos="115,34",
+		width=0.75];
+	b -> y	[pos="e,100.1,49.485 57.918,90.496 67.765,80.923 80.861,68.19 92.026,57.336"];
+}

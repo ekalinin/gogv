@@ -1,0 +1,33 @@
+{
+  "name": "%1",
+  "directed": true,
+  "strict": false,
+  "bb": "0,0,281.95,36",
+  "_subgraph_cnt": 0,
+  "objects": [
+    {
+      "_gvid": 0,
+      "name": "a",
+      "height": "0.5",
+      "label": "<TABLE><TR><TD><\/TD><\/TR><\/TABLE>",
+      "pos": "27,18",
+      "width": "0.75"
+    },
+    {
+      "_gvid": 1,
+      "name": "b",
+      "height": "0.5",
+      "label": "say \"hi\"",
+      "pos": "114,18",
+      "width": "1.1589"
+    },
+    {
+      "_gvid": 2,
+      "name": "c",
+      "height": "0.5",
+      "label": "back\\\\slash\/",
+      "pos": "228,18",
+      "width": "1.4985"
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "name": "%1",
+  "directed": true,
+  "strict": false,
+  "_subgraph_cnt": 0,
+  "objects": [
+    {
+      "_gvid": 0,
+      "name": "a",
+      "color": "#FF0000",
+      "fontcolor": "#0000FF",
+      "fontname": "Helvetica",
+      "fontsize": "10",
+      "label": "\\N"
+    },
+    {
+      "_gvid": 1,
+      "name": "b",
+      "fontname": "Courier",
+      "label": "\\N"
+    },
+    {
+      "_gvid": 2,
+      "name": "c",
+      "label": "\\N"
+    },
+    {
+      "_gvid": 3,
+      "name": "d",
+      "label": "\\N"
+    }
+  ],
+  "edges": [
+    {
+      "_gvid": 0,
+      "tail": 0,
+      "head": 1,
+      "arrowhead": "empty",
+      "arrowsize": "2",
+      "color": "#00FF00"
+    },
+    {
+      "_gvid": 2,
+      "tail": 1,
+      "head": 2,
+      "arrowtail": "empty",
+      "dir": "both"
+    },
+    {
+      "_gvid": 1,
+      "tail": 0,
+      "head": 2,
+      "style": "invis"
+    },
+    {
+      "_gvid": 3,
+      "tail": 2,
+      "head": 3,
+      "arrowhead": "none"
+    },
+    {
+      "_gvid": 4,
+      "tail": 3,
+      "head": 0,
+      "dir": "back"
+    }
+  ]
+}

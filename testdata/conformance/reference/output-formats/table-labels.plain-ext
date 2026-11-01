@@ -1,0 +1,5 @@
+graph 1 1.3889 2.2222
+node a 0.59722 1.4861 0.75 0.5 a solid ellipse black lightgrey
+node b 0.59722 0.25 0.75 0.5 <<TABLE BORDER="2" CELLBORDER="3" CELLSPACING="4" COLOR="#00000F"><TR><TD BGCOLOR="#000001"></TD><TD COLOR="#00000E"></TD></TR></TABLE>> solid plaintext black lightgrey
+edge a b 4 0.59722 1.2335 0.59722 1.0686 0.59722 0.8455 0.59722 0.65488 "<TABLE>" 0.99306 0.86806 solid black
+stop

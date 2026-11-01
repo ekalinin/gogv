@@ -1,0 +1,37 @@
+digraph {
+	graph [_draw_="c 9 -#fffffe00 C 7 -#ffffff P 4 0 0 0 60.55 282 60.55 282 0 ",
+		bb="0,0,282,60.549",
+		xdotversion=1.7
+	];
+	node [label="\N"];
+	{
+		graph [rank=same];
+		a	[_ldraw_="S 5 -solid c 9 -#fffffe00 C 7 -#000001 P 4 28 9 28 29 68 29 68 9 ",
+			height=0.52778,
+			label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD></TD><TD FIXEDSIZE="TRUE" WIDTH="1" HEIGHT="5"></TD><TD></TD></TR><TR><TD FIXEDSIZE="TRUE" WIDTH="20" HEIGHT="1"></TD><TD BGCOLOR="#000001" FIXEDSIZE="TRUE" WIDTH="40" HEIGHT="20" PORT="h"></TD><TD FIXEDSIZE="TRUE" WIDTH="20" HEIGHT="1"></TD></TR><TR><TD></TD><TD FIXEDSIZE="TRUE" WIDTH="1" HEIGHT="5"></TD><TD></TD></TR></TABLE>>,
+			pos="48,19",
+			shape=plaintext,
+			width=1.3333];
+		m	[_draw_="c 7 -#000000 e 141 19 27 18 ",
+			_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 141 14.8 0 10.89 1 -m ",
+			height=0.5,
+			pos="141,19",
+			width=0.75];
+		c	[_ldraw_="S 5 -solid c 9 -#fffffe00 C 7 -#000002 P 4 214 9 214 29 254 29 254 9 ",
+			height=0.52778,
+			label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD></TD><TD FIXEDSIZE="TRUE" WIDTH="1" HEIGHT="5"></TD><TD></TD></TR><TR><TD FIXEDSIZE="TRUE" WIDTH="20" HEIGHT="1"></TD><TD BGCOLOR="#000002" FIXEDSIZE="TRUE" WIDTH="40" HEIGHT="20" PORT="h"></TD><TD FIXEDSIZE="TRUE" WIDTH="20" HEIGHT="1"></TD></TR><TR><TD></TD><TD FIXEDSIZE="TRUE" WIDTH="1" HEIGHT="5"></TD><TD></TD></TR></TABLE>>,
+			pos="234,19",
+			shape=plaintext,
+			width=1.3333];
+	}
+	a -> m	[_draw_="c 7 -#000000 B 4 95.95 19 98.06 19 100.17 19 102.28 19 ",
+		_hdraw_="S 5 -solid c 7 -#000000 C 7 -#000000 P 3 102.04 22.5 112.04 19 102.04 15.5 ",
+		pos="e,113.55,19 95.953,19 98.061,19 100.17,19 102.28,19"];
+	a:h -> c:h	[_draw_="c 7 -#000000 B 10 60.78 28.81 73.48 37.89 93.92 50.76 114 56 137.22 62.06 144.78 62.06 168 56 183.69 51.9 199.59 43.15 211.86 35.19 ",
+		_hdraw_="S 5 -solid c 7 -#000000 C 7 -#000000 P 3 213.68 38.19 219.97 29.66 209.73 32.4 ",
+		pos="e,221.22,28.809 60.782,28.809 73.484,37.89 93.919,50.755 114,56 137.22,62.065 144.78,62.065 168,56 183.69,51.902 199.59,43.154 211.86,\
+35.193"];
+	m -> c	[_draw_="c 7 -#000000 B 4 168.25 19 170.49 19 172.74 19 174.99 19 ",
+		_hdraw_="S 5 -solid c 7 -#000000 C 7 -#000000 P 3 174.71 22.5 184.71 19 174.71 15.5 ",
+		pos="e,186.23,19 168.25,19 170.49,19 172.74,19 174.99,19"];
+}

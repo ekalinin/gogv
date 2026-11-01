@@ -1,0 +1,1 @@
+digraph { a [shape=box, label="left\lright\rcenter\n"]; a -> b [label="one\ltwo\r"] }

@@ -1,0 +1,18 @@
+digraph {
+	graph [bb="0,0,86,100"];
+	node [label="\N"];
+	subgraph cluster_a {
+		graph [bb="8,8,78,92",
+			fontcolor="#0000FF",
+			fontname=Helvetica,
+			fontsize=10,
+			label="Title\nsecond line",
+			lheight=0.33,
+			lp="43,76",
+			lwidth=0.70
+		];
+		a	[height=0.5,
+			pos="43,34",
+			width=0.75];
+	}
+}
