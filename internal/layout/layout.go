@@ -215,7 +215,15 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 		return nil, err
 	}
 
-	rg, chains := buildRanked(ranks, ends, own)
+	// Edges with ports get chains of their own, as labeled edges do, whose
+	// ends carry the ports.
+	ports := edgePorts(g, res.Nodes, ends, p.lr)
+	ownChain := make([]bool, len(own))
+	for i := range own {
+		ownChain[i] = own[i] || hasPort(ports[i])
+	}
+	rg, chains := buildRanked(ranks, ends, ownChain)
+	rg.setPorts(chains, ends, ports, lw, p.lr)
 	// The label of an edge belongs to the virtual node halfway along its
 	// chain.
 	labelNode := make([]int, len(g.Edges()))
@@ -344,7 +352,7 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 	for v, rn := range rg.nodes {
 		pos[v] = Point{xs[v], ys[rn.rank]}
 	}
-	rt := &router{g: rg, pos: pos, left: left, right: right, ys: ys, nodesep: p.nodesep, lr: p.lr, nodes: res.Nodes, labelAlong: map[int]float64{}}
+	rt := &router{g: rg, pos: pos, left: left, right: right, ys: ys, nodesep: p.nodesep, lr: p.lr, nodes: res.Nodes, labelAlong: map[int]float64{}, ports: ports}
 	for v, i := range labelEdge {
 		rt.labelAlong[v], _ = labelSize(elabels[i])
 	}

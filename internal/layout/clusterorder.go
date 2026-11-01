@@ -139,11 +139,19 @@ func (g *ranked) orderClusters(ctx context.Context, t *clusterTree, maxIter int,
 			d := t.childToward(c, of[v])
 			return skel[d][g.nodes[v].rank-t.clusters[d].minRank]
 		}
-		type pair struct{ a, b int }
+		// An edge keeps the place of its ports within their nodes, also
+		// where a skeleton stands for the node.
+		type pair struct {
+			a, b             int
+			upperAt, lowerAt float64
+		}
 		counts := map[pair]int{}
 		var pairs []pair
-		addEdge := func(a, b, count int) {
-			p := pair{a, b}
+		addEdge := func(a, b, count int, at ...float64) {
+			p := pair{a: a, b: b}
+			if len(at) == 2 {
+				p.upperAt, p.lowerAt = at[0], at[1]
+			}
 			if _, ok := counts[p]; !ok {
 				pairs = append(pairs, p)
 			}
@@ -173,10 +181,12 @@ func (g *ranked) orderClusters(ctx context.Context, t *clusterTree, maxIter int,
 			default:
 				continue
 			}
-			addEdge(a, b, e.count)
+			addEdge(a, b, e.count, e.upperAt, e.lowerAt)
 		}
 		for _, p := range pairs {
 			lg.addEdge(p.a, p.b, counts[p])
+			last := &lg.edges[len(lg.edges)-1]
+			last.upperAt, last.lowerAt = p.upperAt, p.lowerAt
 		}
 		for _, j := range g.joins {
 			if inside(j[0]) && inside(j[1]) && unit(j[0]) != unit(j[1]) {

@@ -32,11 +32,11 @@ that the output is the same, byte for byte, on every platform.
 
 ## Status
 
-This is the third slice of version 1. It supports:
+This is the fourth slice of version 1. It supports:
 
 - the whole DOT grammar, read as the reference reads it
-- the layout of graphs without node ports and HTML-like labels other than
-  single-cell tables:
+- the layout of graphs without compass points and HTML-like labels other
+  than table labels:
   shapes `rect`, `box`, `rectangle`, `plaintext`, `point`, `ellipse`, `oval`,
   `circle`, `diamond`, `hexagon`, `octagon`; plain-text labels; `width`,
   `height`, `color`, `fontname`, `fontsize`, `fontcolor`; `minlen`,
@@ -49,16 +49,22 @@ This is the third slice of version 1. It supports:
 - edge labels, on edges between ranks, flat edges and loops, in the edge's
   `fontname`, `fontsize` and `fontcolor`; external labels: `xlabel` on nodes
   and edges, `headlabel` and `taillabel`; `sametail`
-- single-cell table labels (`TABLE` with one row of one empty cell, with
-  `BGCOLOR`, `FIXEDSIZE`, `WIDTH` and `HEIGHT`) on nodes, edges and clusters
+- table labels (`TABLE` of rows of empty cells) on nodes, edges and
+  clusters, with `BORDER`, `CELLBORDER`, `CELLSPACING`, `CELLPADDING`,
+  `BGCOLOR`, `COLOR`, `FIXEDSIZE`, `WIDTH`, `HEIGHT` and `PORT` on the table,
+  and `BORDER`, `CELLPADDING`, `BGCOLOR`, `COLOR`, `COLSPAN`, `FIXEDSIZE`,
+  `WIDTH`, `HEIGHT` and `PORT` on its cells
+- node ports: edge ends written `node:port`, or set by `tailport` and
+  `headport`, attach to the cell of a table label with that `PORT`, in the
+  positioning, the order and the routes
 - the output formats `svg`, `plain` and `canon`
 
 A Graphviz feature that is not supported yet gives a warning that says so and
 names the default used instead; attributes that Graphviz does not document
 are ignored, as Graphviz ignores them.
 
-The next slices of version 1 add the other HTML tables and node ports, and
-the formats `svg_inline`, `plain-ext`, `dot`, `gv`, `xdot*` and `json*`.
+The next slice of version 1 adds the formats `svg_inline`, `plain-ext`,
+`dot`, `gv`, `xdot*` and `json*`.
 
 ## Building
 

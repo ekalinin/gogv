@@ -134,6 +134,32 @@ type router struct {
 	flatAcross map[int]float64
 	// sameTail lists, by edge, the edges of its sametail group.
 	sameTail map[int][]int
+	// ports holds, by edge, where its tail and its head attach when they
+	// have ports.
+	ports [][2]portEnd
+}
+
+// end returns where end j (0 for the tail, 1 for the head) of edge i
+// attaches to the ranked node v: the center of its port's box, or the
+// center of the node.
+func (r *router) end(i, j, v int) Point {
+	if pe := r.ports[i][j]; pe.set {
+		return add(r.pos[v], pe.off)
+	}
+	return r.pos[v]
+}
+
+// insideEnd returns the test that clips end j of edge i at its node: the
+// box of its port, or the node's outline.
+func (r *router) insideEnd(i, j, v int) func(Point) bool {
+	if pe := r.ports[i][j]; pe.set {
+		c := add(r.pos[v], pe.off)
+		return func(q Point) bool {
+			return math.Abs(q.X-c.X) <= pe.half.X && math.Abs(q.Y-c.Y) <= pe.half.Y
+		}
+	}
+	c := r.pos[v]
+	return func(q Point) bool { return r.inside(v, c, q) }
 }
 
 // sameTailPoint returns the point of the tail's outline that the edges of
@@ -252,12 +278,11 @@ type gate struct {
 	y, lo, hi float64
 }
 
-// chainPath returns the shortest path from the center of a chain's upper
-// node to the center of its lower node that stays within the free space
-// around its virtual nodes: the corridor of section 5, with the funnel
-// algorithm for the path.
-func (r *router) chainPath(chain []int) []Point {
-	src, dst := r.pos[chain[0]], r.pos[chain[len(chain)-1]]
+// chainPath returns the shortest path from src, on a chain's upper node, to
+// dst, on its lower node, that stays within the free space around its
+// virtual nodes: the corridor of section 5, with the funnel algorithm for
+// the path.
+func (r *router) chainPath(chain []int, src, dst Point) []Point {
 	var gates []gate
 	for _, v := range chain[1 : len(chain)-1] {
 		lo, hi, down, up := r.bounds(v, [2]int{chain[0], chain[len(chain)-1]})
@@ -589,22 +614,51 @@ func (r *router) routeEdges(g *graph.Graph, ends [][2]int, chains [][]int, polyl
 			} else {
 				pts = r.flat(t, h, off)
 			}
+			// From port to port: the ends move with their control points.
+			if n := len(pts); n == 4 {
+				dt, dh := sub(r.end(i, 0, t), r.pos[t]), sub(r.end(i, 1, h), r.pos[h])
+				pts[0], pts[1] = add(pts[0], dt), add(pts[1], dt)
+				pts[2], pts[3] = add(pts[2], dh), add(pts[3], dh)
+			}
 		default:
-			pts = r.chain(chains[i], float64(off*r.nodesep), polyline)
+			// The ends at the top and at the bottom of the chain. An end
+			// at the port of a cell leaves its box from the middle of the
+			// side that faces the other end, straight across the ranks, as
+			// the port boxes of section 5.1.1 lead it.
+			tj, bj, tv, bv := 0, 1, t, h
+			if r.g.nodes[t].rank > r.g.nodes[h].rank {
+				tj, bj, tv, bv = 1, 0, h, t
+			}
+			top, bottom := r.end(i, tj, tv), r.end(i, bj, bv)
+			cellT, cellB := r.ports[i][tj].set && !r.ports[i][tj].table, r.ports[i][bj].set && !r.ports[i][bj].table
+			if cellT {
+				top.Y -= r.ports[i][tj].half.Y
+			}
+			if cellB {
+				bottom.Y += r.ports[i][bj].half.Y
+			}
+			pts = r.chain(chains[i], top, bottom, float64(off*r.nodesep), polyline)
+			if n := len(pts); n >= 4 {
+				if cellT {
+					straightAcross(pts, 0, 1, 3)
+				}
+				if cellB {
+					straightAcross(pts, n-1, n-2, n-4)
+				}
+			}
 			if r.g.nodes[t].rank > r.g.nodes[h].rank {
 				pts = reverseCurve(pts)
 			}
 		}
-		if p, ok := r.sameTailPoint(i, ends); ok && t != h && len(pts) > 1 {
+		if p, ok := r.sameTailPoint(i, ends); ok && t != h && len(pts) > 1 && !r.ports[i][0].set {
 			// The curve leaves from the shared point, its first control
 			// point moved with it.
 			pts[1] = add(pts[1], sub(p, pts[0]))
 			pts[0] = p
 		}
 		segs := segments(pts)
-		tc, hc := r.pos[t], r.pos[h]
-		segs = clipStart(segs, func(q Point) bool { return r.inside(t, tc, q) })
-		segs = clipEnd(segs, func(q Point) bool { return r.inside(h, hc, q) })
+		segs = clipStart(segs, r.insideEnd(i, 0, t))
+		segs = clipEnd(segs, r.insideEnd(i, 1, h))
 		if len(segs) > 0 {
 			// Where the edge meets its nodes, before the arrowheads, and
 			// its middle, for the external labels.
@@ -625,17 +679,27 @@ func (r *router) routeEdges(g *graph.Graph, ends [][2]int, chains [][]int, polyl
 	return out
 }
 
+// straightAcross puts the control point next of the end at straight across
+// the ranks from it: at its x, and a third of the way to the point other
+// when it is level with the end.
+func straightAcross(pts []Point, at, next, other int) {
+	if pts[next].Y == pts[at].Y {
+		pts[next].Y = pts[at].Y + (pts[other].Y-pts[at].Y)/3
+	}
+	pts[next].X = pts[at].X
+}
+
 // chain returns the curve of an edge through its chain of ranked nodes, from
-// the upper node to the lower one, moved sideways by off for parallel edges.
-func (r *router) chain(chain []int, off float64, polyline bool) []Point {
-	top, bottom := r.pos[chain[0]], r.pos[chain[len(chain)-1]]
+// top, where it attaches to the upper node, to bottom, where it attaches to
+// the lower one, moved sideways by off for parallel edges.
+func (r *router) chain(chain []int, top, bottom Point, off float64, polyline bool) []Point {
 	if len(chain) == 2 {
 		if polyline {
 			return []Point{top, lerp(top, bottom, 1.0/3), lerp(top, bottom, 2.0/3), bottom}
 		}
 		return []Point{top, add(top, Point{off, 0}), add(bottom, Point{off, 0}), bottom}
 	}
-	path := r.chainPath(chain)
+	path := r.chainPath(chain, top, bottom)
 	if len(path) == 2 && !polyline {
 		// Nothing in the way: one curve, as between neighboring ranks.
 		return []Point{top, add(top, Point{off, 0}), add(bottom, Point{off, 0}), bottom}
