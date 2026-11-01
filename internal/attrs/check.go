@@ -123,10 +123,97 @@ func Check(g *graph.Graph) []Warning {
 	}
 	for _, e := range root.Edges() {
 		for _, s := range root.Symbols(graph.EdgeKind) {
+			if s.Name == "tailport" || s.Name == "headport" {
+				c.port(root, e, s.Name, e.AttrAt(s))
+				continue
+			}
 			c.value(graph.EdgeKind, EdgeName(root, e), s.Name, e.AttrAt(s))
 		}
 	}
 	return c.warnings
+}
+
+// nodeTable returns the table label of a node, or nil when its label is
+// not a table label.
+func nodeTable(g *graph.Graph, n *graph.Node) *label.Table {
+	v, _ := n.Attr(g, "label")
+	if !v.HTML {
+		return nil
+	}
+	t, ok := label.ParseTable(v.S)
+	if !ok {
+		return nil
+	}
+	return &t
+}
+
+// port checks a tailport or a headport: a port on a loop and a compass
+// point are not supported yet; the edge attaches to the center of the
+// node, or to the port before the compass point.
+func (c *checker) port(g *graph.Graph, e *graph.Edge, name string, v graph.Value) {
+	if v.S == "" {
+		return
+	}
+	n := e.Tail
+	if name == "headport" {
+		n = e.Head
+	}
+	port, compass := label.SplitPort(nodeTable(g, n), v.S)
+	switch {
+	case e.Tail == e.Head:
+		c.add(Warning{Object: EdgeName(g, e), Feature: feature(name, v.S), Default: "center"})
+	case compass != "" && port != "":
+		c.add(Warning{Object: EdgeName(g, e), Feature: feature(name, v.S), Default: port})
+	case compass != "":
+		c.add(Warning{Object: EdgeName(g, e), Feature: feature(name, v.S), Default: "center"})
+	}
+}
+
+// UnknownPorts returns the reference's warnings, without their "Warning: "
+// prefix, for the ports that edges name and their nodes do not define: one
+// for each edge end, the edges of one tail node after those of the
+// previous one, in node order, and the tail end before the head end.
+func UnknownPorts(g *graph.Graph) []string {
+	root := g.Root()
+	tables := map[*graph.Node]*label.Table{}
+	tableOf := func(n *graph.Node) *label.Table {
+		t, ok := tables[n]
+		if !ok {
+			t = nodeTable(root, n)
+			tables[n] = t
+		}
+		return t
+	}
+	byTail := map[*graph.Node][]*graph.Edge{}
+	for _, e := range root.Edges() {
+		byTail[e.Tail] = append(byTail[e.Tail], e)
+	}
+	var out []string
+	for _, n := range root.Nodes() {
+		for _, e := range byTail[n] {
+			for _, end := range []struct {
+				attr string
+				node *graph.Node
+			}{{"tailport", e.Tail}, {"headport", e.Head}} {
+				v, _ := e.Attr(root, end.attr)
+				if v.S == "" {
+					continue
+				}
+				t := tableOf(end.node)
+				port, _ := label.SplitPort(t, v.S)
+				if port == "" {
+					continue
+				}
+				if t != nil {
+					if _, ok := t.PortBox(port); ok {
+						continue
+					}
+				}
+				out = append(out, "node "+end.node.Name+", port "+port+" unrecognized")
+			}
+		}
+	}
+	return out
 }
 
 type checker struct {

@@ -93,6 +93,9 @@ func Render(ctx context.Context, src string, format string) ([]byte, []Warning, 
 		for _, w := range attrs.Check(g) {
 			warnings = append(warnings, Warning{Object: w.Object, Feature: w.Feature, Default: w.Default, text: w.String()})
 		}
+		for _, w := range attrs.UnknownPorts(g) {
+			warnings = append(warnings, Warning{text: w})
+		}
 		if format == "canon" {
 			out.Write(output.Canon(g))
 			continue

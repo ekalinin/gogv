@@ -37,9 +37,12 @@ func TestTableLabelSizes(t *testing.T) {
 	if e := edgeOf(t, res, "a", "b"); e.Label.Table == nil || !approx(e.Label.Width, 57) || !approx(e.Label.Height, 17) || !approx(e.LabelPos.X-e.Label.Width/2, nodesOf(res)["a"].X) {
 		t.Errorf("edge label table: %+v at %v", e.Label, e.LabelPos)
 	}
-	res = layoutResolved(t, `digraph { a -> b [label=<<TABLE WIDTH="30" HEIGHT="10"><TR><TD></TD></TR></TABLE>>] }`)
-	if e := edgeOf(t, res, "a", "b"); !approx(e.Label.Width, 30) || !approx(e.Label.Height, 10) {
-		t.Errorf("table smaller than its cell: %v x %v", e.Label.Width, e.Label.Height)
+	res = layoutResolved(t, `digraph { a -> b [label=<<TABLE WIDTH="30" HEIGHT="10"><TR><TD></TD></TR></TABLE>>]; a -> c [label=<<TABLE FIXEDSIZE="TRUE" WIDTH="30" HEIGHT="10"><TR><TD></TD></TR></TABLE>>] }`)
+	if e := edgeOf(t, res, "a", "b"); !approx(e.Label.Width, 30) || !approx(e.Label.Height, 12) {
+		t.Errorf("table smaller than its cell: %v x %v, want 30 x 12", e.Label.Width, e.Label.Height)
+	}
+	if e := edgeOf(t, res, "a", "c"); !approx(e.Label.Width, 30) || !approx(e.Label.Height, 10) {
+		t.Errorf("fixed table smaller than its cell: %v x %v, want 30 x 10", e.Label.Width, e.Label.Height)
 	}
 	res = layoutResolved(t, `digraph { subgraph cluster6 { label=<<TABLE BGCOLOR="#000007" FIXEDSIZE="TRUE" WIDTH="51" HEIGHT="11"><TR><TD></TD></TR></TABLE>>; a [shape=rect, label="", width=1, height=0.5] } }`)
 	if c := clusterOf(t, res, "cluster6"); !approx(c.X1-c.X0, 88) || !approx(c.Y1-c.Y0, 71) || !approx(c.LabelPos.X, (c.X0+c.X1)/2) {

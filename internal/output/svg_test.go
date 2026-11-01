@@ -151,3 +151,52 @@ func TestPlainEdgeLabel(t *testing.T) {
 		t.Errorf("edge line:\n%s", plain)
 	}
 }
+
+// TestSVGTables checks the table drawings against the reference's: the
+// order of the polygons, their colors, stroke widths and insets.
+func TestSVGTables(t *testing.T) {
+	for _, tt := range []struct {
+		src  string
+		want []string
+	}{
+		{`digraph { a [shape=plaintext, label=<<TABLE BGCOLOR="#000009" COLOR="#00000F"><TR><TD BGCOLOR="#000001" COLOR="#00000E"></TD><TD BGCOLOR="#000002"></TD></TR></TABLE>>] }`, []string{
+			`<polygon fill="#000009" stroke="none" points="17,-12 17,-24 37,-24 37,-12 17,-12"/>`,
+			`<polygon fill="none" stroke="#00000f" points="17,-12 17,-24 37,-24 37,-12 17,-12"/>`,
+			`<polygon fill="#000001" stroke="none" points="20,-15 20,-21 26,-21 26,-15 20,-15"/>`,
+			`<polygon fill="none" stroke="#00000e" points="20,-15 20,-21 26,-21 26,-15 20,-15"/>`,
+			`<polygon fill="#000002" stroke="none" points="28,-15 28,-21 34,-21 34,-15 28,-15"/>`,
+			`<polygon fill="none" stroke="#00000f" points="28,-15 28,-21 34,-21 34,-15 28,-15"/>`,
+		}},
+		{`digraph { a [shape=plaintext, label=<<TABLE BORDER="2" CELLBORDER="3" CELLSPACING="4" CELLPADDING="5"><TR><TD></TD><TD WIDTH="30"></TD></TR></TABLE>>] }`, []string{
+			`<polygon fill="none" stroke="black" stroke-width="2" points="9,-5 9,-31 69,-31 69,-5 9,-5"/>`,
+			`<polygon fill="none" stroke="black" stroke-width="3" points="15.5,-11.5 15.5,-24.5 28.5,-24.5 28.5,-11.5 15.5,-11.5"/>`,
+			`<polygon fill="none" stroke="black" stroke-width="3" points="35.5,-11.5 35.5,-24.5 62.5,-24.5 62.5,-11.5 35.5,-11.5"/>`,
+		}},
+		{`digraph { a [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0"><TR><TD></TD><TD BGCOLOR="#000006"></TD><TD></TD></TR></TABLE>>] }`, []string{
+			`<polygon fill="#000006" stroke="none" points="25,-16 25,-20 29,-20 29,-16 25,-16"/>`,
+		}},
+	} {
+		svg := render(t, tt.src, SVG)
+		node := svg[strings.Index(svg, `<g id="node1"`):]
+		var got []string
+		for _, line := range strings.Split(node, "\n") {
+			if strings.HasPrefix(line, "<polygon") {
+				got = append(got, line)
+			}
+		}
+		if strings.Join(got, "\n") != strings.Join(tt.want, "\n") {
+			t.Errorf("%s: polygons\n%s\nwant\n%s", tt.src, strings.Join(got, "\n"), strings.Join(tt.want, "\n"))
+		}
+	}
+}
+
+func TestSVGEdgeTitleWithPorts(t *testing.T) {
+	svg := render(t, `digraph { a [shape=rect]; a:P -> b }`, SVG)
+	if !strings.Contains(svg, "<!-- a&#45;&gt;b -->\n<g id=\"edge1\" class=\"edge\">\n<title>a:P&#45;&gt;b</title>") {
+		t.Errorf("edge title with a port:\n%s", svg)
+	}
+	svg = render(t, `digraph { a [shape=plaintext, label=<<TABLE><TR><TD PORT="p"></TD></TR></TABLE>>]; b -> a [headport=p] }`, SVG)
+	if !strings.Contains(svg, "<title>b&#45;&gt;a:p</title>") {
+		t.Errorf("edge title with a head port:\n%s", svg)
+	}
+}
