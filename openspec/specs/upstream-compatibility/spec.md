@@ -60,7 +60,7 @@ The conformance run SHALL fail when a case is failed, and SHALL NOT fail for kno
 
 #### Scenario: Feature of a later slice
 
-- **WHEN** a case uses a port on a node ID, as in `a:p -> b`, before ports are supported
+- **WHEN** a case uses a compass point on a node ID, as in `a:n -> b`, before compass points are supported
 - **THEN** the case is reported as not supported yet, and the run does not fail because of it
 
 #### Scenario: Unlisted failure

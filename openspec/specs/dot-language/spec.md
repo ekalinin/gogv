@@ -116,7 +116,7 @@ The system SHALL act on the following attributes and values:
 - clusters: `style` (`solid`), `color`
 - subgraphs: `rank` (`same`, `min`, `max`, `source`, `sink`)
 - nodes: `label`, `xlabel`, `fontname`, `fontsize`, `fontcolor`, `shape` (`rect` and its synonyms `box` and `rectangle`, `plaintext`, `point`, `ellipse` and its synonym `oval`, `circle`, `diamond`, `hexagon`, `octagon`), `width`, `height`, `color`, `style` (`solid`, and `rounded` except on `diamond`, `hexagon` and `octagon`)
-- edges: `label`, `xlabel`, `headlabel`, `taillabel`, `fontname`, `fontsize`, `fontcolor`, `sametail`, `minlen`, `color`, `style` (`solid`, `invis`), `constraint`, `arrowhead` and `arrowtail` (`none`, `empty`, `normal`), `dir` (`forward`, `back`, `both`, `none`), `arrowsize`
+- edges: `label`, `xlabel`, `headlabel`, `taillabel`, `fontname`, `fontsize`, `fontcolor`, `sametail`, `tailport` and `headport` (the `PORT` of a table cell of the node), `minlen`, `color`, `style` (`solid`, `invis`), `constraint`, `arrowhead` and `arrowtail` (`none`, `empty`, `normal`), `dir` (`forward`, `back`, `both`, `none`), `arrowsize`
 
 Colors SHALL be accepted in the form `#rrggbb`, in either letter case.
 
@@ -135,13 +135,19 @@ Colors SHALL be accepted in the form `#rrggbb`, in either letter case.
 - **WHEN** the input is `digraph { a [xlabel="X"]; a -> b [label="L", xlabel="X", headlabel="H", taillabel="T", fontname="Helvetica", fontsize=10, fontcolor="#0000FF", sametail=t] }`
 - **THEN** the system lays out the graph without a warning
 
+#### Scenario: Port attributes give no warning
+
+- **WHEN** the input is `digraph { a [shape=plaintext, label=<<TABLE><TR><TD PORT="p"></TD></TR></TABLE>>]; a -> b [tailport=p] }`
+- **THEN** the system lays out the graph without a warning
+
 ### Requirement: Graphviz features that are not supported yet
 
 For a feature that Graphviz documents but this system does not support yet, the system SHALL emit a warning and continue as if the feature were absent, using the documented default:
 
 - an attribute of the Graphviz documentation that is not in the supported list, or a supported attribute with a value that is not supported: the attribute takes its default value
-- a port or compass point on a node ID: the edge attaches to the node itself
-- an HTML label that is not a single-cell table label, or an HTML label of the root graph: the object takes its default label
+- a compass point on a node ID, alone or after a port: the edge attaches to the node itself, or to the port
+- a port on a loop: the loop is drawn on the node itself
+- an HTML label that is not a table label, or an HTML label of the root graph: the object takes its default label
 - an undirected graph: its edges take the documented default `dir=none`
 - `style=rounded` on a `diamond`, `hexagon` or `octagon` node: the node is drawn without rounded corners
 - a `fontname` for which the reference has metrics that this system does not have yet (`DejaVu Sans`, `Verdana`, `Georgia`, `Consolas`, `Calibri`, `Trebuchet MS`, `Open Sans`, compared without regard to case): the text takes the Times metrics
@@ -178,6 +184,16 @@ The warning SHALL start with `Warning:`, SHALL name the object and the feature, 
 - **WHEN** an edge `a -> b` has `headlabel="H"` and `labelangle=30`
 - **THEN** the system warns that `labelangle=30` of edge `a->b` is not supported yet, and places `H` as without `labelangle`
 
+#### Scenario: Compass point
+
+- **WHEN** an edge is written `a:n -> b`
+- **THEN** the system warns that `tailport=n` of edge `a->b` is not supported yet, and the edge attaches to `a` itself
+
+#### Scenario: Port on a loop
+
+- **WHEN** a node `a` has `shape=plaintext, label=<<TABLE><TR><TD PORT="p"></TD></TR></TABLE>>` and an edge is written `a:p -> a`
+- **THEN** the system warns that `tailport=p` of edge `a->a` is not supported yet, and draws the loop on `a`
+
 ### Requirement: Cluster subgraphs
 
 A subgraph whose name starts with `cluster`, compared without regard to case, SHALL be a cluster. A cluster SHALL be nested in the nearest enclosing cluster, through any subgraphs that are not clusters.
@@ -212,9 +228,15 @@ A node taken out of a cluster SHALL also be taken out of the subgraphs inside th
 
 - **WHEN** the graph is `digraph { subgraph cluster_x { a; b } c; { rank=same; b; c } }`
 - **THEN** the system warns that `b` is taken out of `cluster_x`, `cluster_x` contains only `a`, and `canon` writes `b` outside `cluster_x`
-### Requirement: Single-cell table labels
+### Requirement: Table labels
 
-An HTML label SHALL be a table label when it is a `TABLE` element that holds one `TR` element that holds one empty `TD` element, and when the `TABLE` has no attributes other than `BGCOLOR` (a `#rrggbb` color), `FIXEDSIZE` (`TRUE` or `FALSE`), `WIDTH` and `HEIGHT` (in points) and the `TD` has none. Element and attribute names SHALL be compared without regard to case, and white space between the elements SHALL be allowed. A table label SHALL be accepted as the `label` and the `xlabel` of a node, as the `label`, `xlabel`, `headlabel` and `taillabel` of an edge, and as the `label` of a cluster.
+An HTML label SHALL be a table label when it is a `TABLE` element that holds one or more `TR` elements, each of which holds one or more empty `TD` elements, with these attributes only, all optional:
+
+- on the `TABLE`: `BORDER`, `CELLBORDER`, `CELLSPACING` and `CELLPADDING` (whole points), `BGCOLOR` and `COLOR` (`#rrggbb` colors), `FIXEDSIZE` (`TRUE` or `FALSE`), `WIDTH` and `HEIGHT` (points), `PORT`
+- on a `TD`: `BORDER`, `CELLSPACING` and `CELLPADDING` (whole points), `BGCOLOR` and `COLOR`, `COLSPAN` (a whole number of columns), `FIXEDSIZE`, `WIDTH` and `HEIGHT`, `PORT`
+- on a `TR`: none
+
+Element and attribute names SHALL be compared without regard to case, and white space between the elements SHALL be allowed. A table label SHALL be accepted as the `label` and the `xlabel` of a node, as the `label`, `xlabel`, `headlabel` and `taillabel` of an edge, and as the `label` of a cluster; its ports SHALL count only on the `label` of a node.
 
 #### Scenario: Table that gopuml writes
 
@@ -229,4 +251,33 @@ An HTML label SHALL be a table label when it is a `TABLE` element that holds one
 #### Scenario: Cell with a port
 
 - **WHEN** a node `a` has `label=<<TABLE><TR><TD PORT="p"></TD></TR></TABLE>>`
+- **THEN** the system lays out the graph without a warning, with a table label on `a` whose cell has the port `p`
+
+#### Scenario: Grid that gopuml writes
+
+- **WHEN** a node has `shape=plaintext` and a label of three rows of three empty cells, with `BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0"` on the `TABLE` and `FIXEDSIZE`, `WIDTH`, `HEIGHT`, `BGCOLOR` and `PORT` on its cells
+- **THEN** the system lays out the graph without a warning
+
+#### Scenario: Row span
+
+- **WHEN** a node `a` has `label=<<TABLE><TR><TD ROWSPAN="2"></TD></TR><TR><TD></TD></TR></TABLE>>`
 - **THEN** the system warns that HTML labels of node `a` are not supported yet and gives `a` its default label
+
+### Requirement: Node ports
+
+An edge end written `node:port`, or set by the edge's `tailport` or `headport`, SHALL name a port of the node: the `PORT` of a cell, or of the `TABLE`, of the node's table label. A name that the node defines as a port SHALL be that port, even when it is also the name of a compass point. When the node has no port of that name and the name is not a compass point, the system SHALL warn as the reference does, `node a, port P unrecognized`, once for each edge end that names it: the edges of one tail node after those of the previous one, in the order of the nodes, and the tail of an edge before its head. The edge SHALL then attach to the node itself, and this warning SHALL NOT say that a feature is not supported yet.
+
+#### Scenario: Port of a cell
+
+- **WHEN** a node `a` has `shape=plaintext, label=<<TABLE><TR><TD PORT="l"></TD><TD PORT="r"></TD></TR></TABLE>>` and an edge is written `a:r -> b`
+- **THEN** the edge attaches to the cell `r` of `a`, without a warning
+
+#### Scenario: Unknown port
+
+- **WHEN** a node `a` has `shape=rect` and an edge is written `a:P -> b`
+- **THEN** the system warns `node a, port P unrecognized`, and the edge attaches to `a` itself
+
+#### Scenario: Port named like a compass point
+
+- **WHEN** a node `a` has `shape=plaintext, label=<<TABLE><TR><TD PORT="n"></TD><TD WIDTH="40"></TD></TR></TABLE>>` and an edge is written `a:n -> b`
+- **THEN** the edge attaches to the cell `n` of `a`, without a warning
