@@ -1,0 +1,8 @@
+digraph {
+	node [label="\N"];
+	a	[label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD FIXEDSIZE="TRUE" WIDTH="30" HEIGHT="20" PORT="l"></TD><TD FIXEDSIZE="TRUE" WIDTH="30" HEIGHT="20" PORT="m"></TD><TD FIXEDSIZE="TRUE" WIDTH="30" HEIGHT="20" PORT="r"></TD></TR></TABLE>>,
+		shape=plaintext];
+	a:r -> b;
+	a:l -> c;
+	a:m -> d;
+}

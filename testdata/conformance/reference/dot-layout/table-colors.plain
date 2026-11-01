@@ -1,0 +1,4 @@
+graph 1 1.75 0.5
+node a 0.375 0.25 0.75 0.5 <<TABLE BGCOLOR="#000009" COLOR="#00000F"><TR><TD BGCOLOR="#000001" COLOR="#00000E"></TD><TD BGCOLOR="#000002"></TD></TR></TABLE>> solid plaintext black lightgrey
+node b 1.375 0.25 0.75 0.5 <<TABLE><TR><TD></TD><TD COLOR="#00FF00"></TD></TR></TABLE>> solid rect #FF0000 #FF0000
+stop

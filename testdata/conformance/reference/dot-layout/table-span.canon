@@ -1,0 +1,5 @@
+digraph {
+	node [label="\N"];
+	a	[label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD WIDTH="10" HEIGHT="8" BGCOLOR="#000001"></TD><TD WIDTH="20" HEIGHT="8" BGCOLOR="#000002"></TD></TR><TR><TD COLSPAN="2" WIDTH="60" HEIGHT="8" BGCOLOR="#000003"></TD></TR></TABLE>>,
+		shape=plaintext];
+}

@@ -1,0 +1,8 @@
+digraph {
+	node [label="\N"];
+	a	[label=<<TABLE BGCOLOR="#000009" COLOR="#00000F"><TR><TD BGCOLOR="#000001" COLOR="#00000E"></TD><TD BGCOLOR="#000002"></TD></TR></TABLE>>,
+		shape=plaintext];
+	b	[color="#FF0000",
+		label=<<TABLE><TR><TD></TD><TD COLOR="#00FF00"></TD></TR></TABLE>>,
+		shape=rect];
+}

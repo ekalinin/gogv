@@ -1,0 +1,4 @@
+graph 1 0.75 0.75
+node a 0.375 0.25 0.75 0.5 <<TABLE><TR><TD PORT="p"></TD></TR></TABLE>> solid plaintext black lightgrey
+edge a a 7 0.39951 0.28745 0.49938 0.46189 0.49121 0.75 0.375 0.75 0.3327 0.75 0.30472 0.71183 0.29105 0.65487 solid black
+stop
