@@ -1,0 +1,24 @@
+digraph {
+	graph [_draw_="c 9 -#fffffe00 C 7 -#ffffff P 4 0 0 0 125 84 125 84 0 ",
+		bb="0,0,84,125",
+		xdotversion=1.7
+	];
+	node [label="\N"];
+	a	[_draw_="c 7 -#000000 e 27 107 27 18 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 27 102.8 0 6.21 1 -a ",
+		height=0.5,
+		pos="27,107",
+		width=0.75];
+	b	[_draw_="c 7 -#000000 e 27 18 27 18 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 27 13.8 0 7 1 -b ",
+		height=0.5,
+		pos="27,18",
+		width=0.75];
+	a -> b	[_draw_="c 7 -#000000 B 4 27 88.81 27 77.09 27 61.29 27 47.68 ",
+		_hdraw_="S 5 -solid c 7 -#000000 C 7 -#000000 P 3 30.5 47.96 27 37.96 23.5 47.96 ",
+		_ldraw_="S 5 -solid c 9 -#fffffe00 C 7 -#000009 P 4 27 54 27 71 84 71 84 54 S 5 -solid c 7 -#000000 p 4 27 54 27 71 84 71 84 54 S 5 -solid \
+c 7 -#000000 p 4 30 62 30 68 36 68 36 62 ",
+		label=<<TABLE BGCOLOR="#000009" FIXEDSIZE="TRUE" WIDTH="57" HEIGHT="17"><TR><TD></TD></TR></TABLE>>,
+		lp="55.5,62.5",
+		pos="e,27,36.45 27,88.812 27,77.092 27,61.29 27,47.684"];
+}

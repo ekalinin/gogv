@@ -1,0 +1,50 @@
+{
+  "name": "G",
+  "directed": true,
+  "strict": false,
+  "_subgraph_cnt": 1,
+  "objects": [
+    {
+      "name": "cluster_x",
+      "_gvid": 0,
+      "nodes": [
+        3
+      ]
+    },
+    {
+      "_gvid": 1,
+      "name": "a",
+      "color": "#123456",
+      "label": "\\N",
+      "shape": "box"
+    },
+    {
+      "_gvid": 2,
+      "name": "b",
+      "color": "#123456",
+      "label": "\\N",
+      "shape": "box"
+    },
+    {
+      "_gvid": 3,
+      "name": "c",
+      "color": "#123456",
+      "label": "\\N",
+      "shape": "ellipse"
+    }
+  ],
+  "edges": [
+    {
+      "_gvid": 0,
+      "tail": 1,
+      "head": 2,
+      "color": "#654321"
+    },
+    {
+      "_gvid": 1,
+      "tail": 2,
+      "head": 3,
+      "color": "#654321"
+    }
+  ]
+}

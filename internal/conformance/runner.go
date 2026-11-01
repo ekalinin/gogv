@@ -19,9 +19,21 @@ import (
 	"strings"
 )
 
-// Formats are the output formats compared by the conformance run, in the
-// order of the layers of the contract.
-var Formats = []string{"canon", "plain", "svg"}
+// Formats are the output formats that the conformance run can compare, in
+// the order of the layers of the contract. A case is compared in the formats
+// that its reference records.
+var Formats = []string{"canon", "plain", "plain-ext", "svg", "svg_inline", "dot", "gv", "xdot", "xdot1.2", "xdot1.4", "json", "json0", "dot_json", "xdot_json"}
+
+// formatsOf returns the formats of ref, in the order of Formats.
+func formatsOf(ref Reference) []string {
+	var fs []string
+	for _, f := range Formats {
+		if _, ok := ref[f]; ok {
+			fs = append(fs, f)
+		}
+	}
+	return fs
+}
 
 // NotSupportedYet is the phrase of the warnings and errors that gogv emits
 // for a feature it does not support yet.
@@ -81,18 +93,19 @@ type meta map[string]struct {
 }
 
 // WriteReference records ref for the case id under dir, as
-// <id>.<format> files with stdout and <id>.meta.json.
+// <id>.<format> files with stdout for each of its formats and
+// <id>.meta.json.
 func WriteReference(dir, id string, ref Reference) error {
 	base := filepath.Join(dir, filepath.FromSlash(id))
 	if err := os.MkdirAll(filepath.Dir(base), 0o755); err != nil {
 		return err
 	}
+	if len(formatsOf(ref)) == 0 {
+		return fmt.Errorf("%s: no result", id)
+	}
 	m := meta{}
-	for _, f := range Formats {
-		r, ok := ref[f]
-		if !ok {
-			return fmt.Errorf("%s: no %s result", id, f)
-		}
+	for _, f := range formatsOf(ref) {
+		r := ref[f]
 		if err := os.WriteFile(base+"."+f, r.Stdout, 0o644); err != nil {
 			return err
 		}
@@ -124,6 +137,9 @@ func ReadReference(dir, id string) (Reference, error) {
 	}
 	ref := Reference{}
 	for _, f := range Formats {
+		if _, ok := m[f]; !ok {
+			continue
+		}
 		out, err := os.ReadFile(base + "." + f)
 		if err != nil {
 			return nil, err
@@ -236,7 +252,7 @@ type CaseResult struct {
 func Judge(c Case, ref Reference, got map[string]Result, known map[string]KnownDifference, r Rasterizer) CaseResult {
 	res := CaseResult{Case: c, Formats: map[string]Outcome{}, Problems: map[string]string{}}
 	notSupported := false
-	for _, f := range Formats {
+	for _, f := range formatsOf(ref) {
 		g := got[f]
 		if bytes.Contains(g.Stderr, []byte(NotSupportedYet)) {
 			notSupported = true
@@ -280,22 +296,69 @@ func judgeFormat(format string, ref, got Result, r Rasterizer, res *CaseResult) 
 	switch format {
 	case "canon":
 		return CompareCanon(ref.Stdout, got.Stdout)
-	case "plain":
-		rp, err := ParsePlain(ref.Stdout)
-		if err != nil {
-			return fmt.Errorf("reference: %w", err)
-		}
-		gp, err := ParsePlain(got.Stdout)
-		if err != nil {
-			return err
-		}
-		return ComparePlain(rp, gp, SizeTolerance)
+	case "plain", "plain-ext":
+		return eachDocument(ref.Stdout, got.Stdout, "stop\n", func(ref, got []byte) error {
+			rp, err := ParsePlain(ref)
+			if err != nil {
+				return fmt.Errorf("reference: %w", err)
+			}
+			gp, err := ParsePlain(got)
+			if err != nil {
+				return err
+			}
+			return ComparePlain(rp, gp, SizeTolerance)
+		})
 	case "svg":
-		score, err := CompareSVG(r, ref.Stdout, got.Stdout)
-		res.SSIM = score
-		return err
+		return eachDocument(ref.Stdout, got.Stdout, "</svg>\n", func(ref, got []byte) error {
+			score, err := CompareSVG(r, ref, got)
+			res.SSIM = score
+			return err
+		})
+	case "svg_inline":
+		return eachDocument(ref.Stdout, got.Stdout, "</svg>\n", func(ref, got []byte) error {
+			return CompareInlineSVG(r, ref, got)
+		})
+	case "dot", "gv", "xdot", "xdot1.2", "xdot1.4":
+		return CompareDOT(ref.Stdout, got.Stdout, SizeTolerance)
+	case "json", "json0":
+		return CompareJSON(ref.Stdout, got.Stdout, SizeTolerance)
+	case "dot_json", "xdot_json":
+		if !bytes.Equal(ref.Stdout, got.Stdout) {
+			return errors.New("differs from the reference")
+		}
+		return nil
 	}
 	return fmt.Errorf("unknown format %q", format)
+}
+
+// eachDocument compares the outputs of an input with several graphs graph by
+// graph: each document of the output ends with end.
+func eachDocument(ref, got []byte, end string, compare func(ref, got []byte) error) error {
+	split := func(data []byte) [][]byte {
+		var docs [][]byte
+		for len(data) > 0 {
+			i := bytes.Index(data, []byte(end))
+			if i < 0 {
+				return append(docs, data)
+			}
+			docs = append(docs, data[:i+len(end)])
+			data = data[i+len(end):]
+		}
+		return docs
+	}
+	rd, gd := split(ref), split(got)
+	if len(rd) != len(gd) {
+		return fmt.Errorf("%d documents, the reference has %d", len(gd), len(rd))
+	}
+	for i := range rd {
+		if err := compare(rd[i], gd[i]); err != nil {
+			if len(rd) > 1 {
+				return fmt.Errorf("graph %d: %w", i+1, err)
+			}
+			return err
+		}
+	}
+	return nil
 }
 
 // firstLine returns the first line of a stderr output, with the input name
@@ -363,9 +426,13 @@ func (r Report) Markdown() string {
 	for _, f := range Formats {
 		counts := map[Outcome]int{}
 		for _, res := range r.Results {
-			counts[res.Formats[f]]++
+			if o, ok := res.Formats[f]; ok {
+				counts[o]++
+			}
 		}
-		row(f, counts)
+		if len(counts) > 0 {
+			row(f, counts)
+		}
 	}
 
 	var other []CaseResult
@@ -410,7 +477,7 @@ func Run(cases []Case, refDir string, known map[string]KnownDifference, render R
 			return report, fmt.Errorf("%s: no reference: %w", c.ID, err)
 		}
 		got := map[string]Result{}
-		for _, f := range Formats {
+		for _, f := range formatsOf(ref) {
 			got[f] = render(c.Source, f)
 		}
 		report.Results = append(report.Results, Judge(c, ref, got, known, r))

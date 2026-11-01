@@ -1,0 +1,6 @@
+digraph G {
+	node [label="\N"];
+	a	[color="#FF0000",
+		shape=rect];
+	a -> b	[label=x];
+}

@@ -1,0 +1,15 @@
+digraph {
+	node [label="\N"];
+	{
+		graph [rank=same];
+		a;
+	}
+	{
+		graph [rank=same];
+		b;
+	}
+	subgraph x {
+		c;
+	}
+	d;
+}

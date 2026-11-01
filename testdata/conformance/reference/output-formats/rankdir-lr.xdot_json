@@ -1,0 +1,48 @@
+{
+  "name": "%1",
+  "directed": true,
+  "strict": false,
+  "label": "",
+  "rankdir": "LR",
+  "_subgraph_cnt": 1,
+  "objects": [
+    {
+      "name": "cluster_x",
+      "label": "X",
+      "rankdir": "LR",
+      "_gvid": 0,
+      "nodes": [
+        2,3
+      ]
+    },
+    {
+      "_gvid": 1,
+      "name": "a",
+      "label": "\\N"
+    },
+    {
+      "_gvid": 2,
+      "name": "b",
+      "label": "\\N"
+    },
+    {
+      "_gvid": 3,
+      "name": "c",
+      "label": "\\N"
+    }
+  ],
+  "edges": [
+    {
+      "_gvid": 0,
+      "tail": 1,
+      "head": 2,
+      "label": "ab"
+    },
+    {
+      "_gvid": 1,
+      "tail": 1,
+      "head": 3,
+      "label": ""
+    }
+  ]
+}

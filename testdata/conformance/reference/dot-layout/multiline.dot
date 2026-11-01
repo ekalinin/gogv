@@ -1,0 +1,13 @@
+digraph {
+	graph [bb="0,0,62.196,177.42"];
+	node [label="\N"];
+	a	[height=1.1471,
+		label="one\ntwo\nthree",
+		pos="31.098,136.13",
+		width=0.86384];
+	b	[height=0.8171,
+		label="left\lright\r",
+		pos="31.098,29.416",
+		width=0.83363];
+	a -> b	[pos="e,31.098,59.266 31.098,94.343 31.098,86.563 31.098,78.426 31.098,70.663"];
+}

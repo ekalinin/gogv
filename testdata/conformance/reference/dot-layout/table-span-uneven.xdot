@@ -1,0 +1,16 @@
+digraph {
+	graph [_draw_="c 9 -#fffffe00 C 7 -#ffffff P 4 0 0 0 36 54 36 54 0 ",
+		bb="0,0,54,36",
+		xdotversion=1.7
+	];
+	node [label="\N"];
+	a	[_ldraw_="S 5 -solid c 9 -#fffffe00 C 7 -#000001 P 4 8.67 22 8.67 30 21.17 30 21.17 22 S 5 -solid c 9 -#fffffe00 C 7 -#000002 P 4 21.17 22 \
+21.17 30 33.67 30 33.67 22 S 5 -solid c 9 -#fffffe00 C 7 -#000004 P 4 33.67 22 33.67 30 45.33 30 45.33 22 S 5 -solid c 9 -#fffffe00 \
+C 7 -#000003 P 4 8.67 14 8.67 22 45.33 22 45.33 14 S 5 -solid c 9 -#fffffe00 C 7 -#000005 P 4 8.67 6 8.67 14 33.67 14 33.67 6 S \
+5 -solid c 9 -#fffffe00 C 7 -#000006 P 4 33.67 6 33.67 14 45.33 14 45.33 6 ",
+		height=0.5,
+		label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD WIDTH="10" HEIGHT="8" BGCOLOR="#000001"></TD><TD WIDTH="10" HEIGHT="8" BGCOLOR="#000002"></TD><TD WIDTH="10" HEIGHT="8" BGCOLOR="#000004"></TD></TR><TR><TD COLSPAN="3" WIDTH="35" HEIGHT="8" BGCOLOR="#000003"></TD></TR><TR><TD COLSPAN="2" WIDTH="25" HEIGHT="8" BGCOLOR="#000005"></TD><TD BGCOLOR="#000006"></TD></TR></TABLE>>,
+		pos="27,18",
+		shape=plaintext,
+		width=0.75];
+}

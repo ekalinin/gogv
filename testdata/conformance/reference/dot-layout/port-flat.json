@@ -1,0 +1,111 @@
+{
+  "name": "%1",
+  "directed": true,
+  "strict": false,
+  "_draw_": 
+  [
+    {
+      "op": "c",
+      "grad": "none",
+      "color": "#fffffe00"
+    },
+    {
+      "op": "C",
+      "grad": "none",
+      "color": "#ffffff"
+    },
+    {
+      "op": "P",
+      "points": [[0.000,0.000],[0.000,38.000],[210.000,38.000],[210.000,0.000]]
+    }
+  ],
+  "bb": "0,0,210,38",
+  "xdotversion": "1.7",
+  "_subgraph_cnt": 0,
+  "objects": [
+    {
+      "_gvid": 0,
+      "name": "a",
+      "_ldraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000001"
+        },
+        {
+          "op": "P",
+          "points": [[28.000,9.000],[28.000,29.000],[68.000,29.000],[68.000,9.000]]
+        }
+      ],
+      "height": "0.52778",
+      "label": "<TABLE BORDER=\"0\" CELLBORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD><\/TD><TD FIXEDSIZE=\"TRUE\" WIDTH=\"1\" HEIGHT=\"5\"><\/TD><TD><\/TD><\/TR><TR><TD FIXEDSIZE=\"TRUE\" WIDTH=\"20\" HEIGHT=\"1\"><\/TD><TD BGCOLOR=\"#000001\" FIXEDSIZE=\"TRUE\" WIDTH=\"40\" HEIGHT=\"20\" PORT=\"h\"><\/TD><TD FIXEDSIZE=\"TRUE\" WIDTH=\"20\" HEIGHT=\"1\"><\/TD><\/TR><TR><TD><\/TD><TD FIXEDSIZE=\"TRUE\" WIDTH=\"1\" HEIGHT=\"5\"><\/TD><TD><\/TD><\/TR><\/TABLE>",
+      "pos": "48,19",
+      "shape": "plaintext",
+      "width": "1.3333"
+    },
+    {
+      "_gvid": 1,
+      "name": "b",
+      "_ldraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000002"
+        },
+        {
+          "op": "P",
+          "points": [[142.000,9.000],[142.000,29.000],[182.000,29.000],[182.000,9.000]]
+        }
+      ],
+      "height": "0.52778",
+      "label": "<TABLE BORDER=\"0\" CELLBORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD><\/TD><TD FIXEDSIZE=\"TRUE\" WIDTH=\"1\" HEIGHT=\"5\"><\/TD><TD><\/TD><\/TR><TR><TD FIXEDSIZE=\"TRUE\" WIDTH=\"20\" HEIGHT=\"1\"><\/TD><TD BGCOLOR=\"#000002\" FIXEDSIZE=\"TRUE\" WIDTH=\"40\" HEIGHT=\"20\" PORT=\"h\"><\/TD><TD FIXEDSIZE=\"TRUE\" WIDTH=\"20\" HEIGHT=\"1\"><\/TD><\/TR><TR><TD><\/TD><TD FIXEDSIZE=\"TRUE\" WIDTH=\"1\" HEIGHT=\"5\"><\/TD><TD><\/TD><\/TR><\/TABLE>",
+      "pos": "162,19",
+      "shape": "plaintext",
+      "width": "1.3333"
+    }
+  ],
+  "edges": [
+    {
+      "_gvid": 0,
+      "tail": 0,
+      "head": 1,
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "b",
+          "points": [[68.000,19.000],[88.720,19.000],[121.670,19.000],[142.280,19.000]]
+        }
+      ],
+      "arrowhead": "none",
+      "headport": "h",
+      "minlen": "0",
+      "pos": "67.999,19 88.72,19 121.67,19 142.28,19",
+      "tailport": "h"
+    }
+  ]
+}

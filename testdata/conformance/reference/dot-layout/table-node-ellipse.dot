@@ -1,0 +1,8 @@
+digraph {
+	graph [bb="0,0,107.48,67.882"];
+	node [label="\N"];
+	z	[height=0.94281,
+		label=<<TABLE BGCOLOR="#000007" FIXEDSIZE="TRUE" WIDTH="60" HEIGHT="40"><TR><TD></TD></TR></TABLE>>,
+		pos="53.74,33.941",
+		width=1.4928];
+}

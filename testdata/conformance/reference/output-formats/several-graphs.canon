@@ -1,0 +1,8 @@
+digraph A {
+	node [label="\N"];
+	a -> b;
+}
+digraph B {
+	node [label="\N"];
+	c;
+}

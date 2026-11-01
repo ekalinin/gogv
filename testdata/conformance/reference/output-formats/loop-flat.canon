@@ -1,0 +1,7 @@
+digraph {
+	node [label="\N"];
+	a -> a	[label=loop];
+	a -> b	[label=flat,
+		minlen=0];
+	b -> c;
+}

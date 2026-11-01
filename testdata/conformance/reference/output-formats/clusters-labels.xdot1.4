@@ -1,0 +1,64 @@
+digraph G {
+	graph [_draw_="c 9 -#fffffe00 C 7 -#ffffff P 4 0 0 0 250.4 102 250.4 102 0 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 51 8.2 0 26.43 5 -Title ",
+		bb="0,0,102,250.4",
+		label=Title,
+		lheight=0.23,
+		lp="51,12.4",
+		lwidth=0.37,
+		xdotversion=1.4
+	];
+	node [label="\N"];
+	subgraph cluster_x {
+		graph [_draw_="c 7 -#00ff00 p 4 8 80.8 8 242.4 94 242.4 94 80.8 ",
+			_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 51 225.8 0 9.34 1 -C ",
+			bb="8,80.8,94,242.4",
+			color="#00FF00",
+			label=C,
+			lheight=0.23,
+			lp="51,230",
+			lwidth=0.13
+		];
+		subgraph cluster_y {
+			graph [_draw_="c 7 -#00ff00 p 4 16 88.8 16 165.6 86 165.6 86 88.8 ",
+				_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 51 149 0 9.34 1 -C ",
+				bb="16,88.8,86,165.6",
+				lheight=0.23,
+				lp="51,153.2",
+				lwidth=0.13
+			];
+			b	[_draw_="c 7 -#000000 e 51 114.8 27 18 ",
+				_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 51 110.6 0 7 1 -b ",
+				height=0.5,
+				pos="51,114.8",
+				width=0.75];
+		}
+		a	[_draw_="c 7 -#000000 e 51 191.6 27 18 ",
+			_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 51 187.4 0 6.21 1 -a ",
+			height=0.5,
+			pos="51,191.6",
+			width=0.75];
+		a -> b	[_draw_="c 7 -#000000 B 4 51 173.25 51 164.66 51 154.07 51 144.32 ",
+			_hdraw_="S 5 -solid c 7 -#000000 C 7 -#000000 P 3 54.5 144.57 51 134.57 47.5 144.57 ",
+			_hldraw_="F 14 11 -Times-Roman c 7 -#000000 T 45.94 137.25 0 10.11 1 -H ",
+			_tldraw_="F 14 11 -Times-Roman c 7 -#000000 T 46.72 160.65 0 8.55 1 -T ",
+			head_lp="45.945,141.45",
+			headlabel=H,
+			pos="e,51,133.05 51,173.25 51,164.66 51,154.07 51,144.32",
+			tail_lp="46.724,164.85",
+			taillabel=T];
+	}
+	c	[_draw_="c 7 -#000000 e 51 42.8 27 18 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 51 38.6 0 6.21 1 -c F 14 11 -Times-Roman c 7 -#000000 T 18.94 65 0 10.11 1 -N ",
+		height=0.5,
+		pos="51,42.8",
+		width=0.75,
+		xlabel=N,
+		xlp="18.945,69.2"];
+	b -> c	[_draw_="c 7 -#000000 B 4 51 96.5 51 89.21 51 80.53 51 72.34 ",
+		_hdraw_="S 5 -solid c 7 -#000000 C 7 -#000000 P 3 54.5 72.42 51 62.42 47.5 72.42 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 45.94 83.13 0 10.11 1 -X ",
+		pos="e,51,60.904 51,96.497 51,89.207 51,80.526 51,72.336",
+		xlabel=X,
+		xlp="45.945,87.331"];
+}

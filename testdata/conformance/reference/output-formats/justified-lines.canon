@@ -1,0 +1,6 @@
+digraph {
+	node [label="\N"];
+	a	[label="left\lright\rcenter\n",
+		shape=box];
+	a -> b	[label="one\ltwo\r"];
+}

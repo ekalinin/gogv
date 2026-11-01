@@ -1,0 +1,45 @@
+{
+  "name": "%1",
+  "directed": true,
+  "strict": false,
+  "_subgraph_cnt": 0,
+  "objects": [
+    {
+      "_gvid": 0,
+      "name": "a",
+      "label": "<TABLE><TR><TD PORT=\"p\" BGCOLOR=\"#000001\"><\/TD><TD WIDTH=\"20\"><\/TD><\/TR><\/TABLE>",
+      "shape": "plaintext"
+    },
+    {
+      "_gvid": 1,
+      "name": "b",
+      "label": "<TABLE><TR><TD PORT=\"q\"><\/TD><\/TR><\/TABLE>",
+      "shape": "plaintext"
+    },
+    {
+      "_gvid": 2,
+      "name": "c",
+      "label": "\\N"
+    }
+  ],
+  "edges": [
+    {
+      "_gvid": 0,
+      "tail": 0,
+      "head": 1,
+      "tailport": "p"
+    },
+    {
+      "_gvid": 2,
+      "tail": 2,
+      "head": 1,
+      "headport": "q"
+    },
+    {
+      "_gvid": 1,
+      "tail": 0,
+      "head": 2,
+      "tailport": "p"
+    }
+  ]
+}

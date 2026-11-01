@@ -3,11 +3,23 @@
     "status": 0,
     "stderr": "Warning: Improper BORDER value x - ignoredin label of node a\nWarning: COLSPAN value cannot be 0 - ignored\nin label of node c\n"
   },
+  "dot": {
+    "status": 0,
+    "stderr": "Warning: Improper BORDER value x - ignoredin label of node a\nWarning: COLSPAN value cannot be 0 - ignored\nin label of node c\n"
+  },
+  "json": {
+    "status": 0,
+    "stderr": "Warning: Improper BORDER value x - ignoredin label of node a\nWarning: COLSPAN value cannot be 0 - ignored\nin label of node c\n"
+  },
   "plain": {
     "status": 0,
     "stderr": "Warning: Improper BORDER value x - ignoredin label of node a\nWarning: COLSPAN value cannot be 0 - ignored\nin label of node c\n"
   },
   "svg": {
+    "status": 0,
+    "stderr": "Warning: Improper BORDER value x - ignoredin label of node a\nWarning: COLSPAN value cannot be 0 - ignored\nin label of node c\n"
+  },
+  "xdot": {
     "status": 0,
     "stderr": "Warning: Improper BORDER value x - ignoredin label of node a\nWarning: COLSPAN value cannot be 0 - ignored\nin label of node c\n"
   }

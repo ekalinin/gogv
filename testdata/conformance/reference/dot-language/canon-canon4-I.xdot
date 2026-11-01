@@ -1,0 +1,27 @@
+digraph {
+	graph [_draw_="c 9 -#fffffe00 C 7 -#ffffff P 4 0 0 0 60.8 126 60.8 126 0 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 63 8.2 0 8.55 1 -L ",
+		bb="0,0,126,60.8",
+		label=L,
+		lheight=0.23,
+		lp="63,12.4",
+		lwidth=0.12,
+		xdotversion=1.7
+	];
+	node [label="\N"];
+	subgraph s {
+		graph [label=""];
+		x	[_draw_="c 7 -#000000 e 27 42.8 27 18 ",
+			_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 27 38.6 0 7 1 -x ",
+			height=0.5,
+			pos="27,42.8",
+			width=0.75];
+	}
+	subgraph t {
+		y	[_draw_="c 7 -#000000 e 99 42.8 27 18 ",
+			_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 99 38.6 0 7 1 -y ",
+			height=0.5,
+			pos="99,42.8",
+			width=0.75];
+	}
+}

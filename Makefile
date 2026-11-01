@@ -20,9 +20,10 @@ provenance:
 reference-image:
 	docker build --platform linux/amd64 -t $(REFERENCE_IMAGE) tools/reference
 
-# Records the reference outputs of the curated cases.
+# Records the reference outputs of the curated cases: canon, plain, svg, dot,
+# xdot and json, and every format for the cases of output-formats.
 reference:
-	$(GO) run ./tools/refgen -image $(REFERENCE_IMAGE) -cases testdata/conformance/cases -out testdata/conformance/reference
+	$(GO) run ./tools/refgen -image $(REFERENCE_IMAGE) -cases testdata/conformance/cases -out testdata/conformance/reference -formats "canon plain svg dot xdot json" -all output-formats
 
 # Collects the DOT that gopuml generates for its conformance cases into
 # .cache/gopuml-dot (GOPUML is a gopuml checkout), writes the variant of its

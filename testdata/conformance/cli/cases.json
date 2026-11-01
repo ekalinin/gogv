@@ -9,7 +9,8 @@
   {"id": "cli/version", "args": ["-V"], "stdin": "not read\n"},
   {"id": "cli/syntax-error", "args": ["-Tcanon"], "stdin": "digraph { a -> }\n"},
   {"id": "cli/ambiguous-number", "args": ["-Tcanon"], "stdin": "digraph { 2abc }\n"},
-  {"id": "cli/later-format", "args": ["-Txdot"], "stdin": "digraph { a }\n"},
+  {"id": "cli/xdot", "args": ["-Txdot"], "stdin": "digraph { a }\n"},
+  {"id": "cli/default-format", "args": [], "stdin": "digraph G { a }\n"},
   {"id": "cli/other-engine", "args": ["-Kneato", "-Tcanon"], "stdin": "digraph { a }\n"},
   {"id": "cli/default-attribute-flag", "args": ["-Gnodesep=1", "-Tcanon"], "stdin": "digraph { a }\n"}
 ]

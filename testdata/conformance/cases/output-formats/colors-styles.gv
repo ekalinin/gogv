@@ -1,0 +1,1 @@
+digraph { a [color="#FF0000", fontcolor="#0000FF", fontname="Helvetica", fontsize=10]; b [fontname="Courier"]; a -> b [color="#00FF00", arrowhead=empty, arrowsize=2]; b -> c [dir=both, arrowtail=empty]; a -> c [style=invis]; c -> d [arrowhead=none]; d -> a [dir=back] }

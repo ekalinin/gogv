@@ -1,0 +1,19 @@
+digraph {
+	graph [bb="0,0,89.642,156.8"];
+	node [label="\N"];
+	subgraph cluster_a {
+		graph [bb="8,96.8,78,148.8"];
+		a	[height=0.5,
+			pos="43,122.8",
+			width=0.75];
+	}
+	subgraph cluster_b {
+		graph [bb="8,8,78,60"];
+		b	[height=0.5,
+			pos="43,34",
+			width=0.75];
+	}
+	a -> b	[label=between,
+		lp="66.321,78.4",
+		pos="e,43,52.41 43,104.65 43,92.958 43,77.192 43,63.618"];
+}

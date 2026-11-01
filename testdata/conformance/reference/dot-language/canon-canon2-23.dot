@@ -1,0 +1,17 @@
+digraph G {
+	graph [bb="0,0,154.02,124"];
+	node [label="\N"];
+	subgraph "cluster x" {
+		graph [bb="76.024,64,146.02,116"];
+		y	[height=0.5,
+			pos="111.02,90",
+			width=0.75];
+	}
+	"graph"	[height=0.5,
+		pos="33.024,90",
+		width=0.91733];
+	x	[height=0.5,
+		pos="33.024,18",
+		width=0.75];
+	"graph" -> x	[pos="e,33.024,36.104 33.024,71.697 33.024,64.407 33.024,55.726 33.024,47.536"];
+}

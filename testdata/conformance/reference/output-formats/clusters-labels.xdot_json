@@ -1,0 +1,64 @@
+{
+  "name": "G",
+  "directed": true,
+  "strict": false,
+  "label": "Title",
+  "_subgraph_cnt": 2,
+  "objects": [
+    {
+      "name": "cluster_x",
+      "color": "#00FF00",
+      "label": "C",
+      "_gvid": 0,
+      "subgraphs": [
+        1
+      ],
+      "nodes": [
+        2,3
+      ],
+      "edges": [
+        0
+      ]
+    },
+    {
+      "name": "cluster_y",
+      "color": "#00FF00",
+      "label": "C",
+      "_gvid": 1,
+      "nodes": [
+        3
+      ]
+    },
+    {
+      "_gvid": 2,
+      "name": "a",
+      "label": "\\N"
+    },
+    {
+      "_gvid": 3,
+      "name": "b",
+      "label": "\\N"
+    },
+    {
+      "_gvid": 4,
+      "name": "c",
+      "label": "\\N",
+      "xlabel": "N"
+    }
+  ],
+  "edges": [
+    {
+      "_gvid": 0,
+      "tail": 2,
+      "head": 3,
+      "headlabel": "H",
+      "taillabel": "T"
+    },
+    {
+      "_gvid": 1,
+      "tail": 3,
+      "head": 4,
+      "xlabel": "X"
+    }
+  ]
+}

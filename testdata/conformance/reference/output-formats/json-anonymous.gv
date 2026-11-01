@@ -1,0 +1,26 @@
+digraph {
+	graph [bb="0,0,270,36"];
+	node [label="\N"];
+	{
+		graph [rank=same];
+		a	[height=0.5,
+			pos="27,18",
+			width=0.75];
+	}
+	{
+		graph [rank=same];
+		b	[height=0.5,
+			pos="99,18",
+			width=0.75];
+	}
+	subgraph x {
+		c	[height=0.5,
+			pos="171,18",
+			width=0.75];
+	}
+	{
+		d	[height=0.5,
+			pos="243,18",
+			width=0.75];
+	}
+}

@@ -18,23 +18,25 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"slices"
 	"strconv"
 	"strings"
 
 	"github.com/ekalinin/gogv/internal/conformance"
 )
 
-// script runs inside the reference image. For each case it writes
-// <case>.<format>.out, .err and .status under /work.
+// script runs inside the reference image. For each case of /work/cases.txt,
+// a line with its path and its formats, it writes <case>.<format>.out, .err
+// and .status under /work.
 const script = `set -u
 cd /cases
-find . -name '*.gv' | sort | while read -r f; do
+while read -r f fmts; do
 	mkdir -p "/work/$(dirname "$f")"
-	for fmt in ` + "canon plain svg" + `; do
+	for fmt in $fmts; do
 		dot -T"$fmt" < "$f" > "/work/$f.$fmt.out" 2> "/work/$f.$fmt.err"
 		echo $? > "/work/$f.$fmt.status"
 	done
-done
+done < /work/cases.txt
 `
 
 func main() {
@@ -42,13 +44,15 @@ func main() {
 	cases := flag.String("cases", "testdata/conformance/cases", "corpus directory")
 	out := flag.String("out", "testdata/conformance/reference", "directory of the recorded references")
 	cli := flag.String("cli", "", "CLI cases to record instead (JSON); written next to them as reference.json")
+	formats := flag.String("formats", "canon plain svg", "formats to record for every case")
+	all := flag.String("all", "", "capabilities whose cases are recorded in every format the conformance run compares")
 	flag.Parse()
 
 	var err error
 	if *cli != "" {
 		err = recordCLI(*image, *cli)
 	} else {
-		err = run(*image, *cases, *out)
+		err = run(*image, *cases, *out, strings.Fields(*formats), strings.Fields(*all))
 	}
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "refgen:", err)
@@ -87,10 +91,18 @@ func recordCLI(image, path string) error {
 	return nil
 }
 
-func run(image, casesDir, out string) error {
+// run records the references of the cases under casesDir: in formats, or in
+// every format of conformance.Formats for the capabilities of all.
+func run(image, casesDir, out string, formats, all []string) error {
 	cases, err := conformance.LoadCases(casesDir)
 	if err != nil {
 		return err
+	}
+	formatsOf := func(c conformance.Case) []string {
+		if slices.Contains(all, c.Capability) {
+			return conformance.Formats
+		}
+		return formats
 	}
 	absCases, err := filepath.Abs(casesDir)
 	if err != nil {
@@ -110,6 +122,14 @@ func run(image, casesDir, out string) error {
 		return err
 	}
 
+	var list strings.Builder
+	for _, c := range cases {
+		fmt.Fprintf(&list, "./%s.gv %s\n", c.ID, strings.Join(formatsOf(c), " "))
+	}
+	if err := os.WriteFile(filepath.Join(work, "cases.txt"), []byte(list.String()), 0o644); err != nil {
+		return err
+	}
+
 	cmd := exec.Command("docker", "run", "--rm", "--platform", "linux/amd64",
 		"-v", absCases+":/cases:ro", "-v", work+":/work",
 		image, "sh", "-c", script)
@@ -125,7 +145,7 @@ func run(image, casesDir, out string) error {
 	}
 	for _, c := range cases {
 		ref := conformance.Reference{}
-		for _, f := range conformance.Formats {
+		for _, f := range formatsOf(c) {
 			base := filepath.Join(work, filepath.FromSlash(c.ID)+".gv."+f)
 			stdout, err := os.ReadFile(base + ".out")
 			if err != nil {

@@ -1,0 +1,1 @@
+digraph { label="left title"; labeljust=l; a -> b }

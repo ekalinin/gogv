@@ -60,6 +60,9 @@ type root struct {
 	edges            []*Edge
 	graphs           []*Graph // the root and every subgraph, in creation order
 	anonymous        int
+	// unnamed counts the graphs without a name and the edges, in creation
+	// order, as the reference numbers them.
+	unnamed int
 	// rankedIn is the cluster that a rank subgraph took each node out of.
 	rankedIn map[*Node]*Graph
 }
@@ -71,6 +74,10 @@ type Graph struct {
 	Name   string
 	// Anonymous is set for subgraphs written without a name.
 	Anonymous bool
+	// Unnamed is, for a graph without a name, its place from 1 among the
+	// graphs without a name and the edges, in creation order: the reference
+	// names it %N with N = 2*Unnamed-1.
+	Unnamed   int
 	Subgraphs []*Graph
 	values    []Value
 	// defaults holds the node and edge defaults set in this subgraph, by
@@ -108,6 +115,10 @@ func New(name string, directed, strict bool) *Graph {
 		r.byName[k] = map[string]*Symbol{}
 	}
 	g := &Graph{r: r, Name: name, nodeIn: map[*Node]bool{}, edgeIn: map[*Edge]bool{}}
+	if name == "" {
+		r.unnamed++
+		g.Unnamed = r.unnamed
+	}
 	r.graphs = append(r.graphs, g)
 	g.SetDefault(NodeKind, "label", Str(LabelDefault))
 	return g
@@ -240,6 +251,8 @@ func (g *Graph) Subgraph(name string) *Graph {
 	if name == "" {
 		g.r.anonymous++
 		sg.Anonymous = true
+		g.r.unnamed++
+		sg.Unnamed = g.r.unnamed
 	}
 	g.Subgraphs = append(g.Subgraphs, sg)
 	g.r.graphs = append(g.r.graphs, sg)
@@ -316,6 +329,7 @@ func (g *Graph) Edge(tail, head *Node) (e *Edge, created bool) {
 	if e == nil {
 		created = true
 		e = &Edge{Tail: tail, Head: head, Seq: len(g.r.edges)}
+		g.r.unnamed++
 		for _, s := range g.r.symbols[EdgeKind] {
 			e.values = append(e.values, g.Default(s, EdgeKind))
 		}

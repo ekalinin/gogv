@@ -3,11 +3,23 @@
     "status": 0,
     "stderr": "Warning: Warning: no value for width of non-ASCII character 195. Falling back to width of space character\nWarning: Warning: no value for width of ASCII character 9. Falling back to 0\n"
   },
+  "dot": {
+    "status": 0,
+    "stderr": "Warning: Warning: no value for width of non-ASCII character 195. Falling back to width of space character\nWarning: Warning: no value for width of ASCII character 9. Falling back to 0\n"
+  },
+  "json": {
+    "status": 0,
+    "stderr": "Warning: Warning: no value for width of non-ASCII character 195. Falling back to width of space character\nWarning: Warning: no value for width of ASCII character 9. Falling back to 0\n"
+  },
   "plain": {
     "status": 0,
     "stderr": "Warning: Warning: no value for width of non-ASCII character 195. Falling back to width of space character\nWarning: Warning: no value for width of ASCII character 9. Falling back to 0\n"
   },
   "svg": {
+    "status": 0,
+    "stderr": "Warning: Warning: no value for width of non-ASCII character 195. Falling back to width of space character\nWarning: Warning: no value for width of ASCII character 9. Falling back to 0\n"
+  },
+  "xdot": {
     "status": 0,
     "stderr": "Warning: Warning: no value for width of non-ASCII character 195. Falling back to width of space character\nWarning: Warning: no value for width of ASCII character 9. Falling back to 0\n"
   }

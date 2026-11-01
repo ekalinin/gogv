@@ -1,0 +1,42 @@
+digraph {
+	graph [_draw_="c 9 -#fffffe00 C 7 -#ffffff P 4 0 0 0 36 436.17 36 436.17 0 ",
+		bb="0,0,436.17,36",
+		xdotversion=1.7
+	];
+	node [label="\N"];
+	a	[_draw_="c 7 -#000000 e 27 18 27 18 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 23.5 12.4 -1 7 1 -x ",
+		height=0.5,
+		label=<x>,
+		pos="27,18",
+		width=0.75];
+	b	[_draw_="c 7 -#000000 e 99 18 27 18 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 99 13.8 0 22.79 3 -<x> ",
+		height=0.5,
+		label="<x>",
+		pos="99,18",
+		width=0.75];
+	c	[_draw_="c 7 -#000000 e 171 18 27 18 ",
+		height=0.5,
+		label="",
+		pos="171,18",
+		width=0.75];
+	d	[_draw_="c 7 -#000000 e 243 18 27 18 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 243 13.8 0 3.5 1 -  ",
+		height=0.5,
+		label=" ",
+		pos="243,18",
+		width=0.75];
+	e	[_draw_="c 7 -#000000 e 318 18 29.81 18 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 318 13.8 0 27.21 4 -node ",
+		height=0.5,
+		label="node",
+		pos="318,18",
+		width=0.828];
+	f	[_draw_="c 7 -#000000 e 401 18 35.17 18 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 401 13.8 0 34.99 5 -Graph ",
+		height=0.5,
+		label="Graph",
+		pos="401,18",
+		width=0.97693];
+}

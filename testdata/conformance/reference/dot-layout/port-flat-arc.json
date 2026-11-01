@@ -1,0 +1,256 @@
+{
+  "name": "%1",
+  "directed": true,
+  "strict": false,
+  "_draw_": 
+  [
+    {
+      "op": "c",
+      "grad": "none",
+      "color": "#fffffe00"
+    },
+    {
+      "op": "C",
+      "grad": "none",
+      "color": "#ffffff"
+    },
+    {
+      "op": "P",
+      "points": [[0.000,0.000],[0.000,60.550],[282.000,60.550],[282.000,0.000]]
+    }
+  ],
+  "bb": "0,0,282,60.549",
+  "xdotversion": "1.7",
+  "_subgraph_cnt": 1,
+  "objects": [
+    {
+      "name": "%3",
+      "rank": "same",
+      "_gvid": 0,
+      "nodes": [
+        1,2,3
+      ]
+    },
+    {
+      "_gvid": 1,
+      "name": "a",
+      "_ldraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000001"
+        },
+        {
+          "op": "P",
+          "points": [[28.000,9.000],[28.000,29.000],[68.000,29.000],[68.000,9.000]]
+        }
+      ],
+      "height": "0.52778",
+      "label": "<TABLE BORDER=\"0\" CELLBORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD><\/TD><TD FIXEDSIZE=\"TRUE\" WIDTH=\"1\" HEIGHT=\"5\"><\/TD><TD><\/TD><\/TR><TR><TD FIXEDSIZE=\"TRUE\" WIDTH=\"20\" HEIGHT=\"1\"><\/TD><TD BGCOLOR=\"#000001\" FIXEDSIZE=\"TRUE\" WIDTH=\"40\" HEIGHT=\"20\" PORT=\"h\"><\/TD><TD FIXEDSIZE=\"TRUE\" WIDTH=\"20\" HEIGHT=\"1\"><\/TD><\/TR><TR><TD><\/TD><TD FIXEDSIZE=\"TRUE\" WIDTH=\"1\" HEIGHT=\"5\"><\/TD><TD><\/TD><\/TR><\/TABLE>",
+      "pos": "48,19",
+      "shape": "plaintext",
+      "width": "1.3333"
+    },
+    {
+      "_gvid": 2,
+      "name": "m",
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "e",
+          "rect": [141.000,19.000,27.000,18.000]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [141.000,14.800],
+          "align": "c",
+          "width": 10.890,
+          "text": "m"
+        }
+      ],
+      "height": "0.5",
+      "label": "\\N",
+      "pos": "141,19",
+      "width": "0.75"
+    },
+    {
+      "_gvid": 3,
+      "name": "c",
+      "_ldraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000002"
+        },
+        {
+          "op": "P",
+          "points": [[214.000,9.000],[214.000,29.000],[254.000,29.000],[254.000,9.000]]
+        }
+      ],
+      "height": "0.52778",
+      "label": "<TABLE BORDER=\"0\" CELLBORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD><\/TD><TD FIXEDSIZE=\"TRUE\" WIDTH=\"1\" HEIGHT=\"5\"><\/TD><TD><\/TD><\/TR><TR><TD FIXEDSIZE=\"TRUE\" WIDTH=\"20\" HEIGHT=\"1\"><\/TD><TD BGCOLOR=\"#000002\" FIXEDSIZE=\"TRUE\" WIDTH=\"40\" HEIGHT=\"20\" PORT=\"h\"><\/TD><TD FIXEDSIZE=\"TRUE\" WIDTH=\"20\" HEIGHT=\"1\"><\/TD><\/TR><TR><TD><\/TD><TD FIXEDSIZE=\"TRUE\" WIDTH=\"1\" HEIGHT=\"5\"><\/TD><TD><\/TD><\/TR><\/TABLE>",
+      "pos": "234,19",
+      "shape": "plaintext",
+      "width": "1.3333"
+    }
+  ],
+  "edges": [
+    {
+      "_gvid": 0,
+      "tail": 1,
+      "head": 2,
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "b",
+          "points": [[95.950,19.000],[98.060,19.000],[100.170,19.000],[102.280,19.000]]
+        }
+      ],
+      "_hdraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "P",
+          "points": [[102.040,22.500],[112.040,19.000],[102.040,15.500]]
+        }
+      ],
+      "pos": "e,113.55,19 95.953,19 98.061,19 100.17,19 102.28,19"
+    },
+    {
+      "_gvid": 2,
+      "tail": 2,
+      "head": 3,
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "b",
+          "points": [[168.250,19.000],[170.490,19.000],[172.740,19.000],[174.990,19.000]]
+        }
+      ],
+      "_hdraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "P",
+          "points": [[174.710,22.500],[184.710,19.000],[174.710,15.500]]
+        }
+      ],
+      "pos": "e,186.23,19 168.25,19 170.49,19 172.74,19 174.99,19"
+    },
+    {
+      "_gvid": 1,
+      "tail": 1,
+      "head": 3,
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "b",
+          "points": [[60.780,28.810],[73.480,37.890],[93.920,50.760],[114.000,56.000],[137.220,62.060],[144.780,62.060],[168.000,56.000],[183.690,51.900],[199.590,43.150],[211.860,35.190]]
+        }
+      ],
+      "_hdraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "P",
+          "points": [[213.680,38.190],[219.970,29.660],[209.730,32.400]]
+        }
+      ],
+      "headport": "h",
+      "pos": "e,221.22,28.809 60.782,28.809 73.484,37.89 93.919,50.755 114,56 137.22,62.065 144.78,62.065 168,56 183.69,51.902 199.59,43.154 211.86,35.193",
+      "tailport": "h"
+    }
+  ]
+}

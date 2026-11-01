@@ -1,0 +1,58 @@
+{
+  "canon": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of graph cluster_t\n"
+  },
+  "dot": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of graph cluster_t\n"
+  },
+  "dot_json": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of graph cluster_t\n"
+  },
+  "gv": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of graph cluster_t\n"
+  },
+  "json": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of graph cluster_t\n"
+  },
+  "json0": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of graph cluster_t\n"
+  },
+  "plain": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of graph cluster_t\n"
+  },
+  "plain-ext": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of graph cluster_t\n"
+  },
+  "svg": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of graph cluster_t\n"
+  },
+  "svg_inline": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of graph cluster_t\n"
+  },
+  "xdot": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of graph cluster_t\n"
+  },
+  "xdot1.2": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of graph cluster_t\n"
+  },
+  "xdot1.4": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of graph cluster_t\n"
+  },
+  "xdot_json": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of graph cluster_t\n"
+  }
+}

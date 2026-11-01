@@ -1,0 +1,15 @@
+digraph {
+	graph [bb="0,0,86,104.8"];
+	node [label="\N"];
+	subgraph cluster_x {
+		graph [bb="8,8,78,96.8",
+			label=<<TABLE><TR><TD>x</TD></TR></TABLE>>,
+			lheight=0.40,
+			lp="43,78.4",
+			lwidth=0.26
+		];
+		a	[height=0.5,
+			pos="43,34",
+			width=0.75];
+	}
+}

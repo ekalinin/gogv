@@ -1,0 +1,147 @@
+{
+  "name": "%1",
+  "directed": true,
+  "strict": false,
+  "_draw_": 
+  [
+    {
+      "op": "c",
+      "grad": "none",
+      "color": "#fffffe00"
+    },
+    {
+      "op": "C",
+      "grad": "none",
+      "color": "#ffffff"
+    },
+    {
+      "op": "P",
+      "points": [[0.000,0.000],[0.000,36.000],[54.000,36.000],[54.000,0.000]]
+    }
+  ],
+  "bb": "0,0,54,36",
+  "xdotversion": "1.7",
+  "_subgraph_cnt": 0,
+  "objects": [
+    {
+      "_gvid": 0,
+      "name": "a",
+      "_ldraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000001"
+        },
+        {
+          "op": "P",
+          "points": [[8.670,22.000],[8.670,30.000],[21.170,30.000],[21.170,22.000]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000002"
+        },
+        {
+          "op": "P",
+          "points": [[21.170,22.000],[21.170,30.000],[33.670,30.000],[33.670,22.000]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000004"
+        },
+        {
+          "op": "P",
+          "points": [[33.670,22.000],[33.670,30.000],[45.330,30.000],[45.330,22.000]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000003"
+        },
+        {
+          "op": "P",
+          "points": [[8.670,14.000],[8.670,22.000],[45.330,22.000],[45.330,14.000]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000005"
+        },
+        {
+          "op": "P",
+          "points": [[8.670,6.000],[8.670,14.000],[33.670,14.000],[33.670,6.000]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000006"
+        },
+        {
+          "op": "P",
+          "points": [[33.670,6.000],[33.670,14.000],[45.330,14.000],[45.330,6.000]]
+        }
+      ],
+      "height": "0.5",
+      "label": "<TABLE BORDER=\"0\" CELLBORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD WIDTH=\"10\" HEIGHT=\"8\" BGCOLOR=\"#000001\"><\/TD><TD WIDTH=\"10\" HEIGHT=\"8\" BGCOLOR=\"#000002\"><\/TD><TD WIDTH=\"10\" HEIGHT=\"8\" BGCOLOR=\"#000004\"><\/TD><\/TR><TR><TD COLSPAN=\"3\" WIDTH=\"35\" HEIGHT=\"8\" BGCOLOR=\"#000003\"><\/TD><\/TR><TR><TD COLSPAN=\"2\" WIDTH=\"25\" HEIGHT=\"8\" BGCOLOR=\"#000005\"><\/TD><TD BGCOLOR=\"#000006\"><\/TD><\/TR><\/TABLE>",
+      "pos": "27,18",
+      "shape": "plaintext",
+      "width": "0.75"
+    }
+  ]
+}

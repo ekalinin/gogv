@@ -1,0 +1,18 @@
+digraph G {
+	graph [bb="0,0,151,36",
+		rankdir=LR
+	];
+	node [label="\N",
+		shape=box
+	];
+	a	[color=red,
+		height=0.5,
+		pos="27,18",
+		width=0.75];
+	b	[height=0.5,
+		pos="124,18",
+		width=0.75];
+	a -> b	[label=x,
+		lp="75.5,26.4",
+		pos="e,96.679,18 54.463,18 64.036,18 75.039,18 85.386,18"];
+}

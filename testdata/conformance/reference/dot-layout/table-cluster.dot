@@ -1,0 +1,20 @@
+digraph {
+	graph [bb="0,0,104,87"];
+	node [label="\N"];
+	subgraph cluster6 {
+		graph [bb="8,8,96,79",
+			color="#000006",
+			label=<<TABLE BGCOLOR="#000007" FIXEDSIZE="TRUE" WIDTH="51" HEIGHT="11"><TR><TD></TD></TR></TABLE>>,
+			labeljust=c,
+			lheight=0.15,
+			lp="52,69.5",
+			lwidth=0.71,
+			style=solid
+		];
+		a	[height=0.5,
+			label="",
+			pos="52,34",
+			shape=rect,
+			width=1];
+	}
+}

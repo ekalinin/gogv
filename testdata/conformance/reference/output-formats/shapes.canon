@@ -1,0 +1,23 @@
+digraph {
+	node [label="\N"];
+	a	[shape=rect];
+	b	[shape=box,
+		style=rounded];
+	a -> b;
+	c	[shape=rectangle];
+	b -> c;
+	d	[shape=plaintext];
+	c -> d;
+	e	[shape=point];
+	f	[shape=ellipse];
+	e -> f;
+	g	[shape=oval];
+	f -> g;
+	h	[shape=circle];
+	g -> h;
+	i	[shape=diamond];
+	j	[shape=hexagon];
+	i -> j;
+	k	[shape=octagon];
+	j -> k;
+}

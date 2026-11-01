@@ -1,0 +1,17 @@
+digraph {
+	graph [_draw_="c 9 -#fffffe00 C 7 -#ffffff P 4 0 0 0 36 2693.39 36 2693.39 0 ",
+		bb="0,0,2693.4,36",
+		xdotversion=1.7
+	];
+	node [label="\N"];
+	a	[_draw_="c 7 -#000000 e 1346.69 18 1346.69 18 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 1346.69 13.8 0 1936.35 300 -word word word word word word word word word word word word word \
+word word word word word word word word word word word word word word word word word word word word word word word word word word \
+word word word word word word word word word word word word word word word word word word word word word  ",
+		height=0.5,
+		label="word word word word word word word word word word word word word word word word word word word word word word word word word word \
+word word word word word word word word word word word word word word word word word word word word word word word word word word \
+word word word word word word word word ",
+		pos="1346.7,18",
+		width=37.408];
+}

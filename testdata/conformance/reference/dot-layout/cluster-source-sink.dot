@@ -1,0 +1,53 @@
+digraph {
+	graph [bb="0,0,195,308",
+		nodesep=0.486111,
+		ranksep=0.833333,
+		remincross=true,
+		searchsize=500
+	];
+	node [label="\N"];
+	subgraph cluster6 {
+		graph [bb="8,8,96,300",
+			color="#000006",
+			labeljust=c,
+			style=solid
+		];
+		{
+			graph [rank=source];
+			s1	[height=0.16667,
+				label="",
+				pos="67,286",
+				shape=rect,
+				width=0.16667];
+		}
+		{
+			graph [rank=sink];
+			s2	[height=0.16667,
+				label="",
+				pos="67,22",
+				shape=rect,
+				width=0.16667];
+		}
+		x1	[height=0.5,
+			label="",
+			pos="52,202",
+			shape=rect,
+			width=1];
+		s1 -> x1	[pos="e,55.177,220.37 66.016,279.62 64.249,269.96 60.425,249.06 57.217,231.52"];
+		x2	[height=0.5,
+			label="",
+			pos="52,106",
+			shape=rect,
+			width=1];
+		x1 -> x2	[pos="e,52,124.45 52,183.76 52,170.33 52,151.39 52,135.68"];
+		x2 -> s2	[pos="e,66.045,28.223 55.181,87.61 57.788,73.359 61.451,53.336 64.005,39.37"];
+	}
+	y	[height=0.5,
+		label="",
+		pos="159,106",
+		shape=rect,
+		width=1];
+	s1 -> y	[arrowhead=none,
+		pos="70.424,279.71 77.454,268.77 93.872,242.76 106,220 123.63,186.92 141.63,146.94 151.46,124.5"];
+	y -> s2	[pos="e,72.86,28.223 139.49,87.61 122.02,72.037 96.811,49.571 81.191,35.649"];
+}

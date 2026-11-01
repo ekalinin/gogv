@@ -1,0 +1,10 @@
+digraph {
+	node [label="\N"];
+	subgraph cluster_t {
+		graph [label=<<TABLE BGCOLOR="#000007" FIXEDSIZE="TRUE" WIDTH="51" HEIGHT="11"><TR><TD></TD></TR></TABLE>>];
+		a;
+	}
+	b	[label=<<TABLE BORDER="2" CELLBORDER="3" CELLSPACING="4" COLOR="#00000F"><TR><TD BGCOLOR="#000001"></TD><TD COLOR="#00000E"></TD></TR></TABLE>>,
+		shape=plaintext];
+	a -> b	[label=<<TABLE BGCOLOR="#000009" FIXEDSIZE="TRUE" WIDTH="57" HEIGHT="17"><TR><TD></TD></TR></TABLE>>];
+}

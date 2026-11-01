@@ -32,7 +32,7 @@ that the output is the same, byte for byte, on every platform.
 
 ## Status
 
-This is the fourth slice of version 1. It supports:
+This is version 1, in its fifth and last slice. It supports:
 
 - the whole DOT grammar, read as the reference reads it
 - the layout of graphs without compass points and HTML-like labels other
@@ -57,14 +57,13 @@ This is the fourth slice of version 1. It supports:
 - node ports: edge ends written `node:port`, or set by `tailport` and
   `headport`, attach to the cell of a table label with that `PORT`, in the
   positioning, the order and the routes
-- the output formats `svg`, `plain` and `canon`
+- the output formats of version 1: `svg`, `svg_inline`, `plain`, `plain-ext`,
+  `canon`, `dot`, `gv`, `xdot`, `xdot1.2`, `xdot1.4`, `json`, `json0`,
+  `dot_json` and `xdot_json`
 
 A Graphviz feature that is not supported yet gives a warning that says so and
 names the default used instead; attributes that Graphviz does not document
 are ignored, as Graphviz ignores them.
-
-The next slice of version 1 adds the formats `svg_inline`, `plain-ext`,
-`dot`, `gv`, `xdot*` and `json*`.
 
 ## Building
 
@@ -97,7 +96,10 @@ The outputs are compared with those of Graphviz 16.1.0 built without Pango, in
 a pinned container (`tools/reference/Dockerfile`), layer by layer: `canon`
 byte for byte, `plain` by nodes, edges and size (within 5%), and `svg` by size
 (within 5%) and the structural similarity of the rasterized documents (SSIM
-of at least 0.90). The corpus is the curated cases of
+of at least 0.90). `dot`, xdot and JSON output are parsed and must have the
+reference's objects, attributes and drawing operations, with values equal but
+for the numbers of the layout, and a size within 5%; `dot_json` and
+`xdot_json` are compared byte for byte. The corpus is the curated cases of
 `testdata/conformance/cases` and, when collected with `make harvest`, the DOT
 that gopuml generates for its own conformance cases.
 

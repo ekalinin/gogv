@@ -7,7 +7,6 @@ import (
 	"bytes"
 	"os"
 	"path/filepath"
-	"strings"
 	"testing"
 
 	"github.com/ekalinin/gogv/internal/conformance"
@@ -30,8 +29,8 @@ func TestCanonMatchesReference(t *testing.T) {
 		if err != nil {
 			t.Fatalf("%s: %v", c.ID, err)
 		}
-		if ref["canon"].Status != 0 || strings.Contains(c.ID, "cluster") || bytes.Contains(ref["canon"].Stderr, []byte("rankset")) {
-			continue // clusters are laid out from slice 2 on
+		if ref["canon"].Status != 0 {
+			continue
 		}
 		file, _, err := dotlang.Parse(string(c.Source))
 		if err != nil {
@@ -40,7 +39,10 @@ func TestCanonMatchesReference(t *testing.T) {
 		}
 		var got bytes.Buffer
 		for _, decl := range file.Graphs {
-			got.Write(Canon(dotlang.Build(decl)))
+			// As Render builds the graph: clusters resolved first.
+			g := dotlang.Build(decl)
+			g.ResolveClusters()
+			got.Write(Canon(g))
 		}
 		checked++
 		if err := conformance.CompareCanon(ref["canon"].Stdout, got.Bytes()); err != nil {

@@ -1,0 +1,1 @@
+digraph { a [shape=rect]; b [shape=box, style=rounded]; c [shape=rectangle]; d [shape=plaintext]; e [shape=point]; f [shape=ellipse]; g [shape=oval]; h [shape=circle]; i [shape=diamond]; j [shape=hexagon]; k [shape=octagon]; a -> b -> c -> d; e -> f -> g -> h; i -> j -> k }

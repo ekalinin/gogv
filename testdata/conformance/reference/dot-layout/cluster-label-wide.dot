@@ -1,0 +1,15 @@
+digraph {
+	graph [bb="0,0,128,92.8"];
+	node [label="\N"];
+	subgraph cluster_a {
+		graph [bb="8,8,120,84.8",
+			label="Long cluster title",
+			lheight=0.23,
+			lp="64,72.4",
+			lwidth=1.33
+		];
+		a	[height=0.5,
+			pos="64,34",
+			width=0.75];
+	}
+}

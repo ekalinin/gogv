@@ -1,0 +1,28 @@
+digraph {
+	graph [_draw_="c 9 -#fffffe00 C 7 -#ffffff P 4 0 0 0 108 54 108 54 0 ",
+		bb="0,0,54,108",
+		xdotversion=1.7
+	];
+	node [label="\N"];
+	a	[_draw_="c 7 -#000000 e 27 90 27 18 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 27 85.8 0 6.21 1 -a ",
+		height=0.5,
+		pos="27,90",
+		width=0.75];
+	b	[_draw_="c 7 -#000000 e 27 18 27 18 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 27 13.8 0 7 1 -b ",
+		height=0.5,
+		pos="27,18",
+		width=0.75];
+	a -> b	[_draw_="c 7 -#000000 B 4 27 71.7 27 64.41 27 55.73 27 47.54 ",
+		_hdraw_="S 5 -solid c 7 -#000000 C 7 -#000000 P 3 30.5 47.62 27 37.62 23.5 47.62 ",
+		_hldraw_="S 5 -solid c 9 -#fffffe00 C 7 -#00000b P 4 7 36.1 7 51.1 27 51.1 27 36.1 S 5 -solid c 7 -#000000 p 4 7 36.1 7 51.1 27 51.1 27 36.1 \
+S 5 -solid c 7 -#000000 p 4 10 42.1 10 48.1 16 48.1 16 42.1 ",
+		_tldraw_="S 5 -solid c 9 -#fffffe00 C 7 -#00000a P 4 19 56.7 19 71.7 27 71.7 27 56.7 S 5 -solid c 7 -#000000 p 4 19 56.7 19 71.7 27 71.7 27 \
+56.7 S 5 -solid c 7 -#000000 p 4 22 62.7 22 68.7 28 68.7 28 62.7 ",
+		head_lp="17,43.604",
+		headlabel=<<TABLE BGCOLOR="#00000B" FIXEDSIZE="TRUE" WIDTH="20" HEIGHT="15"><TR><TD></TD></TR></TABLE>>,
+		pos="e,27,36.104 27,71.697 27,64.407 27,55.726 27,47.536",
+		tail_lp="23,64.197",
+		taillabel=<<TABLE BGCOLOR="#00000A" FIXEDSIZE="TRUE" WIDTH="8" HEIGHT="15"><TR><TD></TD></TR></TABLE>>];
+}

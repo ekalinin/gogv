@@ -1,0 +1,16 @@
+digraph {
+	node [label="\N"];
+	a	[color="#FF0000",
+		fontcolor="#0000FF",
+		fontname=Helvetica,
+		fontsize=10];
+	b	[fontname=Courier];
+	a -> b	[arrowhead=empty,
+		arrowsize=2,
+		color="#00FF00"];
+	a -> c	[style=invis];
+	b -> c	[arrowtail=empty,
+		dir=both];
+	c -> d	[arrowhead=none];
+	d -> a	[dir=back];
+}

@@ -3,11 +3,23 @@
     "status": 1,
     "stderr": "Error: <stdin>: syntax error in line 2 near '}'\n"
   },
+  "dot": {
+    "status": 1,
+    "stderr": "Error: <stdin>: syntax error in line 2 near '}'\n"
+  },
+  "json": {
+    "status": 1,
+    "stderr": "Error: <stdin>: syntax error in line 2 near '}'\n"
+  },
   "plain": {
     "status": 1,
     "stderr": "Error: <stdin>: syntax error in line 2 near '}'\n"
   },
   "svg": {
+    "status": 1,
+    "stderr": "Error: <stdin>: syntax error in line 2 near '}'\n"
+  },
+  "xdot": {
     "status": 1,
     "stderr": "Error: <stdin>: syntax error in line 2 near '}'\n"
   }

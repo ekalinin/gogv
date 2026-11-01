@@ -1,0 +1,16 @@
+digraph {
+	graph [bb="0,0,54,132"];
+	node [label="\N"];
+	a	[height=0.5,
+		pos="27,114",
+		width=0.75];
+	b	[height=0.5,
+		pos="27,18",
+		width=0.75];
+	a -> b	[fontcolor="#FF0000",
+		fontname=Helvetica,
+		fontsize=20,
+		label=x,
+		lp="32,66",
+		pos="e,27,36.45 27,95.759 27,82.328 27,63.389 27,47.684"];
+}
