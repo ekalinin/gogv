@@ -1,0 +1,1 @@
+digraph { a -> b [label=<<TABLE WIDTH="30" HEIGHT="10"><TR><TD></TD></TR></TABLE>>]; a -> c [label=<<TABLE FIXEDSIZE="TRUE" WIDTH="30" HEIGHT="10"><TR><TD></TD></TR></TABLE>>] }

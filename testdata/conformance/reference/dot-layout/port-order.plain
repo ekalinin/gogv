@@ -1,0 +1,7 @@
+graph 1 1.75 1.5278
+node a 0.94444 1.2639 1.6111 0.52778 <<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD FIXEDSIZE="TRUE" WIDTH="40" HEIGHT="20" PORT="l"></TD><TD FIXEDSIZE="TRUE" WIDTH="60" HEIGHT="30" PORT="r"></TD></TR></TABLE>> solid plaintext black lightgrey
+node b 1.375 0.25 0.75 0.5 b solid ellipse black lightgrey
+node c 0.375 0.25 0.75 0.5 c solid ellipse black lightgrey
+edge a b 4 1.2222 1.0417 1.2222 0.91345 1.2425 0.77554 1.2682 0.65197 solid black
+edge a c 4 0.52778 1.0417 0.52778 0.91345 0.50754 0.77554 0.4818 0.65197 solid black
+stop

@@ -1,0 +1,4 @@
+digraph {
+	node [label="\N"];
+	a	[label=<<TABLE><TR><TD ROWSPAN="2"></TD></TR><TR><TD></TD></TR></TABLE>>];
+}

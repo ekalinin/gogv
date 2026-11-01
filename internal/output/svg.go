@@ -10,6 +10,7 @@ import (
 	"math"
 	"strings"
 
+	"github.com/ekalinin/gogv/internal/graph"
 	"github.com/ekalinin/gogv/internal/label"
 	"github.com/ekalinin/gogv/internal/layout"
 )
@@ -75,7 +76,7 @@ func SVG(res *layout.Result) []byte {
 				continue
 			}
 			edgeID++
-			writeEdge(&b, e, edgeID, g.Directed())
+			writeEdge(&b, e, edgeID, g)
 		}
 	}
 	b.WriteString("</g>\n</svg>\n")
@@ -151,30 +152,65 @@ func writePolygon(b *bytes.Buffer, n *layout.NodeResult, color string) {
 	fmt.Fprintf(b, "<polygon fill=\"none\" stroke=\"%s\" points=\"%s\"/>\n", color, strings.Join(pts, " "))
 }
 
-// writeLabel writes a label centered on c: its lines, or a single-cell
-// table as the reference draws one: a polygon filled with its background
-// color, the border of the table and the border of its empty cell at the
-// upper left, the borders in pen, the color of the object's outline.
+// writeLabel writes a label centered on c: its lines, or a table as the
+// reference draws one: a polygon filled with the table's background color
+// and the table's border, then, for each cell, its fill and its border. A
+// border is in the cell's color, the table's, or else pen, the color of
+// the object's outline; one of 0 is not drawn, and one wider than 1 point
+// has a stroke-width and lies half its width inside its box.
 func writeLabel(b *bytes.Buffer, t layout.Text, c layout.Point, pen string) {
 	if t.Table == nil {
 		writeText(b, t, c)
 		return
 	}
-	box := func(fill, stroke string, x0, y0, x1, y1 float64) {
-		fmt.Fprintf(b, "<polygon fill=\"%s\" stroke=\"%s\" points=\"%s,%s %s,%s %s,%s %s,%s %s,%s\"/>\n", fill, stroke,
+	box := func(fill, stroke string, width int, x0, y0, x1, y1 float64) {
+		sw := ""
+		if width > 1 {
+			sw = fmt.Sprintf(" stroke-width=\"%d\"", width)
+		}
+		fmt.Fprintf(b, "<polygon fill=\"%s\" stroke=\"%s\"%s points=\"%s,%s %s,%s %s,%s %s,%s %s,%s\"/>\n", fill, stroke, sw,
 			svgNumber(x0), y(y0), svgNumber(x0), y(y1), svgNumber(x1), y(y1), svgNumber(x1), y(y0), svgNumber(x0), y(y0))
 	}
+	border := func(color string, width int, x0, y0, x1, y1 float64) {
+		if width == 0 {
+			return
+		}
+		if width > 1 {
+			// Rounded on its own, so that it is not fused into a
+			// multiply-add.
+			in := float64(float64(width) / 2)
+			x0, y0, x1, y1 = x0+in, y0+in, x1-in, y1-in
+		}
+		box("none", color, width, x0, y0, x1, y1)
+	}
+	tb := t.Table
 	// Halves held apart from the sums, so that they are not fused into a
 	// multiply-add.
 	hw, hh := float64(t.Width/2), float64(t.Height/2)
 	x0, x1 := c.X-hw, c.X+hw
 	y0, y1 := c.Y-hh, c.Y+hh
-	if t.Table.BgColor != "" {
-		box(svgColor(t.Table.BgColor), "none", x0, y0, x1, y1)
+	color := pen
+	if tb.Color != "" {
+		color = svgColor(tb.Color)
 	}
-	box("none", pen, x0, y0, x1, y1)
-	cx, cy := x0+label.CellInset, y1-label.CellInset
-	box("none", pen, cx, cy-label.EmptyCell, cx+label.EmptyCell, cy)
+	if tb.BgColor != "" {
+		box(svgColor(tb.BgColor), "none", 0, x0, y0, x1, y1)
+	}
+	border(color, tb.Border, x0, y0, x1, y1)
+	for _, row := range tb.Rows {
+		for _, cell := range row {
+			cx0, cy1 := x0+cell.Box.X, y1-cell.Box.Y
+			cx1, cy0 := cx0+cell.Box.W, cy1-cell.Box.H
+			if cell.BgColor != "" {
+				box(svgColor(cell.BgColor), "none", 0, cx0, cy0, cx1, cy1)
+			}
+			cc := color
+			if cell.Color != "" {
+				cc = svgColor(cell.Color)
+			}
+			border(cc, cell.Border, cx0, cy0, cx1, cy1)
+		}
+	}
 }
 
 // writeText writes the lines of a label centered on c: each line on its own
@@ -203,13 +239,21 @@ func writeText(b *bytes.Buffer, t layout.Text, c layout.Point) {
 	}
 }
 
-func writeEdge(b *bytes.Buffer, e *layout.EdgeResult, id int, directed bool) {
+func writeEdge(b *bytes.Buffer, e *layout.EdgeResult, id int, g *graph.Graph) {
 	op := "--"
-	if directed {
+	if g.Directed() {
 		op = "->"
 	}
+	// The title names the ports as they are written; the comment does not.
+	end := func(n *graph.Node, attr string) string {
+		if v, _ := e.Edge.Attr(g, attr); v.S != "" {
+			return n.Name + ":" + v.S
+		}
+		return n.Name
+	}
 	name := xmlText(e.Edge.Tail.Name + op + e.Edge.Head.Name)
-	fmt.Fprintf(b, "<!-- %s -->\n<g id=\"edge%d\" class=\"edge\">\n<title>%s</title>\n", name, id, name)
+	title := xmlText(end(e.Edge.Tail, "tailport") + op + end(e.Edge.Head, "headport"))
+	fmt.Fprintf(b, "<!-- %s -->\n<g id=\"edge%d\" class=\"edge\">\n<title>%s</title>\n", name, id, title)
 	color := svgColor(e.Color)
 	if len(e.Points) > 0 {
 		var d strings.Builder

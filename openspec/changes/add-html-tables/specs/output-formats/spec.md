@@ -1,0 +1,67 @@
+## MODIFIED Requirements
+
+### Requirement: SVG document
+
+`svg` output SHALL be an SVG document with the structure that the reference writes:
+
+- a root `svg` element whose `width` and `height` are whole numbers of points (`width="62pt"`) and whose `viewBox` covers the drawing
+- one group for the graph, with the graph name in its `title` and a transform that puts the origin at the bottom left of the drawing plus the pad, so that `y` coordinates are negative
+- one group per drawn cluster, of class `cluster`, with the cluster name in its `title`, written before the node groups, a cluster before the clusters nested in it
+- one group per drawn node, of class `node`, with the node name in its `title`
+- one group per drawn edge, of class `edge`, with the edge name (`tail->head`) in its `title`, each end followed by its port as it is written (`tail:port->head`)
+- coordinates written with at most two decimals
+- text escaped for XML as the reference escapes it
+
+#### Scenario: Groups that gopuml reads
+
+- **WHEN** `digraph { a -> b }` is rendered as `svg`
+- **THEN** the document has a node group titled `a`, a node group titled `b` and an edge group titled `a->b` (escaped as the reference escapes it), and its `svg` element has `width` and `height` in whole points
+
+#### Scenario: Cluster groups
+
+- **WHEN** `digraph { subgraph cluster_a { subgraph cluster_b { a } } }` is rendered as `svg`
+- **THEN** the document has a cluster group titled `cluster_a`, then a cluster group titled `cluster_b`, both before the node group titled `a`
+
+#### Scenario: Edge title with a port
+
+- **WHEN** `digraph { a [shape=rect]; a:P -> b }` is rendered as `svg`
+- **THEN** the edge group is titled `a:P->b`, escaped as the reference escapes it
+
+### Requirement: SVG drawing
+
+Node outlines SHALL be `polygon` elements for polygonal shapes, `ellipse` elements for `ellipse`, `circle` and `point`, and `path` elements of cubic Bezier segments for rounded rectangles. Cluster boxes SHALL be `polygon` elements with no fill. Edges SHALL be `path` elements whose `d` attribute is a move followed by cubic Bezier segments (`M x,y C ...`), and arrowheads SHALL be `polygon` elements. Labels SHALL be `text` elements, one per line, with the font family, the font size and the color of the label. The labels of an edge (`label`, `xlabel`, `headlabel`, `taillabel`) SHALL be in the edge's group, after its arrowheads, and the `xlabel` of a node in the node's group, after its label. A table label SHALL be drawn as the reference draws it: a `polygon` over the table filled with its `BGCOLOR` and without a stroke, when it has one, and a `polygon` for the border of the table, when its border is not 0; then, for each cell in order, a filled `polygon` for its `BGCOLOR` and a `polygon` for its border, likewise. Borders SHALL be in the `COLOR` of the cell or the table, or else in the color of the outline of the object that holds the label; a border wider than 1 point SHALL have a `stroke-width` and be drawn half its width inside its box. A color given as `#RRGGBB` SHALL be written in lower case in the `stroke` and `fill` attributes, and the default color SHALL be black.
+
+#### Scenario: Node color
+
+- **WHEN** a node has `color="#FF0000"`
+- **THEN** its outline element has `stroke="#ff0000"`
+
+#### Scenario: Edge path
+
+- **WHEN** `digraph { a -> b }` is rendered as `svg`
+- **THEN** the edge group has a `path` whose `d` starts with `M` and continues with `C`, and a `polygon` for the arrowhead
+
+#### Scenario: Cluster box
+
+- **WHEN** a cluster with `color="#FF0000"` and `label="A"` is rendered as `svg`
+- **THEN** its group has a `polygon` with `fill="none"` and `stroke="#ff0000"`, and a `text` element `A`
+
+#### Scenario: Edge label
+
+- **WHEN** `digraph { a -> b [label="x"] }` is rendered as `svg`
+- **THEN** the edge group has a `text` element `x` after the arrowhead `polygon`
+
+#### Scenario: Table label that gopuml reads
+
+- **WHEN** `digraph { a -> b [label=<<TABLE BGCOLOR="#000009" FIXEDSIZE="TRUE" WIDTH="57" HEIGHT="17"><TR><TD></TD></TR></TABLE>>] }` is rendered as `svg`
+- **THEN** the edge group has a `polygon` with `fill="#000009"` and `stroke="none"` whose points are the corners of a 57 by 17 points box, then a `polygon` for the border of the table and one for the border of its cell
+
+#### Scenario: Cells and their colors
+
+- **WHEN** a table with `BGCOLOR="#000009" COLOR="#00000F"` has a cell with `BGCOLOR="#000001" COLOR="#00000E"` and a cell with `BGCOLOR="#000002"`
+- **THEN** the `svg` has, in this order, the table's fill and its border in `#00000f`, the first cell's fill and its border in `#00000e`, and the second cell's fill and its border in `#00000f`
+
+#### Scenario: Grid without borders
+
+- **WHEN** a table with `BORDER="0" CELLBORDER="0"` has one cell with `BGCOLOR="#000006"` among empty cells
+- **THEN** the only `polygon` of the table is that cell's fill, without a stroke

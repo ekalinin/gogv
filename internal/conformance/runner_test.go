@@ -37,11 +37,11 @@ func TestJudgeOutcomes(t *testing.T) {
 	shifted := clone(ref)
 	shifted["svg"] = Result{Stdout: []byte(okSVG + " shifted")}
 
-	portWarning := clone(ref)
+	compassWarning := clone(ref)
 	for _, f := range Formats {
-		r := portWarning[f]
-		r.Stderr = []byte("Warning: edge a->b: tailport=p is not supported yet\n")
-		portWarning[f] = r
+		r := compassWarning[f]
+		r.Stderr = []byte("Warning: edge a->b: tailport=n is not supported yet, using center\n")
+		compassWarning[f] = r
 	}
 
 	otherNodes := clone(ref)
@@ -58,7 +58,7 @@ func TestJudgeOutcomes(t *testing.T) {
 			map[string]Outcome{"canon": Passed, "plain": Passed, "svg": Passed}},
 		{"listed failure", "dot-layout/listed", shifted, KnownDiff,
 			map[string]Outcome{"canon": Passed, "plain": Passed, "svg": KnownDiff}},
-		{"port before its slice", "dot-language/port", portWarning, NotSupported,
+		{"compass point before its slice", "dot-language/compass", compassWarning, NotSupported,
 			map[string]Outcome{"canon": NotSupported, "plain": NotSupported, "svg": NotSupported}},
 		{"unlisted svg failure", "dot-layout/shifted", shifted, Failed,
 			map[string]Outcome{"canon": Passed, "plain": Passed, "svg": Failed}},
@@ -200,7 +200,7 @@ func TestRun(t *testing.T) {
 	ref := okReference()
 	cases := []Case{
 		{ID: "dot-layout/same", Capability: "dot-layout", Source: []byte("same")},
-		{ID: "dot-language/port", Capability: "dot-language", Source: []byte("digraph { a:p -> b }")},
+		{ID: "dot-language/compass", Capability: "dot-language", Source: []byte("digraph { a:n -> b }")},
 	}
 	for _, c := range cases {
 		if err := WriteReference(refDir, c.ID, ref); err != nil {
@@ -209,8 +209,8 @@ func TestRun(t *testing.T) {
 	}
 	render := func(src []byte, format string) Result {
 		r := ref[format]
-		if strings.Contains(string(src), ":p") {
-			r.Stderr = []byte("Warning: edge a->b: tailport=p is not supported yet\n")
+		if strings.Contains(string(src), ":n") {
+			r.Stderr = []byte("Warning: edge a->b: tailport=n is not supported yet, using center\n")
 		}
 		return r
 	}
@@ -219,7 +219,7 @@ func TestRun(t *testing.T) {
 		t.Fatalf("run failed: %v", err)
 	}
 	if report.Results[1].Outcome != NotSupported {
-		t.Errorf("port case: outcome %q, want not supported yet", report.Results[1].Outcome)
+		t.Errorf("compass case: outcome %q, want not supported yet", report.Results[1].Outcome)
 	}
 
 	failing := func(src []byte, format string) Result {

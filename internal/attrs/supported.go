@@ -72,6 +72,8 @@ var supported = [3]map[string]spec{
 		"fontsize":   anyValue,
 		"fontcolor":  colorValue,
 		"sametail":   anyValue,
+		"tailport":   anyValue,
+		"headport":   anyValue,
 		"minlen":     anyValue,
 		"color":      colorValue,
 		"style":      oneOf("solid", "solid", "invis"),

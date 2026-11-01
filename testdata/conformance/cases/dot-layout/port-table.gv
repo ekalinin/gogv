@@ -1,0 +1,1 @@
+digraph { a [shape=plaintext, label=<<TABLE PORT="t"><TR><TD WIDTH="40"></TD><TD PORT="p"></TD></TR></TABLE>>]; a:p -> b; a:t -> c }

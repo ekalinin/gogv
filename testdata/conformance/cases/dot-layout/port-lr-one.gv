@@ -1,0 +1,1 @@
+digraph { rankdir=LR; a [shape=plaintext, label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD FIXEDSIZE="TRUE" WIDTH="40" HEIGHT="20" PORT="t"></TD></TR><TR><TD FIXEDSIZE="TRUE" WIDTH="40" HEIGHT="30" PORT="b"></TD></TR></TABLE>>]; a:b -> b }

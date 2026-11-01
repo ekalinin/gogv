@@ -1,0 +1,6 @@
+digraph {
+	node [label="\N"];
+	a	[label=<<TABLE BORDER="x"><TR><TD></TD></TR></TABLE>>];
+	b	[label=<<TABLE><TR ALIGN="left"><TD></TD></TR></TABLE>>];
+	c	[label=<<TABLE><TR><TD COLSPAN="0"></TD></TR></TABLE>>];
+}

@@ -32,12 +32,26 @@ type rnode struct {
 type redge struct {
 	upper, lower int
 	count        int
+	// upperPort and lowerPort are how far the ends of an edge with ports
+	// lie from the centers of their nodes along the rank; upperAt and
+	// lowerAt are the same as fractions of the nodes' widths, which place
+	// the ends within their nodes for the order.
+	upperPort, lowerPort float64
+	upperAt, lowerAt     float64
 }
 
+// upperPos and lowerPos are where the ends of a redge lie in the order.
+func (g *ranked) upperPos(e redge) float64 { return float64(g.nodes[e.upper].order) + e.upperAt }
+func (g *ranked) lowerPos(e redge) float64 { return float64(g.nodes[e.lower].order) + e.lowerAt }
+
 // flatEdge joins two nodes of the same rank; the order keeps left before
-// right.
+// right. edge is the index of the edge it stands for, and leftPort and
+// rightPort are how far its ports lie from the centers of its nodes along
+// the rank.
 type flatEdge struct {
-	left, right int
+	left, right         int
+	edge                int
+	leftPort, rightPort float64
 }
 
 // ranked is the graph that the order and the positions work on.
@@ -106,7 +120,7 @@ func buildRanked(rank []int, edges [][2]int, own []bool) (*ranked, [][]int) {
 			continue
 		}
 		if rank[t] == rank[h] {
-			g.flats = append(g.flats, flatEdge{left: t, right: h})
+			g.flats = append(g.flats, flatEdge{left: t, right: h, edge: i})
 			fi := len(g.flats) - 1
 			g.nodes[t].flat = append(g.nodes[t].flat, fi)
 			g.nodes[h].flat = append(g.nodes[h].flat, fi)
@@ -393,14 +407,14 @@ func (g *ranked) wmedian(ranks [][]int, iter int, reverseTies bool) {
 // median returns the weighted median of the positions of v's neighbors in
 // the rank above (down) or below, or -1 when it has none (section 3).
 func (g *ranked) median(v int, down bool) float64 {
-	var pos []int
+	var pos []float64
 	if down {
 		for _, e := range g.nodes[v].up {
-			pos = append(pos, g.nodes[g.edges[e].upper].order)
+			pos = append(pos, g.upperPos(g.edges[e]))
 		}
 	} else {
 		for _, e := range g.nodes[v].down {
-			pos = append(pos, g.nodes[g.edges[e].lower].order)
+			pos = append(pos, g.lowerPos(g.edges[e]))
 		}
 	}
 	slices.Sort(pos)
@@ -409,16 +423,16 @@ func (g *ranked) median(v int, down bool) float64 {
 	case len(pos) == 0:
 		return -1
 	case len(pos)%2 == 1:
-		return float64(pos[m])
+		return pos[m]
 	case len(pos) == 2:
-		return float64(pos[0]+pos[1]) / 2
+		return (pos[0] + pos[1]) / 2
 	}
-	left := float64(pos[m-1] - pos[0])
-	right := float64(pos[len(pos)-1] - pos[m])
+	left := pos[m-1] - pos[0]
+	right := pos[len(pos)-1] - pos[m]
 	if left+right == 0 {
-		return float64(pos[m-1]+pos[m]) / 2
+		return (pos[m-1] + pos[m]) / 2
 	}
-	return (float64(float64(pos[m-1])*right) + float64(float64(pos[m])*left)) / (left + right)
+	return (float64(pos[m-1]*right) + float64(pos[m]*left)) / (left + right)
 }
 
 // transpose swaps adjacent nodes while that reduces crossings; with equal
@@ -462,21 +476,19 @@ func (g *ranked) flatBetween(v, w int) bool {
 // pairCrossings counts the crossings between the edges of v and those of w,
 // with v left of w, towards both neighboring ranks.
 func (g *ranked) pairCrossings(v, w int) int {
-	count := func(ev, ew []int, other func(redge) int) int {
+	count := func(ev, ew []int, other func(redge) float64) int {
 		var c int
 		for _, a := range ev {
-			pa := g.nodes[other(g.edges[a])].order
+			pa := other(g.edges[a])
 			for _, b := range ew {
-				if pb := g.nodes[other(g.edges[b])].order; pb < pa {
+				if pb := other(g.edges[b]); pb < pa {
 					c += g.edges[a].count * g.edges[b].count
 				}
 			}
 		}
 		return c
 	}
-	upper := func(e redge) int { return e.upper }
-	lower := func(e redge) int { return e.lower }
-	return count(g.nodes[v].up, g.nodes[w].up, upper) + count(g.nodes[v].down, g.nodes[w].down, lower)
+	return count(g.nodes[v].up, g.nodes[w].up, g.upperPos) + count(g.nodes[v].down, g.nodes[w].down, g.lowerPos)
 }
 
 // crossings counts the weighted crossings of an order.
@@ -493,8 +505,8 @@ func (g *ranked) crossings(ranks [][]int) int {
 		for i := range es {
 			for j := i + 1; j < len(es); j++ {
 				a, b := es[i], es[j]
-				ua, ub := g.nodes[a.upper].order, g.nodes[b.upper].order
-				la, lb := g.nodes[a.lower].order, g.nodes[b.lower].order
+				ua, ub := g.upperPos(a), g.upperPos(b)
+				la, lb := g.lowerPos(a), g.lowerPos(b)
 				if (ua < ub && la > lb) || (ua > ub && la < lb) {
 					total += a.count * b.count
 				}

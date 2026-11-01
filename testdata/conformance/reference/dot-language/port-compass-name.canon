@@ -1,0 +1,6 @@
+digraph {
+	node [label="\N"];
+	a	[label=<<TABLE><TR><TD PORT="n"></TD><TD WIDTH="40"></TD></TR></TABLE>>,
+		shape=plaintext];
+	a:n -> b;
+}

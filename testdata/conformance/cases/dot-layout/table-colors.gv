@@ -1,0 +1,1 @@
+digraph { a [shape=plaintext, label=<<TABLE BGCOLOR="#000009" COLOR="#00000F"><TR><TD BGCOLOR="#000001" COLOR="#00000E"></TD><TD BGCOLOR="#000002"></TD></TR></TABLE>>]; b [shape=rect, color="#FF0000", label=<<TABLE><TR><TD></TD><TD COLOR="#00FF00"></TD></TR></TABLE>>] }

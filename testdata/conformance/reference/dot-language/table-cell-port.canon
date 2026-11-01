@@ -1,0 +1,4 @@
+digraph {
+	node [label="\N"];
+	a	[label=<<TABLE><TR><TD PORT="p"></TD></TR></TABLE>>];
+}
