@@ -1,0 +1,103 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+          cache: false # no dependencies, so no go.sum to key a cache on
+      - run: make lint
+      - run: make provenance
+      - name: Generated font tables
+        run: |
+          go generate ./internal/textmetrics
+          git diff --exit-code
+
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+          cache: false
+      # TestWebAssembly skips itself without Node.js.
+      - run: node --version
+      - run: go test -race ./...
+      - name: Corpus hashes
+        run: |
+          mkdir -p hashes
+          go build -o .cache/tools/hash-native ./internal/corpushash
+          .cache/tools/hash-native testdata/conformance/cases > "hashes/${RUNNER_OS}-${RUNNER_ARCH}.txt"
+      - name: Corpus hashes in WebAssembly
+        if: runner.os == 'Linux'
+        run: |
+          GOOS=js GOARCH=wasm go build -o .cache/tools/hash.wasm ./internal/corpushash
+          env -i PATH="$PATH" "$(go env GOROOT)/lib/wasm/go_js_wasm_exec" .cache/tools/hash.wasm "$PWD/testdata/conformance/cases" > hashes/wasm.txt
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: hashes-${{ matrix.os }}
+          path: hashes/
+          if-no-files-found: error
+
+  conformance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+          cache: false
+      - run: tools/reference/fetch-tools.sh
+      - name: Liberation fonts
+        run: go generate ./internal/textmetrics
+      - run: make conformance
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: conformance-report
+          path: conformance-report.md
+
+  determinism:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: hashes-*
+          merge-multiple: true
+          path: hashes
+      - name: Same outputs on every platform
+        working-directory: hashes
+        run: |
+          files=(./*.txt)
+          test "${#files[@]}" -eq 3
+          for f in "${files[@]}"; do
+            echo "$f: $(tail -1 "$f")"
+            cmp Linux-X64.txt "$f"
+          done

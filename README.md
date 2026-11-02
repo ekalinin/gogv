@@ -181,6 +181,7 @@ make reference-image      # build the reference image (Docker)
 make reference            # record the references of the curated cases
 make harvest              # collect the gopuml corpus and record its references
 tools/reference/fetch-tools.sh
+go generate ./internal/textmetrics  # fetch the Liberation fonts
 make conformance          # compare and write conformance-report.md
 make determinism          # compare native, amd64 and WebAssembly outputs
 ```
