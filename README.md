@@ -32,14 +32,15 @@ that the output is the same, byte for byte, on every platform.
 
 ## Status
 
-This is version 1, in its fifth and last slice. It supports:
+gogv supports:
 
 - the whole DOT grammar, read as the reference reads it
 - the layout of graphs without compass points and HTML-like labels other
   than table labels:
   shapes `rect`, `box`, `rectangle`, `plaintext`, `point`, `ellipse`, `oval`,
-  `circle`, `diamond`, `hexagon`, `octagon`; plain-text labels; `width`,
-  `height`, `color`, `fontname`, `fontsize`, `fontcolor`; `minlen`,
+  `circle`, `diamond`, `hexagon`, `octagon`, and `style=rounded` on `rect`;
+  plain-text labels; `width`, `height`, `fontname`, `fontsize`, and `color`
+  and `fontcolor` written `#rrggbb`; `minlen`,
   `constraint`, `style=invis`, `arrowhead` and `arrowtail` (`normal`, `empty`,
   `none`), `dir`, `arrowsize`; `nodesep`, `ranksep`, `rankdir=LR`,
   `splines=spline|polyline`, a graph label placed by `labeljust`
@@ -57,17 +58,53 @@ This is version 1, in its fifth and last slice. It supports:
 - node ports: edge ends written `node:port`, or set by `tailport` and
   `headport`, attach to the cell of a table label with that `PORT`, in the
   positioning, the order and the routes
-- the output formats of version 1: `svg`, `svg_inline`, `plain`, `plain-ext`,
-  `canon`, `dot`, `gv`, `xdot`, `xdot1.2`, `xdot1.4`, `json`, `json0`,
-  `dot_json` and `xdot_json`
+- the output formats: `svg`, `svg_inline`, `plain`, `plain-ext`, `canon`,
+  `dot`, `gv`, `xdot`, `xdot1.2`, `xdot1.4`, `json`, `json0`, `dot_json` and
+  `xdot_json`
+
+Not supported yet, among others:
+
+- color names such as `red` (colors are written `#rrggbb`), `fillcolor`,
+  `bgcolor`, `penwidth`
+- styles other than `solid`, `invis` on edges and `rounded` on `rect`, such
+  as `filled` and `dashed`
+- other shapes, such as `record`, `Mrecord` and `box3d`, and other arrow
+  types, such as `vee`
+- `rankdir=BT` and `rankdir=RL`; `splines` other than `spline` and
+  `polyline`, such as `ortho`
+- compass points (`a:n -> b`), `compound` with `lhead` and `ltail`,
+  `concentrate`
+- HTML-like labels other than tables of empty cells: text in cells, and text
+  markup such as `<B>` and `<FONT>`
+- fonts other than the Times, Helvetica and Courier families (including
+  Times New Roman, Arial and Courier New), which are measured as Times
+- `URL`, `href`, `tooltip` and images
+- the other layout engines (`-Kneato`, `-Kfdp`, ...) and the other output
+  formats, such as `png`, `pdf` and `cmapx`
 
 A Graphviz feature that is not supported yet gives a warning that says so and
 names the default used instead; attributes that Graphviz does not document
 are ignored, as Graphviz ignores them.
 
-## Building
+## Installation
 
-Go 1.26 or later is needed.
+Go 1.26 or later is needed. The command line:
+
+```sh
+go install github.com/ekalinin/gogv/cmd/dot@latest
+```
+
+The command is named `dot`, as Graphviz's is: when Graphviz is installed
+too, the `dot` found first in `PATH` runs. `dot -V` tells them apart (see
+[Command line](#command-line)).
+
+The library:
+
+```sh
+go get github.com/ekalinin/gogv
+```
+
+## Building
 
 ```sh
 go build -o dot ./cmd/dot
@@ -75,11 +112,40 @@ echo 'digraph { a -> b -> c; a -> c }' | ./dot -Tsvg > out.svg
 ./dot -V
 ```
 
-As a library:
+## Library
+
+`gogv.Render` lays out every graph of DOT text and writes it in one of
+`gogv.Formats`, with the bytes that `dot -T<format>` writes:
 
 ```go
-out, warnings, err := gogv.Render(ctx, "digraph { a -> b }", "svg")
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"os"
+
+	"github.com/ekalinin/gogv"
+)
+
+func main() {
+	out, warnings, err := gogv.Render(context.Background(), "digraph { a -> b }", "svg")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, w := range warnings {
+		fmt.Fprintln(os.Stderr, "warning:", w)
+	}
+	os.Stdout.Write(out)
+}
 ```
+
+The warnings are returned, not written: a `gogv.Warning` names the object,
+the feature that is not supported yet and the default used instead. A syntax
+error is a `*gogv.SyntaxError` with its line, and a format that `Render` does
+not write is a `*gogv.FormatError`. `Render` is safe for concurrent use and
+stops with the context's error when the context is canceled.
 
 ## Command line
 
@@ -119,8 +185,8 @@ make conformance          # compare and write conformance-report.md
 make determinism          # compare native, amd64 and WebAssembly outputs
 ```
 
-`conformance-report.md` has the current results. Cases that use a feature of
-a later slice are reported as not supported yet; the remaining differences
+`conformance-report.md` has the current results. Cases that use a feature
+that is not supported yet are reported as such; the remaining differences
 are listed in `testdata/conformance/known-differences.yaml`.
 
 ## License
