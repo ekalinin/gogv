@@ -103,9 +103,17 @@ for the numbers of the layout, and a size within 5%; `dot_json` and
 `testdata/conformance/cases` and, when collected with `make harvest`, the DOT
 that gopuml generates for its own conformance cases.
 
+`make harvest` fetches gopuml at the version `GOPUML_VERSION` of the
+`Makefile` through the Go module proxy, and the Vega cases of its corpus with
+gopuml's own script, so it needs network access as well as Docker and the
+reference image; no gopuml checkout is needed. `make harvest GOPUML=<dir>`
+harvests from a local gopuml checkout instead. The report names the corpora
+of the run and the gopuml that each harvested corpus comes from.
+
 ```sh
 make reference-image      # build the reference image (Docker)
 make reference            # record the references of the curated cases
+make harvest              # collect the gopuml corpus and record its references
 tools/reference/fetch-tools.sh
 make conformance          # compare and write conformance-report.md
 make determinism          # compare native, amd64 and WebAssembly outputs

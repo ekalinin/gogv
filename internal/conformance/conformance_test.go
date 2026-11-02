@@ -58,6 +58,9 @@ func TestConformance(t *testing.T) {
 			}
 			t.Fatalf("corpus %s: %v", c.Name, err)
 		}
+		// A harvested corpus records where it comes from.
+		source, _ := os.ReadFile(filepath.Join(root, c.Cases, "SOURCE"))
+		all.Corpora = append(all.Corpora, conformance.CorpusRun{Name: c.Name, Cases: len(cases), Source: strings.TrimSpace(string(source))})
 		report, err := conformance.Run(cases, filepath.Join(root, c.References), known, render, rasterizer)
 		all.Results = append(all.Results, report.Results...)
 		if err != nil {
@@ -83,6 +86,7 @@ func TestConformance(t *testing.T) {
 			failures = append(failures, c.ID+": "+res.Problems["cli"])
 		}
 	}
+	all.Corpora = append(all.Corpora, conformance.CorpusRun{Name: "cli", Cases: len(cliCases)})
 	if err := os.WriteFile(reportPath, []byte(all.Markdown()), 0o644); err != nil {
 		t.Fatal(err)
 	}

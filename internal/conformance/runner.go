@@ -378,6 +378,16 @@ func firstLine(stderr []byte) string {
 // Report collects the results of a conformance run.
 type Report struct {
 	Results []CaseResult
+	// Corpora are the corpora of the run, in the order they ran.
+	Corpora []CorpusRun
+}
+
+// CorpusRun is a corpus of a conformance run: its name, its number of cases
+// and, for a harvested corpus, the source recorded with it.
+type CorpusRun struct {
+	Name   string
+	Cases  int
+	Source string
 }
 
 // Failed returns the results whose outcome is Failed. The run fails when it
@@ -392,13 +402,25 @@ func (r Report) Failed() []CaseResult {
 	return failed
 }
 
-// Markdown writes the report: counts of each outcome per capability and per
-// format, then every case that is not passed.
+// Markdown writes the report: the corpora of the run, counts of each outcome
+// per capability and per format, then every case that is not passed.
 func (r Report) Markdown() string {
 	var b strings.Builder
 	b.WriteString("# Conformance report\n\n")
 	b.WriteString("- Reference: Graphviz 16.1.0 built without Pango\n")
-	fmt.Fprintf(&b, "- Cases: %d\n\n", len(r.Results))
+	fmt.Fprintf(&b, "- Cases: %d\n", len(r.Results))
+	if len(r.Corpora) > 0 {
+		var corpora []string
+		for _, c := range r.Corpora {
+			s := fmt.Sprintf("%s %d", c.Name, c.Cases)
+			if c.Source != "" {
+				s += " (" + c.Source + ")"
+			}
+			corpora = append(corpora, s)
+		}
+		fmt.Fprintf(&b, "- Corpora: %s\n", strings.Join(corpora, ", "))
+	}
+	b.WriteString("\n")
 
 	header := "| Name | Cases | Passed | Known differences | Not supported yet | Failed |\n|---|---|---|---|---|---|\n"
 	row := func(name string, counts map[Outcome]int) {

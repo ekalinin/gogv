@@ -2,6 +2,7 @@
 
 - Reference: Graphviz 16.1.0 built without Pango
 - Cases: 565
+- Corpora: curated 255, gopuml 260 (gopuml v0.3.0), gopuml-clusters 36 (gopuml v0.3.0), cli 14
 
 ## By capability
 

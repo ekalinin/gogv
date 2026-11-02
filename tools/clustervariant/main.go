@@ -11,6 +11,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"io/fs"
@@ -67,6 +68,16 @@ func run(in, out string) error {
 		n++
 		return os.WriteFile(filepath.Join(dir, name), []byte(variant(string(src))), 0o644)
 	})
+	if err != nil {
+		return err
+	}
+	// The variant comes from the same gopuml as the corpus.
+	source, err := os.ReadFile(filepath.Join(in, "SOURCE"))
+	if err == nil {
+		err = os.WriteFile(filepath.Join(out, "SOURCE"), source, 0o644)
+	} else if errors.Is(err, fs.ErrNotExist) {
+		err = nil
+	}
 	if err != nil {
 		return err
 	}
