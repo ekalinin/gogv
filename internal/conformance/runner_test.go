@@ -130,6 +130,30 @@ func TestReportFailsOnUnlistedFailuresOnly(t *testing.T) {
 	}
 }
 
+func TestReportCorpora(t *testing.T) {
+	for _, tc := range []struct {
+		name    string
+		corpora []CorpusRun
+		want    string
+	}{
+		{
+			"harvested corpus from v0.3.0",
+			[]CorpusRun{{"curated", 255, ""}, {"gopuml", 260, "gopuml v0.3.0"}, {"gopuml-clusters", 36, "gopuml v0.3.0"}, {"cli", 14, ""}},
+			"- Cases: 0\n- Corpora: curated 255, gopuml 260 (gopuml v0.3.0), gopuml-clusters 36 (gopuml v0.3.0), cli 14\n\n",
+		},
+		{
+			"harvested corpus not collected",
+			[]CorpusRun{{"curated", 255, ""}, {"cli", 14, ""}},
+			"- Cases: 0\n- Corpora: curated 255, cli 14\n\n",
+		},
+	} {
+		md := Report{Corpora: tc.corpora}.Markdown()
+		if !strings.Contains(md, tc.want) {
+			t.Errorf("%s: report lacks %q:\n%s", tc.name, tc.want, md)
+		}
+	}
+}
+
 func TestReadKnownDifferences(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "known-differences.yaml")
 	content := `# Cases that differ from the reference, with the change that resolves them.

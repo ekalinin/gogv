@@ -4,17 +4,22 @@
 // Command harvest collects the DOT that gopuml generates for its conformance
 // cases, so that gogv is checked against what its first consumer sends.
 //
-// It builds gopuml's command line, renders every .puml case of gopuml's
-// curated corpus and of its Vega cache as SVG, with GRAPHVIZ_DOT pointing to
-// a wrapper that saves each DOT input under the output directory before
-// running the reference dot in its image. Inputs are named
-// <capability>/<case>-<n>.gv, where <n> counts the dot runs of the case; the
-// corpus stays in .cache and is never committed (it derives from upstream
-// PlantUML inputs that gopuml does not commit either).
+// gopuml is the module github.com/ekalinin/gopuml at -gopuml-version, fetched
+// through the Go module proxy, or the checkout named by -gopuml. It builds
+// gopuml's command line, renders every .puml case of gopuml's curated corpus
+// and of its Vega cache as SVG, with GRAPHVIZ_DOT pointing to a wrapper that
+// saves each DOT input under the output directory before running the
+// reference dot in its image. For a version, the Vega cache is fetched into
+// .cache/vega by gopuml's own script; for a checkout, it is the checkout's.
+// Inputs are named <capability>/<case>-<n>.gv, where <n> counts the dot runs
+// of the case, and SOURCE records where gopuml came from; the corpus stays in
+// .cache and is never committed (it derives from upstream PlantUML inputs
+// that gopuml does not commit either).
 package main
 
 import (
 	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io/fs"
@@ -49,12 +54,18 @@ exit $status
 `
 
 func main() {
-	gopuml := flag.String("gopuml", "../plantuml-in-go", "gopuml checkout")
+	gopuml := flag.String("gopuml", "", "gopuml checkout, used instead of -gopuml-version")
+	version := flag.String("gopuml-version", "", "gopuml version, fetched through the Go module proxy")
 	out := flag.String("out", ".cache/gopuml-dot", "corpus directory")
 	image := flag.String("image", "gogv-reference", "reference image")
 	jobs := flag.Int("j", min(runtime.NumCPU(), 4), "cases rendered at the same time")
 	flag.Parse()
-	if err := run(*gopuml, *out, *image, *jobs); err != nil {
+	if *gopuml == "" && *version == "" {
+		fmt.Fprintln(os.Stderr, "harvest: -gopuml or -gopuml-version is needed")
+		flag.Usage()
+		os.Exit(2)
+	}
+	if err := run(*gopuml, *version, *out, *image, *jobs); err != nil {
 		fmt.Fprintln(os.Stderr, "harvest:", err)
 		os.Exit(1)
 	}
@@ -62,7 +73,7 @@ func main() {
 
 type input struct{ id, path string }
 
-func run(gopuml, out, image string, jobs int) error {
+func run(checkout, version, out, image string, jobs int) error {
 	tools, err := filepath.Abs(filepath.Join(".cache", "tools"))
 	if err != nil {
 		return err
@@ -70,6 +81,11 @@ func run(gopuml, out, image string, jobs int) error {
 	if err := os.MkdirAll(tools, 0o755); err != nil {
 		return err
 	}
+	gopuml, src, err := resolve(checkout, version)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("harvest: %s in %s\n", src, gopuml)
 	bin := filepath.Join(tools, "gopuml-plantuml")
 	build := exec.Command("go", "build", "-o", bin, "./cmd/plantuml")
 	build.Dir = gopuml
@@ -82,7 +98,13 @@ func run(gopuml, out, image string, jobs int) error {
 		return err
 	}
 
-	inputs, err := collect(gopuml)
+	vega := filepath.Join(gopuml, ".cache", "vega")
+	if checkout == "" {
+		if vega, err = fetchVega(gopuml); err != nil {
+			return err
+		}
+	}
+	inputs, err := collect(gopuml, vega)
 	if err != nil {
 		return err
 	}
@@ -96,8 +118,7 @@ func run(gopuml, out, image string, jobs int) error {
 	if err := os.MkdirAll(absOut, 0o755); err != nil {
 		return err
 	}
-	commit, _ := exec.Command("git", "-C", gopuml, "rev-parse", "HEAD").Output()
-	if err := os.WriteFile(filepath.Join(absOut, "SOURCE"), []byte("gopuml "+strings.TrimSpace(string(commit))+"\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(absOut, "SOURCE"), []byte(src+"\n"), 0o644); err != nil {
 		return err
 	}
 
@@ -136,9 +157,82 @@ func run(gopuml, out, image string, jobs int) error {
 	return nil
 }
 
+// resolve returns the directory of gopuml and the line of SOURCE: the
+// checkout when one is named, otherwise the module directory of version.
+func resolve(checkout, version string) (dir, src string, err error) {
+	if checkout != "" {
+		commit, _ := exec.Command("git", "-C", checkout, "rev-parse", "HEAD").Output()
+		status, _ := exec.Command("git", "-C", checkout, "status", "--porcelain").Output()
+		return checkout, source("", strings.TrimSpace(string(commit)), strings.TrimSpace(string(status))), nil
+	}
+	dir, err = download(version)
+	return dir, source(version, "", ""), err
+}
+
+// download fetches gopuml at version through the Go module proxy and returns
+// its directory in the module cache. It runs in an empty directory, so that
+// the go.mod and go.sum of this module are left alone.
+func download(version string) (string, error) {
+	tmp, err := os.MkdirTemp("", "harvest-")
+	if err != nil {
+		return "", err
+	}
+	defer os.RemoveAll(tmp)
+	cmd := exec.Command("go", "mod", "download", "-json", "github.com/ekalinin/gopuml@"+version)
+	cmd.Dir = tmp
+	cmd.Stderr = os.Stderr
+	out, err := cmd.Output()
+	var mod struct{ Dir, Error string }
+	_ = json.Unmarshal(out, &mod) // on failure, the output may hold Error
+	switch {
+	case mod.Error != "":
+		return "", fmt.Errorf("download gopuml %s: %s", version, mod.Error)
+	case err != nil:
+		return "", fmt.Errorf("download gopuml %s: %w", version, err)
+	case mod.Dir == "":
+		return "", fmt.Errorf("download gopuml %s: no module directory in %q", version, out)
+	}
+	return mod.Dir, nil
+}
+
+// fetchVega fetches the Vega cases with the script of the gopuml in dir into
+// .cache/vega and returns their directory. The script runs under bash, as
+// files in the module cache are not executable, and VEGA_CACHE keeps it from
+// writing into the read-only module directory.
+func fetchVega(dir string) (string, error) {
+	vega, err := filepath.Abs(filepath.Join(".cache", "vega"))
+	if err != nil {
+		return "", err
+	}
+	cmd := exec.Command("bash", filepath.Join(dir, "tools", "corpus", "fetch-vega.sh"))
+	cmd.Env = append(os.Environ(), "VEGA_CACHE="+vega)
+	cmd.Stdout, cmd.Stderr = os.Stdout, os.Stderr
+	if err := cmd.Run(); err != nil {
+		return "", fmt.Errorf("fetch the Vega cases: %w", err)
+	}
+	return vega, nil
+}
+
+// source is the line of SOURCE: "gopuml <version>" for a version, otherwise
+// "gopuml <commit> local" for a checkout, followed by " dirty" when its git
+// status is not empty, with "unknown" for a commit that git did not give.
+func source(version, commit, status string) string {
+	if version != "" {
+		return "gopuml " + version
+	}
+	if commit == "" {
+		commit = "unknown"
+	}
+	s := "gopuml " + commit + " local"
+	if status != "" {
+		s += " dirty"
+	}
+	return s
+}
+
 // collect lists the .puml cases of gopuml's curated corpus, by capability,
-// and of its Vega cache, as vega-<group>.
-func collect(gopuml string) ([]input, error) {
+// and of the Vega cache in vega, as vega-<group>.
+func collect(gopuml, vega string) ([]input, error) {
 	var inputs []input
 	add := func(root, prefix string) error {
 		if _, err := os.Stat(root); err != nil {
@@ -165,7 +259,7 @@ func collect(gopuml string) ([]input, error) {
 	if err := add(filepath.Join(gopuml, "testdata", "conformance", "cases"), ""); err != nil {
 		return nil, err
 	}
-	if err := add(filepath.Join(gopuml, ".cache", "vega"), "vega-"); err != nil {
+	if err := add(vega, "vega-"); err != nil {
 		return nil, err
 	}
 	return inputs, nil
