@@ -5,7 +5,7 @@
 See proposal.md - Why. The current flow of `make harvest`:
 
 ```
-tools/harvest -gopuml ../plantuml-in-go
+tools/harvest -gopuml <checkout>
   go build ./cmd/plantuml (in the checkout)  -> .cache/tools/gopuml-plantuml
   .puml of <checkout>/testdata/conformance/cases and <checkout>/.cache/vega
   gopuml-plantuml -tsvg -pipe, GRAPHVIZ_DOT = wrapper that saves each DOT
@@ -36,7 +36,7 @@ Checked on gopuml v0.3.0 before writing this design:
 - Committing the harvested corpus: the Vega cases derive from upstream PlantUML inputs that gopuml does not commit either
 - Running the harvest in CI
 - Any change to the curated corpus, the comparisons or the known differences
-- The names `plantuml-in-go` and `graphviz-dot-in-go` in the archived changes: a separate `chore/` branch
+- The local directory names of gopuml and gogv in the archived changes: a separate `chore/` branch
 
 ## Decisions
 
@@ -101,4 +101,4 @@ A corpus that was not collected is not listed.
 2. Run `make harvest`, which now harvests from v0.3.0, and compare the `.gv` files with the copy byte for byte (Goals: the same corpus).
 3. Run `make conformance`; `conformance-report.md` differs from the committed one only by the line of the corpora.
 
-Rollback: `make harvest GOPUML=../plantuml-in-go` harvests from the local checkout as before.
+Rollback: `make harvest GOPUML=<checkout>` harvests from the local checkout as before.

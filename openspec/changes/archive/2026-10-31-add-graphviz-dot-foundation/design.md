@@ -6,11 +6,11 @@ See proposal.md for the motivation and the scope of this slice.
 
 Facts that shape the approach:
 
-- gopuml talks to a layout engine through `dot.Engine` (`plantuml-in-go/internal/dot/graphviz.go`): `Layout(ctx, dot string) ([]byte, error)` returns the SVG document that `dot -Tsvg` writes, and implementations must be safe for concurrent use. svek reads node positions, cluster boxes and edge paths back from that SVG by `<title>`, `points="..."`, `d="M...C..."` and the unique `stroke` and `fill` colors it gave each object.
+- gopuml talks to a layout engine through `dot.Engine` (`gopuml/internal/dot/graphviz.go`): `Layout(ctx, dot string) ([]byte, error)` returns the SVG document that `dot -Tsvg` writes, and implementations must be safe for concurrent use. svek reads node positions, cluster boxes and edge paths back from that SVG by `<title>`, `points="..."`, `d="M...C..."` and the unique `stroke` and `fill` colors it gave each object.
 - svek sends no text to `dot`: nodes have `label=""` or HTML tables of empty, fixed-size cells. Text width matters only for standalone use.
 - gopuml's reference `dot` (Graphviz 14.0.1 in `plantuml-go-reference`) has no text layout plugin: `fontname: "Times-Roman" resolved to: [internal hard-coded]`. With Pango (Homebrew `dot` 15.0.0), the same "Hello world" node is 55.45 points wide in radius instead of 57.44.
-- gopuml's parity tolerance is: width and height within 5% of the reference, and SSIM of at least 0.90 between the rasterized outputs (`plantuml-in-go/openspec/specs/upstream-compatibility/spec.md`).
-- gopuml requires byte-identical output across runs, machines and operating systems (`plantuml-in-go/openspec/specs/output-formats/spec.md`). Go may fuse `a*b+c` into one multiply-add on arm64, and the results of Go's `math` package are not identical across architectures (gopuml design D17).
+- gopuml's parity tolerance is: width and height within 5% of the reference, and SSIM of at least 0.90 between the rasterized outputs (`gopuml/openspec/specs/upstream-compatibility/spec.md`).
+- gopuml requires byte-identical output across runs, machines and operating systems (`gopuml/openspec/specs/output-formats/spec.md`). Go may fuse `a*b+c` into one multiply-add on arm64, and the results of Go's `math` package are not identical across architectures (gopuml design D17).
 - No conformance case of gopuml uses `linetype ortho` or `polyline`.
 
 ## Goals / Non-Goals

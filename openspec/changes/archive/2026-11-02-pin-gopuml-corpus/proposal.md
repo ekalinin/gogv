@@ -2,7 +2,7 @@
 
 ## Why
 
-`make harvest` collects the DOT that gopuml generates from a gopuml checkout at `../plantuml-in-go`, the directory name on the maintainer's machine. In a public repository nobody else has that directory, and even with a checkout of their own they would harvest whatever branch and uncommitted changes it holds: the current corpus comes from commit `becdd08`, which was only on a feature branch of gopuml. The committed `conformance-report.md` cannot be reproduced from the repository alone. gopuml v0.3.0 is now released and contains that commit, with the same cases and the same Vega tag, so the corpus can be pinned to it.
+`make harvest` collects the DOT that gopuml generates from a gopuml checkout at a sibling path that only exists on the maintainer's machine. In a public repository nobody else has that directory, and even with a checkout of their own they would harvest whatever branch and uncommitted changes it holds: the current corpus comes from commit `becdd08`, which was only on a feature branch of gopuml. The committed `conformance-report.md` cannot be reproduced from the repository alone. gopuml v0.3.0 is now released and contains that commit, with the same cases and the same Vega tag, so the corpus can be pinned to it.
 
 ## What Changes
 

@@ -2,7 +2,7 @@
 
 ## Why
 
-There is no native Go implementation of Graphviz `dot`. Go programs either run the external `dot` binary or embed Graphviz compiled to WebAssembly (goccy/go-graphviz and its forks). gopuml (`plantuml-in-go`) needs `dot` for class, object, description, state and legacy activity diagrams, and its WebAssembly build cannot lay them out at all. A standalone Go clone of `dot` removes the external dependency for any Go program, and gopuml is its first consumer.
+There is no native Go implementation of Graphviz `dot`. Go programs either run the external `dot` binary or embed Graphviz compiled to WebAssembly (goccy/go-graphviz and its forks). gopuml (`github.com/ekalinin/gopuml`) needs `dot` for class, object, description, state and legacy activity diagrams, and its WebAssembly build cannot lay them out at all. A standalone Go clone of `dot` removes the external dependency for any Go program, and gopuml is its first consumer.
 
 ## What Changes
 
@@ -73,8 +73,8 @@ None. The project has no specs yet.
 
 ## Impact
 
-- New repository in `graphviz-dot-in-go` with the Go module `github.com/ekalinin/gogv` (Go 1.26), under the MIT license.
+- New repository `gogv` with the Go module `github.com/ekalinin/gogv` (Go 1.26), under the MIT license.
 - A pinned reference container with Graphviz 16.1.0 built without Pango, used to record reference outputs. Recording references needs Docker.
-- gopuml (`plantuml-in-go`) is the first consumer. Its switch is done in its own changes, not in this one:
+- gopuml (`github.com/ekalinin/gopuml`) is the first consumer. Its switch is done in its own changes, not in this one:
   - move its reference container to Graphviz 16.1.0 built without Pango and regenerate its references
   - lay out with this module by default once gopuml's conformance passes with it; for `splines=ortho`, run the external `dot` when one is found and report "not supported yet" otherwise (always in the WebAssembly build)
