@@ -43,6 +43,10 @@ func TestConformance(t *testing.T) {
 	if _, err := os.Stat(rasterizer.Path); err != nil {
 		t.Fatal("resvg not fetched: run tools/reference/fetch-tools.sh")
 	}
+	// Without the fonts, resvg draws no text on either side of a comparison.
+	if fonts, _ := filepath.Glob(filepath.Join(rasterizer.FontsDir, "*.ttf")); len(fonts) == 0 {
+		t.Fatal("Liberation fonts not fetched: run go generate ./internal/textmetrics")
+	}
 	reportPath, err := filepath.Abs(filepath.Join(root, "conformance-report.md"))
 	if err != nil {
 		t.Fatal(err)
