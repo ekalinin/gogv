@@ -71,7 +71,7 @@ func Run(ctx context.Context, args []string, stdin io.Reader, stdout, stderr io.
 	// Check the format before reading any input.
 	if _, _, err := gogv.Render(ctx, "", format); err != nil {
 		var fe *gogv.FormatError
-		if errors.As(err, &fe) && !fe.NotSupportedYet {
+		if errors.As(err, &fe) {
 			fmt.Fprintln(stderr, fe.Error())
 		} else {
 			fmt.Fprintf(stderr, "Error: dot: %s\n", err)

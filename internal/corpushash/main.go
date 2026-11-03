@@ -36,7 +36,7 @@ func main() {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
-		for _, format := range gogv.Formats {
+		for _, format := range gogv.Formats() {
 			out, _, _ := gogv.Render(context.Background(), string(src), format)
 			sum := sha256.Sum256(out)
 			all.Write(sum[:])

@@ -17,12 +17,12 @@ import (
 	"github.com/ekalinin/gogv/internal/output"
 )
 
-// Formats are the output formats Render writes.
-var Formats = []string{"canon", "plain", "plain-ext", "svg", "svg_inline", "dot", "gv", "xdot", "xdot1.2", "xdot1.4", "json", "json0", "dot_json", "xdot_json"}
+// formats are the output formats Render writes.
+var formats = []string{"canon", "plain", "plain-ext", "svg", "svg_inline", "dot", "gv", "xdot", "xdot1.2", "xdot1.4", "json", "json0", "dot_json", "xdot_json"}
 
-// laterFormats are the output formats of version 1 that are not supported
-// yet: none since its last slice.
-var laterFormats []string
+// Formats returns the output formats Render writes, always in the same
+// order. Each call returns a new slice, which the caller may change.
+func Formats() []string { return slices.Clone(formats) }
 
 // Warning reports something the caller may want to know about an input:
 // mostly a Graphviz feature that is not supported yet, with the default
@@ -59,15 +59,10 @@ func (e *SyntaxError) Error() string { return e.message }
 // FormatError is an output format that Render does not write.
 type FormatError struct {
 	Format string
-	// NotSupportedYet is set for the formats of a later version.
-	NotSupportedYet bool
 }
 
 func (e *FormatError) Error() string {
-	if e.NotSupportedYet {
-		return fmt.Sprintf("format %q is not supported yet", e.Format)
-	}
-	return fmt.Sprintf("Format: %q not recognized. Use one of: %s", e.Format, strings.Join(Formats, " "))
+	return fmt.Sprintf("Format: %q not recognized. Use one of: %s", e.Format, strings.Join(formats, " "))
 }
 
 // Render lays out every graph of DOT source text and writes it in format, as
@@ -76,8 +71,8 @@ func (e *FormatError) Error() string {
 // After a syntax error, the output holds the graphs read before the one that
 // contains the error. Render is safe for concurrent use.
 func Render(ctx context.Context, src string, format string) ([]byte, []Warning, error) {
-	if !slices.Contains(Formats, format) {
-		return nil, nil, &FormatError{Format: format, NotSupportedYet: slices.Contains(laterFormats, format)}
+	if !slices.Contains(formats, format) {
+		return nil, nil, &FormatError{Format: format}
 	}
 	file, lexWarnings, parseErr := dotlang.Parse(src)
 	var warnings []Warning
