@@ -23,6 +23,16 @@ The rules come from decision D1 of the foundation change,
 - the code of gopuml (https://github.com/ekalinin/gopuml), which is a port of
   PlantUML, not of Graphviz
 
+Observe the reference with the image that `make reference-image` builds, with
+any `-T` format:
+
+```sh
+docker run --rm -i --platform linux/amd64 gogv-reference dot -Tsvg < in.gv
+```
+
+A Graphviz installed on the host is another version, usually with Pango, and
+its outputs are not the reference's.
+
 ### Sources that are not allowed
 
 The source code of Graphviz and of its ports and bindings, such as Smetana in
@@ -62,6 +72,22 @@ same header. A new kind of source changes `CONTRIBUTING.md`, `NOTICE` and
 The pull request template asks you to confirm that your change follows these
 rules.
 
+## Determinism
+
+gogv writes the same bytes on every platform, and CI compares the outputs of
+linux/amd64, macOS/arm64 and the WebAssembly build. Three conventions keep it
+so:
+
+- Write a product that is added to or subtracted from as `float64(a*b) + c`.
+  The conversion keeps the Go compiler from fusing it into one multiply-add,
+  as it does on arm64 and other architectures; `TestNoFusedMultiplyAdd` fails
+  on a fused one.
+- Take `Sin`, `Cos`, `Atan` and `Atan2` from `internal/fdlibm`; `math.Sqrt` is
+  exact and stays.
+- Measure text only with the tables of `internal/textmetrics`, generated from
+  the Liberation fonts by `go generate ./internal/textmetrics`; fonts installed
+  on the host play no part.
+
 ## Changes and the specs
 
 `openspec/specs` describes what gogv does. A change of that behavior, such as
@@ -97,7 +123,30 @@ make reference-image
 make reference
 ```
 
+A change also keeps these in step:
+
+- `conformance-report.md`: commit it from a run that includes the harvested
+  gopuml corpora (`make harvest`, see the README). A run without them
+  rewrites the report with the curated corpus alone; restore the file with
+  `git checkout conformance-report.md` before committing.
+- `testdata/conformance/known-differences.yaml`: an entry names the case, the
+  `reason` of the difference and the `change` that resolves it.
+- tests: every scenario of `openspec/specs` has a test, as the
+  `Test...Scenarios` tests of `internal/layout` cover the scenarios of one
+  requirement each.
+- a newly supported attribute or value: `internal/attrs/supported.go`, and
+  the Status and "Not supported yet" lists of the README.
+
 CI runs the same checks on every pull request.
+
+## Style
+
+- Headers in sentence case.
+- A spaced hyphen ` - ` where a dash is needed.
+- Minimal diffs that keep the existing names, so that a change can be
+  reviewed and undone without touching what it does not change.
+- A renamed heading of this file updates the pointers of `AGENTS.md` in the
+  same pull request.
 
 ## Commits and branches
 
