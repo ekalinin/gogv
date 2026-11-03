@@ -115,7 +115,7 @@ echo 'digraph { a -> b -> c; a -> c }' | ./dot -Tsvg > out.svg
 ## Library
 
 `gogv.Render` lays out every graph of DOT text and writes it in one of
-`gogv.Formats`, with the bytes that `dot -T<format>` writes:
+`gogv.Formats()`, with the bytes that `dot -T<format>` writes:
 
 ```go
 package main
