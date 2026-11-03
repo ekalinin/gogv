@@ -89,6 +89,26 @@ func TestFormatsScenarios(t *testing.T) {
 	}
 }
 
+// TestReadmeExample keeps the picture of the README, docs/example.svg, the
+// output of docs/example.gv.
+func TestReadmeExample(t *testing.T) {
+	src, err := os.ReadFile("docs/example.gv")
+	if err != nil {
+		t.Fatal(err)
+	}
+	want, err := os.ReadFile("docs/example.svg")
+	if err != nil {
+		t.Fatal(err)
+	}
+	got, warnings, err := Render(context.Background(), string(src), "svg")
+	if err != nil || len(warnings) != 0 {
+		t.Fatalf("docs/example.gv: warnings %v, error %v", warnings, err)
+	}
+	if !bytes.Equal(got, want) {
+		t.Error("docs/example.svg is out of date: go run ./cmd/dot -Tsvg docs/example.gv > docs/example.svg")
+	}
+}
+
 func TestRenderWarnings(t *testing.T) {
 	out, warnings, err := Render(context.Background(), "digraph { a [shape=record] }", "svg")
 	if err != nil || len(out) == 0 {

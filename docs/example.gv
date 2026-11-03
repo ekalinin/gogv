@@ -1,0 +1,36 @@
+digraph gogv {
+	rankdir=LR
+	node [shape=box, style=rounded, fontname=Helvetica, fontsize=12]
+	edge [fontname=Helvetica, fontsize=10, color="#555555"]
+
+	input [label="DOT text", shape=plaintext]
+
+	subgraph cluster_language {
+		label="dotlang"
+		fontname=Helvetica
+		color="#4a7ebb"
+		lexer -> parser [label="tokens"]
+	}
+
+	subgraph cluster_layout {
+		label="layout"
+		fontname=Helvetica
+		color="#5a9e4b"
+		rank -> order -> position -> route
+	}
+
+	subgraph cluster_output {
+		label="output"
+		fontname=Helvetica
+		color="#b36b2e"
+		node [shape=ellipse]
+		svg; xdot; json; canon
+	}
+
+	input -> lexer
+	parser -> rank [label="graph"]
+	parser -> canon [label="no layout"]
+	route -> svg
+	route -> xdot
+	route -> json
+}
