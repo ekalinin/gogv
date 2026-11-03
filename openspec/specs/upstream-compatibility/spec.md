@@ -21,13 +21,13 @@ For every case of the corpus, the outputs SHALL be compared with the reference's
 
 - `canon`: byte-identical
 - `plain`: the same node names and the same edges (tail and head), and graph width and height each within 5% of the reference's
-- `svg`: width and height each within 5% of the reference's, and a structural similarity (SSIM, grayscale) of at least 0.90 between both documents rasterized by the pinned `resvg` at the reference's size
+- `svg`: width and height each within 5% of the reference's, and a structural similarity (SSIM, grayscale) of at least 0.90 between both documents rasterized by the pinned `resvg` at the reference's size, with the Liberation 2.1.5 fonts as the only fonts
 - `svg_inline`: the comparison of `svg`, and the same lines as the reference's before the root `svg` element, but for the version of the generator
 - `plain-ext`: the comparison of `plain`, and the same ports on the edge lines
 - `dot`, `gv`, `xdot`, `xdot1.2`, `xdot1.4`, `json` and `json0`: both outputs parsed, with the same graphs, subgraphs, nodes and edges in the same order, the same attribute names on each, and the same values for the attributes that do not depend on the layout; the same drawing operations, in the same order, with the same colors, styles, fonts and texts; and the width and height of the graph's `bb` each within 5% of the reference's. The numbers of the layout are not compared one by one: `plain` and `svg` judge the layout
 - `dot_json` and `xdot_json`: byte-identical
 
-A case passes when the comparisons of all its recorded formats pass.
+A case passes when the comparisons of all its recorded formats pass. A conformance run without the Liberation fonts SHALL fail before comparing any case, and name the command that fetches them.
 
 #### Scenario: Similar layout
 
@@ -48,6 +48,11 @@ A case passes when the comparisons of all its recorded formats pass.
 
 - **WHEN** the `xdot` output of a case has no `_hdraw_` for an edge whose reference has one
 - **THEN** its `xdot` output fails
+
+#### Scenario: Fonts not fetched
+
+- **WHEN** the conformance run starts on a clone where `resvg` is fetched and the Liberation fonts are not
+- **THEN** the run fails before comparing any case, names `go generate ./internal/textmetrics`, and writes no report
 
 ### Requirement: Corpus
 
