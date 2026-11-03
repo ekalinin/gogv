@@ -9,6 +9,10 @@ it works as:
 - a `dot` command line
 - a WebAssembly module (`GOOS=js GOARCH=wasm`)
 
+![The stages of gogv, laid out by gogv](docs/example.svg)
+
+The picture is gogv's SVG output for [`docs/example.gv`](docs/example.gv).
+
 gogv is not affiliated with or endorsed by the Graphviz project.
 
 ## Clean-room implementation
