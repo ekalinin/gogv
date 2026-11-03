@@ -190,6 +190,11 @@ make determinism          # compare native, amd64 and WebAssembly outputs
 that is not supported yet are reported as such; the remaining differences
 are listed in `testdata/conformance/known-differences.yaml`.
 
+## Contributing
+
+Contributions follow the clean-room rules, the checks and the conventions of
+[CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## License
 
 MIT. See `LICENSE` and `NOTICE`.
