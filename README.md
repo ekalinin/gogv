@@ -194,6 +194,28 @@ make determinism          # compare native, amd64 and WebAssembly outputs
 that is not supported yet are reported as such; the remaining differences
 are listed in `testdata/conformance/known-differences.yaml`.
 
+## Releasing
+
+A release is a tag `vX.Y.Z` on a commit of `main` that CI passed, with its
+notes in `docs/releases/vX.Y.Z.md`:
+
+1. Write `docs/releases/vX.Y.Z.md` and merge it into `main` in a pull
+   request.
+2. Once CI has passed on the merge commit, run on an up-to-date `main`:
+
+   ```sh
+   make release VERSION=vX.Y.Z
+   ```
+
+   It checks the version, the notes, the branch, the working tree, that the
+   tag does not exist yet and that CI passed, then tags the commit, pushes the
+   tag and creates the GitHub release with the notes. It needs `gh`, logged
+   in.
+
+A pushed tag is never moved: once the Go module proxy has fetched it, its
+content is fixed. The release is then installed with
+`go install github.com/ekalinin/gogv/cmd/dot@vX.Y.Z`.
+
 ## Contributing
 
 Contributions follow the clean-room rules, the checks and the conventions of

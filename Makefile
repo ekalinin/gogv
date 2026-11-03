@@ -1,7 +1,7 @@
 GO ?= go
 REFERENCE_IMAGE ?= gogv-reference
 
-.PHONY: build test lint provenance reference-image reference harvest conformance determinism
+.PHONY: build test lint provenance reference-image reference harvest conformance determinism release
 
 build:
 	$(GO) build ./...
@@ -56,3 +56,20 @@ determinism:
 	cmp .cache/tools/hash-native.txt .cache/tools/hash-amd64.txt
 	cmp .cache/tools/hash-native.txt .cache/tools/hash-wasm.txt
 	@tail -1 .cache/tools/hash-native.txt
+
+# Releases VERSION (make release VERSION=v0.1.0): tags the commit of main that
+# CI passed with an annotated tag, pushes the tag, and creates the GitHub
+# release with the notes of docs/releases/VERSION.md. A pushed tag is never
+# moved: once the module proxy has fetched it, its content is fixed.
+release:
+	@echo "$(VERSION)" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$$' || { echo "release: VERSION must look like v0.1.0"; exit 1; }
+	@test -f docs/releases/$(VERSION).md || { echo "release: docs/releases/$(VERSION).md is missing"; exit 1; }
+	@test "$$(git rev-parse --abbrev-ref HEAD)" = main || { echo "release: check out main"; exit 1; }
+	@test -z "$$(git status --porcelain)" || { echo "release: the working tree has changes"; exit 1; }
+	git fetch -q origin main
+	@test "$$(git rev-parse HEAD)" = "$$(git rev-parse origin/main)" || { echo "release: main differs from origin/main"; exit 1; }
+	@test -z "$$(git tag -l $(VERSION))$$(git ls-remote --tags origin refs/tags/$(VERSION))" || { echo "release: $(VERSION) is already tagged"; exit 1; }
+	@test "$$(gh run list --commit $$(git rev-parse HEAD) --workflow ci.yml --json conclusion -q '.[0].conclusion')" = success || { echo "release: CI has not passed on $$(git rev-parse --short HEAD)"; exit 1; }
+	git tag -a $(VERSION) -m "gogv $(VERSION)"
+	git push origin $(VERSION)
+	gh release create $(VERSION) --title $(VERSION) --notes-file docs/releases/$(VERSION).md --verify-tag
