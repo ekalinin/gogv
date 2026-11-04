@@ -207,10 +207,11 @@ notes in `docs/releases/vX.Y.Z.md`:
    make release VERSION=vX.Y.Z
    ```
 
-   It checks the version, the notes, the branch, the working tree, that the
-   tag does not exist yet and that CI passed, then tags the commit, pushes the
-   tag and creates the GitHub release with the notes. It needs `gh`, logged
-   in.
+   It checks the version, the notes, the branch, that tracked files have no
+   uncommitted change (untracked files, such as an OpenSpec change not
+   archived yet, do not count), that the tag does not exist yet and that CI
+   passed, then tags the commit, pushes the tag and creates the GitHub
+   release with the notes. It needs `gh`, logged in.
 
 A pushed tag is never moved: once the Go module proxy has fetched it, its
 content is fixed. The release is then installed with

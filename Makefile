@@ -65,7 +65,7 @@ release:
 	@echo "$(VERSION)" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$$' || { echo "release: VERSION must look like v0.1.0"; exit 1; }
 	@test -f docs/releases/$(VERSION).md || { echo "release: docs/releases/$(VERSION).md is missing"; exit 1; }
 	@test "$$(git rev-parse --abbrev-ref HEAD)" = main || { echo "release: check out main"; exit 1; }
-	@test -z "$$(git status --porcelain)" || { echo "release: the working tree has changes"; exit 1; }
+	@test -z "$$(git status --porcelain --untracked-files=no)" || { echo "release: tracked files have uncommitted changes"; exit 1; }
 	git fetch -q origin main
 	@test "$$(git rev-parse HEAD)" = "$$(git rev-parse origin/main)" || { echo "release: main differs from origin/main"; exit 1; }
 	@test -z "$$(git tag -l $(VERSION))$$(git ls-remote --tags origin refs/tags/$(VERSION))" || { echo "release: $(VERSION) is already tagged"; exit 1; }
