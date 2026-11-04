@@ -6,6 +6,7 @@ package layout
 import (
 	"context"
 	"math/rand/v2"
+	"slices"
 	"testing"
 )
 
@@ -129,5 +130,124 @@ func TestSimplexCanceled(t *testing.T) {
 	edges := randomDAG(r, 200, 400)
 	if _, err := newSimplex(ctx, 200, edges, 30).solve(balanceNone); err == nil {
 		t.Skip("solved before the first context check")
+	}
+}
+
+// rebuildExchange exchanges f for e as exchange did before it updated the
+// tree in place: it moves the ranks, swaps the edges, and rebuilds the tree
+// and every cut value.
+func rebuildExchange(s *simplex, f, e int) {
+	fe := s.edges[f]
+	sub := fe.head
+	if s.parent[fe.tail] == f {
+		sub = fe.tail
+	}
+	delta := s.slack(e)
+	if !s.inSubtree(s.edges[e].tail, sub) {
+		delta = -delta
+	}
+	for v := range s.n {
+		if s.inSubtree(v, sub) {
+			s.rank[v] += delta
+		}
+	}
+	s.inTree[f] = false
+	s.inTree[e] = true
+	s.buildTree()
+	s.initCutValues()
+}
+
+// balance spreads the ranks as solve does after its last pivot.
+func balance(s *simplex, mode balanceMode) {
+	switch mode {
+	case balanceTopBottom:
+		s.normalize()
+		s.balanceTB()
+	case balanceLeftRight:
+		s.balanceLR()
+		s.normalize()
+	default:
+		s.normalize()
+	}
+}
+
+// TestSimplexExchangeMatchesRebuild steps two solvers through each problem,
+// one with exchange and one with rebuildExchange, and checks that they make
+// the same pivots and end with the same ranks.
+func TestSimplexExchangeMatchesRebuild(t *testing.T) {
+	ctx := context.Background()
+	r := rand.New(rand.NewPCG(5, 6))
+	pivots := 0
+	for trial := range 300 {
+		n := 2 + r.IntN(40)
+		edges := randomDAG(r, n, r.IntN(2*n))
+		if trial%2 == 1 {
+			// Edges of weight 0, as the edges that keep the neighbors in a
+			// rank apart have in the problem of x coordinates.
+			for i := range edges {
+				if r.IntN(3) == 0 {
+					edges[i].weight = 0
+				}
+			}
+		}
+		search := []int{30, 500, 0}[trial%3]
+		a := newSimplex(ctx, n, edges, search)
+		b := newSimplex(ctx, n, edges, search)
+		for _, s := range []*simplex{a, b} {
+			s.initRank()
+			s.feasibleTree()
+			s.initCutValues()
+		}
+		for pivot := 0; ; pivot++ {
+			f := a.leaveEdge()
+			if g := b.leaveEdge(); g != f {
+				t.Fatalf("trial %d, pivot %d: leaving edge %d, after a rebuild %d", trial, pivot, f, g)
+			}
+			if f < 0 {
+				break
+			}
+			e := a.enterEdge(f)
+			if g := b.enterEdge(f); g != e {
+				t.Fatalf("trial %d, pivot %d: entering edge %d, after a rebuild %d", trial, pivot, e, g)
+			}
+			if e < 0 {
+				break
+			}
+			a.exchange(f, e)
+			rebuildExchange(b, f, e)
+			pivots++
+			if !slices.Equal(a.rank, b.rank) || !slices.Equal(a.inTree, b.inTree) || !slices.Equal(a.parent, b.parent) {
+				t.Fatalf("trial %d, pivot %d: ranks, tree or parent edges differ from a rebuild", trial, pivot)
+			}
+			for ei := range edges {
+				if a.inTree[ei] && (a.cut[ei] != b.cut[ei] || a.cut[ei] != bruteCut(a, ei)) {
+					t.Fatalf("trial %d, pivot %d: cut value of edge %d is %d, after a rebuild %d, by definition %d", trial, pivot, ei, a.cut[ei], b.cut[ei], bruteCut(a, ei))
+				}
+			}
+			for u := range n {
+				for v := range n {
+					if a.inSubtree(u, v) != b.inSubtree(u, v) {
+						t.Fatalf("trial %d, pivot %d: whether node %d is in the subtree of node %d differs from a rebuild", trial, pivot, u, v)
+					}
+				}
+			}
+		}
+		final := slices.Clone(a.rank)
+		for _, mode := range []balanceMode{balanceNone, balanceTopBottom, balanceLeftRight} {
+			copy(a.rank, final)
+			copy(b.rank, final)
+			balance(a, mode)
+			balance(b, mode)
+			solved, err := newSimplex(ctx, n, edges, search).solve(mode)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if !slices.Equal(a.rank, b.rank) || !slices.Equal(solved, b.rank) {
+				t.Fatalf("trial %d, mode %d: ranks differ from a rebuild", trial, mode)
+			}
+		}
+	}
+	if pivots == 0 {
+		t.Fatal("no problem made a pivot")
 	}
 }

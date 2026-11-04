@@ -48,7 +48,7 @@ type simplex struct {
 	low     []int
 	lim     []int
 	cut     []int // cut value by edge
-	order   []int // nodes in postorder: leaves before their parents
+	order   []int // nodes of the initial tree in postorder, leaves before their parents; exchange does not keep it
 	ctx     context.Context
 	// search is how many tree edges with a negative cut value leaveEdge
 	// examines before it takes the most negative one found.
@@ -235,8 +235,12 @@ func (s *simplex) buildTree() {
 	s.parent = make([]int, s.n)
 	s.low = make([]int, s.n)
 	s.lim = make([]int, s.n)
-	s.order = s.order[:0]
 	s.postorder(0, -1, 1)
+	// The tree spans the graph, so the numbers are 1 to n.
+	s.order = make([]int, s.n)
+	for v, num := range s.lim {
+		s.order[num-1] = v
+	}
 }
 
 // postorder numbers the subtree of v: lim is v's number, low the smallest
@@ -255,8 +259,16 @@ func (s *simplex) postorder(v, parentEdge, next int) int {
 		}
 	}
 	s.lim[v] = next
-	s.order = append(s.order, v)
 	return next + 1
+}
+
+// above returns the node at the other end of v's parent edge.
+func (s *simplex) above(v int) int {
+	pe := s.edges[s.parent[v]]
+	if pe.tail == v {
+		return pe.head
+	}
+	return pe.tail
 }
 
 // inSubtree reports whether u is in the subtree rooted at v.
@@ -382,12 +394,20 @@ func (s *simplex) enterEdge(f int) int {
 }
 
 // exchange replaces the tree edge f by e, updates the ranks so that e is
-// tight, and recomputes the postorder numbers and the cut values.
+// tight, and updates the postorder numbers and the cut values. As section 2.4
+// describes, only the subtree of l, the least common ancestor of e's ends,
+// changes: the cycle that e closes runs through f below l, so l's subtree
+// keeps its nodes. Its numbers are redone, and the cut values of the cycle's
+// edges.
 func (s *simplex) exchange(f, e int) {
-	fe := s.edges[f]
+	fe, ee := s.edges[f], s.edges[e]
 	sub := fe.head
 	if s.parent[fe.tail] == f {
 		sub = fe.tail
+	}
+	l := ee.tail
+	for !s.inSubtree(ee.head, l) {
+		l = s.above(l)
 	}
 	// Move the component of sub so that e becomes tight.
 	delta := s.slack(e)
@@ -401,8 +421,19 @@ func (s *simplex) exchange(f, e int) {
 	}
 	s.inTree[f] = false
 	s.inTree[e] = true
-	s.buildTree()
-	s.initCutValues()
+	s.treeOut[fe.tail] = slices.DeleteFunc(s.treeOut[fe.tail], func(ei int) bool { return ei == f })
+	s.treeIn[fe.head] = slices.DeleteFunc(s.treeIn[fe.head], func(ei int) bool { return ei == f })
+	s.treeOut[ee.tail] = append(s.treeOut[ee.tail], e)
+	s.treeIn[ee.head] = append(s.treeIn[ee.head], e)
+	s.postorder(l, s.parent[l], s.low[l])
+	// In the new tree, the rest of the cycle runs from each end of f up to
+	// l. Along it, a node's child on the cycle comes before it, as localCut
+	// needs.
+	for _, end := range [2]int{fe.tail, fe.head} {
+		for v := end; v != l; v = s.above(v) {
+			s.cut[s.parent[v]] = s.localCut(v, s.parent[v])
+		}
+	}
 }
 
 func (s *simplex) normalize() {
