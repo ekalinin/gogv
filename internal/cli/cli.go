@@ -17,10 +17,6 @@ import (
 	"github.com/ekalinin/gogv"
 )
 
-// GraphvizVersion is the Graphviz version that -V names, so that programs
-// that read the Graphviz version from it find the reference's.
-const GraphvizVersion = "16.1.0"
-
 const usage = "Usage: dot [-V] [-T<format>] [-o<file>] [-Kdot] <dot files>"
 
 // Run runs the command with args, without the program name, and returns the
@@ -51,7 +47,7 @@ func Run(ctx context.Context, args []string, stdin io.Reader, stdout, stderr io.
 		}
 		switch flag {
 		case 'V':
-			fmt.Fprintf(stderr, "dot - graphviz version %s (gogv %s)\n", GraphvizVersion, version)
+			fmt.Fprintf(stderr, "dot - graphviz version %s (gogv %s)\n", gogv.GraphvizVersion, version)
 			return 0
 		case 'T':
 			format = value
