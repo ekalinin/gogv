@@ -3,7 +3,7 @@
 ## 1. Branch and inputs
 
 - [x] 1.1 Create the branch `chore/add-performance-check` from an up-to-date `main`, taking the untracked files of this change along. Verify that `git log main..HEAD` is empty and that `git status` shows `openspec/changes/add-performance-check/` among the untracked files.
-- [ ] 1.2 Add `testdata/bench/classes-60.gv`, `classes-100.gv` and `classes-150.gv`: the DOT that gopuml at #81 or later writes for the class diagrams of issue #29, with the generator and the `save-dot.sh` script of the issue (design D1). Verify that the files have 119, 199 and 299 edge statements, and that gogv's `dot -Tsvg` renders each with exit status 0 and no warnings.
+- [x] 1.2 Add `testdata/bench/classes-60.gv`, `classes-100.gv` and `classes-150.gv`: the DOT that gopuml at #81 or later writes for the class diagrams of issue #29, with the generator and the `save-dot.sh` script of the issue (design D1). Verify that the files have 119, 199 and 299 edge statements, and that gogv's `dot -Tsvg` renders each with exit status 0 and no warnings.
 
 ## 2. Benchmark
 
