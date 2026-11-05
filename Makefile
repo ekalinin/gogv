@@ -1,7 +1,7 @@
 GO ?= go
 REFERENCE_IMAGE ?= gogv-reference
 
-.PHONY: build test lint provenance reference-image reference harvest conformance determinism release
+.PHONY: build test lint provenance reference-image reference harvest conformance determinism perf release
 
 build:
 	$(GO) build ./...
@@ -56,6 +56,15 @@ determinism:
 	cmp .cache/tools/hash-native.txt .cache/tools/hash-amd64.txt
 	cmp .cache/tools/hash-native.txt .cache/tools/hash-wasm.txt
 	@tail -1 .cache/tools/hash-native.txt
+
+# Compares the speed of the working tree with BASE (make perf BASE=main), as
+# the performance job of CI does for a pull request: it fails when a benchmark
+# is significantly slower than BASE by more than THRESHOLD percent (default
+# 20), over COUNT rounds (default 10).
+BASE ?= main
+
+perf:
+	$(if $(COUNT),COUNT=$(COUNT)) $(if $(THRESHOLD),THRESHOLD=$(THRESHOLD)) tools/perf/compare.sh $(BASE)
 
 # Releases VERSION (make release VERSION=v0.1.0): tags the commit of main that
 # CI passed with an annotated tag, pushes the tag, and creates the GitHub
