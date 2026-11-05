@@ -101,3 +101,29 @@ jobs:
             echo "$f: $(tail -1 "$f")"
             cmp Linux-X64.txt "$f"
           done
+
+  performance:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # the base commit, for its worktree
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+          cache: false
+      - name: Speed against the base
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          status=0
+          tools/perf/compare.sh "$BASE_SHA" > perf.txt || status=$?
+          cat perf.txt
+          {
+            echo '```'
+            cat perf.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit "$status"
