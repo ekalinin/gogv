@@ -19,4 +19,4 @@
 ## 4. Verification
 
 - [x] 4.1 Verify that `make lint test provenance` passes and that `openspec validate add-performance-check --strict` passes.
-- [ ] 4.2 With the maintainer's go-ahead, commit, push the branch and open the pull request with the sections of the pull request template. Verify that the `performance` job runs on it, writes the benchstat table into its summary and passes, that the other jobs pass, and record in the pull request the job's duration and the spread (the `±` values) that benchstat reports for the three benchmarks. If a spread comes near the 20% of the threshold, report it to the maintainer before the merge (D5).
+- [x] 4.2 With the maintainer's go-ahead, commit, push the branch and open the pull request with the sections of the pull request template. Verify that the `performance` job runs on it, writes the benchstat table into its summary and passes, that the other jobs pass, and record in the pull request the job's duration and the spread (the `±` values) that benchstat reports for the three benchmarks. If a spread comes near the 20% of the threshold, report it to the maintainer before the merge (D5).
