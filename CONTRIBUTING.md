@@ -115,6 +115,16 @@ go generate ./internal/textmetrics  # fetch the Liberation fonts
 make conformance
 ```
 
+and compare its speed with `main`:
+
+```sh
+make perf
+```
+
+CI runs the same comparison on every pull request, against its base. A red
+`performance` job means that a benchmark is significantly slower than the
+base, by more than 20%.
+
 New cases in `testdata/conformance/cases` need their references, recorded
 from the reference with Docker:
 
