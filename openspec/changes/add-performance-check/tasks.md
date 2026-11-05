@@ -7,7 +7,7 @@
 
 ## 2. Benchmark
 
-- [ ] 2.1 Add `bench_test.go` at the repository root, in `package gogv_test`, with the SPDX line and `Provenance: original`: `BenchmarkRenderClasses` with the sub-benchmarks `60`, `100` and `150`, each reading its file of `testdata/bench` once and calling `gogv.Render(ctx, src, "svg")` in the loop, failing on an error, with `b.ReportAllocs` (D1). A comment says how the inputs were written. Verify that `go test -run '^$' -bench BenchmarkRenderClasses -benchtime 1x .` runs the three sub-benchmarks and reports `B/op` and `allocs/op`, and that `make lint test provenance` passes.
+- [x] 2.1 Add `bench_test.go` at the repository root, in `package gogv_test`, with the SPDX line and `Provenance: original`: `BenchmarkRenderClasses` with the sub-benchmarks `60`, `100` and `150`, each reading its file of `testdata/bench` once and calling `gogv.Render(ctx, src, "svg")` in the loop, failing on an error, with `b.ReportAllocs` (D1). A comment says how the inputs were written. Verify that `go test -run '^$' -bench BenchmarkRenderClasses -benchtime 1x .` runs the three sub-benchmarks and reports `B/op` and `allocs/op`, and that `make lint test provenance` passes.
 
 ## 3. Script, make target, CI job and CONTRIBUTING
 
