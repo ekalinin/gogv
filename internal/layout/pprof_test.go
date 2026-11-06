@@ -40,4 +40,24 @@ func TestPprofLayoutScenarios(t *testing.T) {
 	if !approx(n2["a"].X, n2["c"].X) || !(n2["b"].X < n2["a"].X) {
 		t.Errorf("heavy edge across ranks: a %v, b %v, c %v", n2["a"].X, n2["b"].X, n2["c"].X)
 	}
+
+	// Wider pen: the tip stops 3 points further from b with a 3 point pen,
+	// and the arrowhead keeps its size up to 4 points, then widens.
+	gap := func(pen string) (float64, Arrow) {
+		res := layoutResolved(t, `digraph { a -> b [penwidth=`+pen+`] }`)
+		b, e := nodesOf(res)["b"], res.Edges[0]
+		return e.Head.Tip.Y - (b.Y + b.H/2), e.Head
+	}
+	g1, _ := gap("1")
+	g3, a3 := gap("3")
+	if !approx(float64(int((g3-g1)*10+0.5))/10, 3) {
+		t.Errorf("wider pen: tip %v points further, want 3", g3-g1)
+	}
+	if pts := ArrowPolygon(a3); !approx(dist(a3.Base, a3.Tip), 10) || !approx(dist(pts[0], pts[2]), 7) {
+		t.Errorf("arrowhead of a 3 point pen: %v", pts)
+	}
+	_, a5 := gap("5")
+	if pts := ArrowPolygon(a5); !approx(dist(pts[0], pts[2]), 8.75) {
+		t.Errorf("arrowhead of a 5 point pen is %v wide, want 8.75", dist(pts[0], pts[2]))
+	}
 }

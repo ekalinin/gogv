@@ -85,8 +85,10 @@ type EdgeResult struct {
 
 // Arrow is an arrowhead.
 type Arrow struct {
-	Shape     string
-	Size      float64
+	Shape string
+	Size  float64
+	// PenWidth is the width of the pen of the edge.
+	PenWidth  float64
 	Base, Tip Point
 }
 

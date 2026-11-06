@@ -495,10 +495,17 @@ func reverseCurve(pts []Point) []Point {
 // arrowAtEnd shortens a curve for an arrowhead at its end: the tip is
 // arrowMiter before the end along the curve, the base length further, and
 // the curve stops at the base. It returns the shortened curve and the arrow.
-func arrowAtEnd(segs [][4]Point, shape string, size float64) ([][4]Point, Arrow) {
+func arrowAtEnd(segs [][4]Point, shape string, size, penWidth float64) ([][4]Point, Arrow) {
 	end := segs[len(segs)-1][3]
 	length := float64(arrowLength * size)
 	reach := length + arrowMiter
+	if penWidth != 1 {
+		// The stroked tip of a wider pen reaches further: the miter of half
+		// the pen over the sine of the half angle of the arrowhead, which
+		// widens above 4 points.
+		hw := float64(arrowHalfWidth * size * max(1, penWidth/4))
+		reach = length + float64(half(penWidth)*hypot(length, hw))/hw
+	}
 	// The last point of the curve at least reach away from its end.
 	for i := len(segs) - 1; i >= 0; i-- {
 		s := segs[i]
@@ -520,13 +527,13 @@ func arrowAtEnd(segs [][4]Point, shape string, size float64) ([][4]Point, Arrow)
 		left, _ := splitCubic(s, t0)
 		base := left[3]
 		tip := add(base, scale(normalize(sub(end, base)), length))
-		return append(slices.Clone(segs[:i]), left), Arrow{Shape: shape, Size: size, Base: base, Tip: tip}
+		return append(slices.Clone(segs[:i]), left), Arrow{Shape: shape, Size: size, PenWidth: penWidth, Base: base, Tip: tip}
 	}
 	// The curve is shorter than the arrow: draw the arrow over it.
 	start := segs[0][0]
 	tip := end
 	base := sub(tip, scale(normalize(sub(end, start)), length))
-	return nil, Arrow{Shape: shape, Size: size, Base: base, Tip: tip}
+	return nil, Arrow{Shape: shape, Size: size, PenWidth: penWidth, Base: base, Tip: tip}
 }
 
 // ArrowPolygon returns the outline of an arrowhead: the two corners of its
@@ -535,6 +542,10 @@ func ArrowPolygon(a Arrow) []Point {
 	dir := normalize(sub(a.Tip, a.Base))
 	perp := Point{-dir.Y, dir.X}
 	hw := arrowHalfWidth * a.Size
+	if a.PenWidth > 4 {
+		// The arrowhead of a pen wider than 4 points widens with it.
+		hw = float64(hw * a.PenWidth / 4)
+	}
 	return []Point{add(a.Base, scale(perp, hw)), a.Tip, sub(a.Base, scale(perp, hw))}
 }
 
@@ -697,11 +708,11 @@ func (r *router) routeEdges(g *graph.Graph, ends [][2]int, chains [][]int, polyl
 			res.middle = curveMiddle(segs)
 		}
 		if a.head != "" && len(segs) > 0 {
-			segs, res.Head = arrowAtEnd(segs, a.head, a.size)
+			segs, res.Head = arrowAtEnd(segs, a.head, a.size, a.penWidth)
 		}
 		if a.tail != "" && len(segs) > 0 {
 			rev := segments(reverseCurve(join(segs)))
-			rev, res.Tail = arrowAtEnd(rev, a.tail, a.size)
+			rev, res.Tail = arrowAtEnd(rev, a.tail, a.size, a.penWidth)
 			segs = segments(reverseCurve(join(rev)))
 		}
 		res.Points = join(segs)

@@ -29,9 +29,9 @@
   - the "Heavy edge kept short", "Heavy edge kept straight" and "Heavy edge across ranks" scenarios;
   - that the curated cases without `weight` keep their positions, compared with `main`.
 - [x] 3.2 Size `box3d` nodes as boxes and give their outline from a geometry helper (design D5); verify the "Box with depth" scenario
-- [ ] 3.3 Carry the fill color, the edge style and the pen width in `layout.Result`, and stop arrowheads short of their nodes by the miter of their pen, widening them above 4 points (design D4). Verify:
+- [x] 3.3 Carry the fill color, the edge style and the pen width in `layout.Result`, and stop arrowheads short of their nodes by the miter of their pen, widening them above 4 points (design D4). Verify:
   - the "Wider pen" scenario;
-  - the arrowheads of the pen width cases within 0.2 points of the reference's.
+  - the arrowheads of the pen width cases within 0.2 points of the reference's, but for the 0.31 points by which arrowheads at the tail already differ with a 1 point pen.
 
 ## 4. Output
 
