@@ -72,7 +72,7 @@
 
 ## 7. Checks and publication
 
-- [ ] 7.1 Run the checks, with `node` installed:
+- [x] 7.1 Run the checks, with `node` installed:
   - `make lint`;
   - `go test -race ./...`;
   - `go run ./tools/provenance`;
