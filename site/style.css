@@ -387,8 +387,13 @@ main > section {
   color: var(--ink-2);
 }
 
+/* Three columns are narrow for code, so it wraps instead of scrolling,
+   which would hide the end of its lines. */
 .ways pre {
   margin: 0;
+  font-size: 0.82rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 /* Output formats and sources */

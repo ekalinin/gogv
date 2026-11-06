@@ -92,7 +92,8 @@
     <article>
       <h3>Go library</h3>
       <p><code>gogv.Render</code> writes the bytes that <code>dot -T&lt;format&gt;</code> writes, and returns the warnings and a <code>*gogv.SyntaxError</code> with its line. It is safe for concurrent use.</p>
-      <pre><code>out, warnings, err := gogv.Render(ctx, src, "svg")</code></pre>
+      <pre><code>out, warnings, err :=
+	gogv.Render(ctx, src, "svg")</code></pre>
     </article>
     <article>
       <h3>Command line</h3>
