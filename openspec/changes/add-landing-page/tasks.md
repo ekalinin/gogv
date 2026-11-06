@@ -9,7 +9,7 @@
 
 ## 2. Page
 
-- [ ] 2.1 Write `site/index.html` and `site/style.css` (design D1, D2):
+- [x] 2.1 Write `site/index.html` and `site/style.css` (design D1, D2):
   - the sections of the "Project presentation" requirement;
   - the `gogv-release` meta tag, the installation at `v0.3.0` with the line of `dot -V`, and the conformance results of `docs/releases/v0.3.0.md`;
   - the example of `docs/example.gv`, inline, and `example.svg`;
@@ -39,7 +39,7 @@
 
 ## 4. Playground in the browser
 
-- [ ] 4.1 Write `site/page.mjs` (design D6): the lazy loading, the loading and failure messages, the rendering 300 ms after the last edit, the SVG in an `<img>` from a `blob:` URL, the warnings, the error, the example selector, the version and the download link. Verify by hand in a browser, on the output of `make site` served with `python3 -m http.server -d .cache/site`:
+- [x] 4.1 Write `site/page.mjs` (design D6): the lazy loading, the loading and failure messages, the rendering 300 ms after the last edit, the SVG in an `<img>` from a `blob:` URL, the warnings, the error, the example selector, the version and the download link. Verify by hand in a browser, on the output of `make site` served with `python3 -m http.server -d .cache/site`:
   - the network panel shows no WebAssembly request before the playground is reached;
   - the result follows the edits;
   - `shape=record` shows its warning;
