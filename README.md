@@ -41,12 +41,15 @@ gogv supports:
 - the whole DOT grammar, read as the reference reads it
 - the layout of graphs without compass points and HTML-like labels other
   than table labels:
-  shapes `rect`, `box`, `rectangle`, `plaintext`, `point`, `ellipse`, `oval`,
-  `circle`, `diamond`, `hexagon`, `octagon`, and `style=rounded` on `rect`;
-  plain-text labels; `width`, `height`, `fontname`, `fontsize`, and `color`
-  and `fontcolor` written `#rrggbb`; `minlen`,
-  `constraint`, `style=invis`, `arrowhead` and `arrowtail` (`normal`, `empty`,
-  `none`), `dir`, `arrowsize`; `nodesep`, `ranksep`, `rankdir=LR`,
+  shapes `rect`, `box`, `rectangle`, `box3d`, `plaintext`, `point`,
+  `ellipse`, `oval`, `circle`, `diamond`, `hexagon`, `octagon`,
+  `style=filled`, and `style=rounded` on `rect`, and lists of styles such as
+  `filled,rounded`; plain-text labels; `width`, `height`, `fontname`,
+  `fontsize`, and `color`, `fillcolor` and `fontcolor` written `#rrggbb`;
+  `tooltip` and `id` on nodes; `minlen`, `weight`, `penwidth`,
+  `constraint`, `style=invis`, `style=dotted`, `arrowhead` and `arrowtail`
+  (`normal`, `empty`, `none`), `dir`, `arrowsize`, `tooltip` and
+  `labeltooltip` on edges; `nodesep`, `ranksep`, `rankdir=LR`,
   `splines=spline|polyline`, a graph label placed by `labeljust`
 - clusters, nested, with a plain-text label placed by `labeljust` (`c`, `l`,
   `r`), `style=solid` and `color`; `rank=same|min|max|source|sink` on
@@ -68,12 +71,12 @@ gogv supports:
 
 Not supported yet, among others:
 
-- color names such as `red` (colors are written `#rrggbb`), `fillcolor`,
-  `bgcolor`, `penwidth`
-- styles other than `solid`, `invis` on edges and `rounded` on `rect`, such
-  as `filled` and `dashed`
-- other shapes, such as `record`, `Mrecord` and `box3d`, and other arrow
-  types, such as `vee`
+- color names such as `red` (colors are written `#rrggbb`), `bgcolor`,
+  `penwidth` on nodes and clusters
+- styles other than `solid`, `filled` and `rounded` on nodes and `invis` and
+  `dotted` on edges, such as `dashed` and `bold`; `peripheries`
+- other shapes, such as `record` and `Mrecord`, and other arrow types, such
+  as `vee`
 - `rankdir=BT` and `rankdir=RL`; `splines` other than `spline` and
   `polyline`, such as `ortho`
 - compass points (`a:n -> b`), `compound` with `lhead` and `ltail`,
@@ -82,7 +85,8 @@ Not supported yet, among others:
   markup such as `<B>` and `<FONT>`
 - fonts other than the Times, Helvetica and Courier families (including
   Times New Roman, Arial and Courier New), which are measured as Times
-- `URL`, `href`, `tooltip` and images
+- `URL`, `href`, `target`, `tooltip` on graphs and clusters, `id` on
+  edges, graphs and clusters, and images
 - the other layout engines (`-Kneato`, `-Kfdp`, ...) and the other output
   formats, such as `png`, `pdf` and `cmapx`
 

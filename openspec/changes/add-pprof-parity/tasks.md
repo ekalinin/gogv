@@ -47,7 +47,7 @@
   - `make conformance` reports no failed case;
   - the pprof cases are judged, none of them reported as not supported yet;
   - no other case changes its outcome.
-- [ ] 5.2 Check pprof end to end with gogv installed as `dot`. Verify:
+- [x] 5.2 Check pprof end to end with gogv installed as `dot`. Verify:
   - `go tool pprof -svg` writes the graph without a warning;
   - the Graph view of `go tool pprof -http` finds the groups `node<N>` with a `polygon` to highlight, fetched from its page.
 - [ ] 5.3 Check determinism and hygiene. Verify that these pass:
@@ -57,4 +57,4 @@
   - `make lint`;
   - `make determinism`;
   - `make perf`, with no benchmark significantly slower than `main`.
-- [ ] 5.4 Update the Status and "Not supported yet" lists of `README.md`; verify they name the newly supported attributes and values, and still list `dashed`, `bold`, `peripheries` and `URL` as not supported yet
+- [x] 5.4 Update the Status and "Not supported yet" lists of `README.md`; verify they name the newly supported attributes and values, and still list `dashed`, `bold`, `peripheries` and `URL` as not supported yet
