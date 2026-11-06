@@ -6,9 +6,11 @@
 package output
 
 import (
+	"cmp"
 	"strconv"
 	"strings"
 
+	"github.com/ekalinin/gogv/internal/attrs"
 	"github.com/ekalinin/gogv/internal/graph"
 	"github.com/ekalinin/gogv/internal/label"
 	"github.com/ekalinin/gogv/internal/layout"
@@ -49,8 +51,11 @@ func text(s string) string { return strconv.Itoa(len(s)) + " -" + strings.Replac
 
 // xdotColor writes a color as the drawing operations do.
 func xdotColor(c string) string {
-	if c == "" || c == "black" {
+	switch c {
+	case "", "black":
 		return "#000000"
+	case "lightgrey":
+		return "#d3d3d3"
 	}
 	return strings.ToLower(c)
 }
@@ -120,6 +125,27 @@ func solid(d *xdraw, v graph.Value) {
 	}
 }
 
+// lineStyles writes the line styles that an object sets explicitly, solid
+// and dotted, in the order of its style list, as the reference writes them
+// before the object's outline.
+func lineStyles(d *xdraw, k graph.Kind, v graph.Value) {
+	if v.S == "" || !attrs.IsSupported(k, "style", v.S) {
+		return
+	}
+	for _, st := range attrs.Styles(v.S) {
+		if st == "solid" || st == "dotted" {
+			d.style(st)
+		}
+	}
+}
+
+// penWidth writes the width of a pen other than 1 point.
+func (d *xdraw) penWidth(w float64) {
+	if w != 1 {
+		d.style("setlinewidth(" + svgNumber(w) + ")")
+	}
+}
+
 // setDrawAttrs sets the drawing operations of the graph, its clusters, nodes
 // and edges as attributes, and xdotversion on the graph.
 func setDrawAttrs(res *layout.Result, version string) {
@@ -160,33 +186,59 @@ func setDrawAttrs(res *layout.Result, version string) {
 		n := &res.Nodes[i]
 		d := newXdraw()
 		v, _ := n.Node.Attr(g, "style")
+		// A filled outline sets its fill color and uses the filled
+		// operation, written in upper case but for a Bezier curve.
+		filled := func(op string) string {
+			if !n.Filled {
+				return op
+			}
+			d.fill(n.Fill())
+			if op == "B" {
+				return "b"
+			}
+			return strings.ToUpper(op)
+		}
+		vertices := func() []layout.Point {
+			var pts []layout.Point
+			for _, p := range layout.PolygonVertices(n.Shape, n.W, n.H) {
+				pts = append(pts, layout.Point{X: n.X + p.X, Y: n.Y + p.Y})
+			}
+			return pts
+		}
 		switch n.Shape {
 		case "plaintext":
+			// Filled, a polygon with a transparent pen.
+			if n.Filled {
+				d.op("c", text("#fffffe00"))
+				d.points(filled("p"), vertices())
+			}
 		case "ellipse", "oval", "circle":
-			solid(d, v)
+			lineStyles(d, graph.NodeKind, v)
 			d.pen(n.Color)
-			d.op("e", svgNumber(n.X), svgNumber(n.Y), svgNumber(n.W/2), svgNumber(n.H/2))
+			d.op(filled("e"), svgNumber(n.X), svgNumber(n.Y), svgNumber(n.W/2), svgNumber(n.H/2))
 		case "point":
-			solid(d, v)
+			lineStyles(d, graph.NodeKind, v)
 			d.pen(n.Color)
-			d.fill(n.Color)
+			d.fill(cmp.Or(n.FillColor, n.Color))
 			d.op("E", svgNumber(n.X), svgNumber(n.Y), svgNumber(n.W/2), svgNumber(n.H/2))
 		default:
-			solid(d, v)
+			lineStyles(d, graph.NodeKind, v)
 			d.pen(n.Color)
 			if n.Rounded {
 				var pts []layout.Point
 				for _, p := range layout.RoundedOutline(n.W, n.H) {
 					pts = append(pts, layout.Point{X: n.X + p.X, Y: n.Y + p.Y})
 				}
-				d.points("B", pts)
+				d.points(filled("B"), pts)
 				break
 			}
-			var pts []layout.Point
-			for _, p := range layout.PolygonVertices(n.Shape, n.W, n.H) {
-				pts = append(pts, layout.Point{X: n.X + p.X, Y: n.Y + p.Y})
+			d.points(filled("p"), vertices())
+			if n.Shape == "box3d" {
+				for _, l := range layout.Box3DLines(n.W, n.H) {
+					d.pen(n.Color)
+					d.points("L", []layout.Point{{X: n.X + l[0].X, Y: n.Y + l[0].Y}, {X: n.X + l[1].X, Y: n.Y + l[1].Y}})
+				}
 			}
-			d.points("p", pts)
 		}
 		set(d, func(s string) { g.SetNodeAttr(n.Node, "_draw_", graph.Str(s)) })
 		l := newXdraw()
@@ -210,7 +262,8 @@ func setDrawAttrs(res *layout.Result, version string) {
 		d := newXdraw()
 		if len(e.Points) > 0 {
 			v, _ := e.Edge.Attr(g, "style")
-			solid(d, v)
+			d.penWidth(e.PenWidth)
+			lineStyles(d, graph.EdgeKind, v)
 			d.pen(e.Color)
 			d.points("B", e.Points)
 		}
@@ -223,6 +276,7 @@ func setDrawAttrs(res *layout.Result, version string) {
 				continue
 			}
 			d := newXdraw()
+			d.penWidth(e.PenWidth)
 			d.style("solid")
 			d.pen(e.Color)
 			op := "P"

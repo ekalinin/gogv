@@ -33,10 +33,7 @@ func writePlain(res *layout.Result, ports bool) []byte {
 	var b bytes.Buffer
 	b.WriteString("graph 1 " + in(res.Width) + " " + in(res.Height) + "\n")
 	for _, n := range res.Nodes {
-		fill := "lightgrey"
-		if n.ColorSet {
-			fill = n.Color
-		}
+		fill := n.Fill()
 		b.WriteString("node " + quoteID(n.Node.Name, false) + " " + in(n.X) + " " + in(n.Y) + " " + in(n.W) + " " + in(n.H) +
 			" " + quoteID(n.LabelText, n.Label.Table != nil) + " " + n.Style + " " + n.Shape + " " + n.Color + " " + fill + "\n")
 	}
@@ -53,11 +50,7 @@ func writePlain(res *layout.Result, ports bool) []byte {
 			}
 			b.WriteString(" " + quoteID(text, false) + " " + in(e.LabelPos.X) + " " + in(e.LabelPos.Y))
 		}
-		style := "solid"
-		if e.Invisible {
-			style = "invis"
-		}
-		b.WriteString(" " + style + " " + e.Color + "\n")
+		b.WriteString(" " + e.Style + " " + e.Color + "\n")
 	}
 	b.WriteString("stop\n")
 	return b.Bytes()

@@ -5,6 +5,7 @@ package attrs
 
 import (
 	"regexp"
+	"slices"
 	"strings"
 
 	"github.com/ekalinin/gogv/internal/graph"
@@ -40,7 +41,7 @@ func (w Warning) String() string {
 
 // shortValue matches values printed in a warning with their attribute;
 // other values (free text) are left out.
-var shortValue = regexp.MustCompile(`^[A-Za-z0-9_.#:+-]{1,40}$`)
+var shortValue = regexp.MustCompile(`^[A-Za-z0-9_.#:+,-]{1,40}$`)
 
 func feature(name, value string) string {
 	if shortValue.MatchString(value) {
@@ -117,7 +118,7 @@ func Check(g *graph.Graph) []Warning {
 		// Rounded corners are drawn on rectangles only.
 		style, _ := n.Attr(root, "style")
 		shape, _ := n.Attr(root, "shape")
-		if style.S == "rounded" && (shape.S == "diamond" || shape.S == "hexagon" || shape.S == "octagon") {
+		if slices.Contains(Styles(style.S), "rounded") && (shape.S == "diamond" || shape.S == "hexagon" || shape.S == "octagon") {
 			c.add(Warning{Object: NodeName(n), Feature: "style=rounded with shape=" + shape.S, Default: "solid"})
 		}
 	}

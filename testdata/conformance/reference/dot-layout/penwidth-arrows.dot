@@ -1,0 +1,23 @@
+digraph {
+	graph [bb="0,0,126,108"];
+	node [label="\N"];
+	a	[height=0.5,
+		pos="27,90",
+		width=0.75];
+	b	[height=0.5,
+		pos="27,18",
+		width=0.75];
+	a -> b	[arrowtail=empty,
+		dir=both,
+		penwidth=4,
+		pos="s,27,71.697 e,27,36.104 27,55.917 27,54.631 27,53.341 27,52.055"];
+	c	[height=0.5,
+		pos="99,90",
+		width=0.75];
+	d	[height=0.5,
+		pos="99,18",
+		width=0.75];
+	c -> d	[arrowsize=2,
+		penwidth=6,
+		pos="e,99,36.104 99,71.697 99,68.815 99,65.715 99,62.515"];
+}

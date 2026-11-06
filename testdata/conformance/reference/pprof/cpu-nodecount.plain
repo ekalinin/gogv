@@ -1,0 +1,27 @@
+graph 1 8.1528 16.6
+node "File: workload" 3.0833 15.257 5.7155 2.2417 "File: workload\lType: cpu\lTime: 2026-11-06 11:32:22 MSK\lDuration: 1.01s, Total samples = 770ms (76.36%)\lShowing nodes accounting \
+for 150ms, 19.48% of 770ms total\lShowing top 9 nodes out of 99\l\lSee https://git.io/JfYMW for how to read the graph\l" filled box black #f8f8f8
+node N1 6.7778 15.257 1.1666 0.51111 "runtime\nmain\n0 of 620ms (80.52%)" filled box #b20b00 #edd6d5
+node N2 6.7778 13.081 1.1666 0.64444 "main\nmain\nfunc4\n0 of 620ms (80.52%)" filled box #b20b00 #edd6d5
+node N3 5.5833 2.0889 2.8052 1.7111 "runtime\npcvalue\n130ms (16.88%)\nof 210ms (27.27%)" filled box #b23900 #edddd5
+node N3_0 5.5833 0.25 0.75 0.5 "work:string" filled box3d black #f8f8f8
+node N4 6.7778 9.2806 1.1666 0.51111 "runtime\nprofilealloc\n0 of 490ms (63.64%)" filled box #b21600 #edd8d5
+node N5 6.7778 5.2472 1.8366 1.1111 "runtime\ntracebackPCs\n20ms (2.60%)\nof 330ms (42.86%)" filled box #b22800 #eddad5
+node N5_0 6.7778 3.7083 0.75 0.5 "work:hash" filled box3d black #f8f8f8
+node N5_1 7.7778 3.7083 0.75 0.5 "work:string" filled box3d black #f8f8f8
+node N6 6.7778 11.769 1.1666 0.51111 "main\nstringLoop\n0 of 460ms (59.74%)" filled box #b21900 #edd8d5
+node N7 6.7778 8.0361 1.1666 0.51111 "runtime\nmProf_Malloc\n0 of 490ms (63.64%)" filled box #b21600 #edd8d5
+node N8 6.7778 10.525 1.1666 0.51111 "runtime\nmallocgc\n0 of 400ms (51.95%)" filled box #b21f00 #edd9d5
+node N9 6.7778 6.7917 1.1666 0.51111 "runtime\nsystemstack\n0 of 580ms (75.32%)" filled box #b20e00 #edd7d5
+edge N1 N2 4 6.7778 14.997 6.7778 14.665 6.7778 14.068 6.7778 13.631 " 620ms" 7.0614 13.769 dotted #b20b00
+edge N2 N6 4 6.7778 12.756 6.7778 12.598 6.7778 12.403 6.7778 12.229 " 460ms" 7.0614 12.392 dotted #b21900
+edge N3 N3_0 4 5.5833 1.2278 5.5833 1.0289 5.5833 0.8263 5.5833 0.65848 " 210ms" 5.8669 0.86667 solid black
+edge N4 N7 4 6.7778 9.0205 6.7778 8.8753 6.7778 8.687 6.7778 8.5149 " 490ms" 7.0614 8.6583 solid #b21600
+edge N5 N3 7 6.192 4.6883 6.0048 4.4792 5.8184 4.2261 5.7106 3.9583 5.6067 3.7003 5.5584 3.4059 5.5399 3.1287 " 210ms" 5.9942 3.7083 dotted #b23900
+edge N5 N5_0 4 6.7778 4.6878 6.7778 4.4994 6.7778 4.2922 6.7778 4.1181 " 10ms" 7.0128 4.325 solid black
+edge N5 N5_1 7 7.1417 4.6886 7.1967 4.6059 7.2527 4.5216 7.3056 4.4417 7.3797 4.3295 7.4601 4.2073 7.5332 4.096 " 10ms" 7.6838 4.325 solid black
+edge N6 N8 4 6.7778 11.509 6.7778 11.359 6.7778 11.163 6.7778 10.986 " 400ms" 7.0614 11.147 dotted #b21f00
+edge N7 N9 4 6.7778 7.776 6.7778 7.6309 6.7778 7.4425 6.7778 7.2704 " 490ms" 7.0614 7.4139 dotted #b21600
+edge N8 N4 4 6.7778 10.265 6.7778 10.115 6.7778 9.9185 6.7778 9.7418 " 400ms" 7.0614 9.9028 dotted #b21f00
+edge N9 N5 4 6.7778 6.5341 6.7778 6.3887 6.7778 6.1954 6.7778 6.0036 " 330ms" 7.0614 6.1694 dotted #b22800
+stop

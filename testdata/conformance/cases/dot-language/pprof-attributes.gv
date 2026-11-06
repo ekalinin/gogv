@@ -1,0 +1,1 @@
+digraph { node [style=filled fillcolor="#f8f8f8"]; N1 [label="main" id="node1" shape=box tooltip="main (10ms)" color="#b20e00" fillcolor="#edd7d5"]; N1_0 [label="work:hash" id="N1_0" shape=box3d tooltip="10ms"]; N1 -> N1_0 [label=" 10ms" weight=100 penwidth=2 tooltip="10ms" labeltooltip="10ms"]; N1_0 -> N1 [weight=2 style="dotted"] }

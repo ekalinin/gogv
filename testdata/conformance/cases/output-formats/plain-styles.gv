@@ -1,0 +1,1 @@
+digraph { a [style=filled, fillcolor="#00FF00"]; a -> b [style=dotted] }

@@ -220,3 +220,49 @@ func TestPlainExtAndInlineSVG(t *testing.T) {
 		t.Errorf("svg_inline differs from svg beyond its prolog:\n%s", inline)
 	}
 }
+
+// TestSVGPprofDrawing checks the drawing scenarios of the pprof parity
+// change: fills, box3d, dotted edges and wider pens.
+func TestSVGPprofDrawing(t *testing.T) {
+	svg := render(t, `digraph { a [style=filled]; b [style=filled, color="#FF0000"]; c [fillcolor="#00FF00"]; d [shape=box, style=filled, fillcolor="#0000FF"]; f [shape=plaintext, style=filled, fillcolor="#00FF00"] }`, SVG)
+	for _, want := range []string{`<ellipse fill="lightgrey" stroke="black"`, `<ellipse fill="#ff0000" stroke="#ff0000"`, `<ellipse fill="none" stroke="black"`, `<polygon fill="#0000ff" stroke="black"`, `<polygon fill="#00ff00" stroke="none"`} {
+		if !strings.Contains(svg, want) {
+			t.Errorf("filled nodes: no %s in\n%s", want, svg)
+		}
+	}
+	svg = render(t, `digraph { a [shape=box3d] }`, SVG)
+	if !regexp.MustCompile(`<polygon fill="none" stroke="black" points="([-\d.]+,[-\d.]+ ){6}[-\d.]+,[-\d.]+"/>\n(<polyline fill="none" stroke="black" points="[^"]+"/>\n){3}`).MatchString(svg) {
+		t.Errorf("box with depth:\n%s", svg)
+	}
+	svg = render(t, `digraph { a -> b [style=dotted]; c -> d [penwidth=3] }`, SVG)
+	for _, re := range []string{
+		`<path fill="none" stroke="black" stroke-dasharray="1,5" d="[^"]+"/>\n<polygon fill="black" stroke="black" points=`,
+		`<path fill="none" stroke="black" stroke-width="3" d="[^"]+"/>\n<polygon fill="black" stroke="black" stroke-width="3" points=`,
+	} {
+		if !regexp.MustCompile(re).MatchString(svg) {
+			t.Errorf("dotted and wide edges: no %s in\n%s", re, svg)
+		}
+	}
+}
+
+// TestSVGPprofStructure checks the ids, the tooltips and the order of the
+// groups that the pprof parity change brings.
+func TestSVGPprofStructure(t *testing.T) {
+	svg := render(t, `digraph { N1 [id="node1"]; N1_0 [id="N1_0", tooltip="10ms", shape=box3d]; N1 -> N1_0 [tooltip="10ms", labeltooltip="10ms", label=" 10ms"] }`, SVG)
+	for _, re := range []string{
+		`<g id="N1_0" class="node">\n<title>N1_0</title>\n<g id="a_N1_0"><a xlink:title="10ms">\n<polygon [^\n]*\n(<polyline [^\n]*\n){3}<text [^\n]*\n</a>\n</g>\n</g>`,
+		`<g id="edge1" class="edge">\n<title>N1&#45;&gt;N1_0</title>\n<g id="a_edge1"><a xlink:title="10ms">\n<path [^\n]*\n<polygon [^\n]*\n</a>\n</g>\n<g id="a_edge1&#45;label"><a xlink:title="10ms">\n<text [^\n]*\n</a>\n</g>\n</g>`,
+	} {
+		if !regexp.MustCompile(re).MatchString(svg) {
+			t.Errorf("tooltips and ids: no %s in\n%s", re, svg)
+		}
+	}
+	svg = render(t, `digraph { a -> c; b -> a; a -> b }`, SVG)
+	var order []string
+	for _, m := range regexp.MustCompile(`<g id="([^"]+)" class="(?:node|edge)">\n<title>([^<]+)</title>`).FindAllStringSubmatch(svg, -1) {
+		order = append(order, m[1]+":"+strings.ReplaceAll(m[2], "&#45;&gt;", "->"))
+	}
+	if got := strings.Join(order, " "); got != "node1:a node2:c edge1:a->c node3:b edge3:a->b edge2:b->a" {
+		t.Errorf("edge groups in edge order: %s", got)
+	}
+}

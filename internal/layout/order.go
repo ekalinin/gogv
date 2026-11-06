@@ -32,6 +32,8 @@ type rnode struct {
 type redge struct {
 	upper, lower int
 	count        int
+	// weight is the sum of the weights of the edges it stands for.
+	weight int
 	// upperPort and lowerPort are how far the ends of an edge with ports
 	// lie from the centers of their nodes along the rank; upperAt and
 	// lowerAt are the same as fractions of the nodes' widths, which place
@@ -52,6 +54,8 @@ type flatEdge struct {
 	left, right         int
 	edge                int
 	leftPort, rightPort float64
+	// weight is the weight of the edge.
+	weight int
 }
 
 // ranked is the graph that the order and the positions work on.
@@ -90,16 +94,24 @@ type chainKey struct{ upper, lower int }
 // and the chains of the edges: chains[i] lists the ranked nodes of edge i
 // from its upper to its lower end (nil for loops and flat edges). Edge i
 // has a chain of its own when own[i] is set, as a labeled edge does, and
-// shares it with the edges between the same nodes otherwise.
-func buildRanked(rank []int, edges [][2]int, own []bool) (*ranked, [][]int) {
+// shares it with the edges between the same nodes otherwise. weights holds
+// the weight of each edge, or is nil when every edge weighs 1.
+func buildRanked(rank []int, edges [][2]int, own []bool, weights []int) (*ranked, [][]int) {
 	g := &ranked{}
 	for v, r := range rank {
 		g.nodes = append(g.nodes, rnode{real: v, rank: r})
+	}
+	weightOf := func(i int) int {
+		if weights == nil {
+			return 1
+		}
+		return weights[i]
 	}
 	chains := make([][]int, len(edges))
 	shared := map[chainKey][]int{}
 	var sharedOrder []chainKey
 	count := map[chainKey]int{}
+	weight := map[chainKey]int{}
 	// Edges are taken by tail, then by head, in node order, then in edge
 	// order, as the reference builds them: a reversed edge gets its chain
 	// with its tail.
@@ -120,7 +132,7 @@ func buildRanked(rank []int, edges [][2]int, own []bool) (*ranked, [][]int) {
 			continue
 		}
 		if rank[t] == rank[h] {
-			g.flats = append(g.flats, flatEdge{left: t, right: h, edge: i})
+			g.flats = append(g.flats, flatEdge{left: t, right: h, edge: i, weight: weightOf(i)})
 			fi := len(g.flats) - 1
 			g.nodes[t].flat = append(g.nodes[t].flat, fi)
 			g.nodes[h].flat = append(g.nodes[h].flat, fi)
@@ -135,6 +147,7 @@ func buildRanked(rank []int, edges [][2]int, own []bool) (*ranked, [][]int) {
 			// A chain of its own: a key that no other edge has.
 			k = chainKey{upper, -1 - i}
 		}
+		weight[k] += weightOf(i)
 		if c, ok := shared[k]; ok {
 			chains[i] = c
 			count[k]++
@@ -155,6 +168,7 @@ func buildRanked(rank []int, edges [][2]int, own []bool) (*ranked, [][]int) {
 		chain := shared[k]
 		for j := 0; j+1 < len(chain); j++ {
 			g.addEdge(chain[j], chain[j+1], count[k])
+			g.edges[len(g.edges)-1].weight = weight[k]
 		}
 		for _, v := range chain[1 : len(chain)-1] {
 			g.nodes[v].count = count[k]

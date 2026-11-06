@@ -107,7 +107,7 @@ var opFieldOrder = map[string][]string{
 	"F": {"op", "size", "face"},
 	"T": {"op", "pt", "align", "width", "text"},
 	"t": {"op", "fontchar"},
-	"P": {"op", "points"}, "p": {"op", "points"}, "L": {"op", "points"}, "b": {"op", "points"},
+	"P": {"op", "points"}, "p": {"op", "points"}, "L": {"op", "points"}, "b": {"op", "points"}, "B": {"op", "points"},
 	"E": {"op", "rect"}, "e": {"op", "rect"},
 }
 
@@ -195,9 +195,12 @@ func jsonOps(s string) []map[string]string {
 				pts[i] = point()
 			}
 			o["points"] = "[" + strings.Join(pts, ",") + "]"
-			if op == "B" {
-				// The reference names a Bezier curve b in JSON.
+			// The reference swaps the case of the Bezier curves in JSON.
+			switch op {
+			case "B":
 				op = "b"
+			case "b":
+				op = "B"
 			}
 		case "E", "e":
 			o["rect"] = "[" + jsonNumber(num()) + "," + jsonNumber(num()) + "," + jsonNumber(num()) + "," + jsonNumber(num()) + "]"

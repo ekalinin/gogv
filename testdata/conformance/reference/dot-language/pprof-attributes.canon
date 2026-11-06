@@ -1,0 +1,23 @@
+digraph {
+	node [fillcolor="#f8f8f8",
+		label="\N",
+		style=filled
+	];
+	N1	[color="#b20e00",
+		fillcolor="#edd7d5",
+		id=node1,
+		label=main,
+		shape=box,
+		tooltip="main (10ms)"];
+	N1_0	[id=N1_0,
+		label="work:hash",
+		shape=box3d,
+		tooltip="10ms"];
+	N1 -> N1_0	[label=" 10ms",
+		labeltooltip="10ms",
+		penwidth=2,
+		tooltip="10ms",
+		weight=100];
+	N1_0 -> N1	[style=dotted,
+		weight=2];
+}

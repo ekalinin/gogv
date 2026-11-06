@@ -1,0 +1,1 @@
+digraph { a -> b [penwidth=4, dir=both, arrowtail=empty]; c -> d [penwidth=6, arrowsize=2] }

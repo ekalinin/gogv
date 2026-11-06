@@ -1,0 +1,8 @@
+digraph {
+	node [label="\N"];
+	a -> b	[style=dotted];
+	c -> d	[penwidth=3];
+	e -> f	[color="#0000FF",
+		penwidth=2,
+		style=dotted];
+}

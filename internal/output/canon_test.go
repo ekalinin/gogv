@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/ekalinin/gogv/internal/conformance"
@@ -80,6 +81,17 @@ func TestCanonQuoting(t *testing.T) {
 	}
 	if got := c.id("<b>x</b>", true); got != "<<b>x</b>>" {
 		t.Errorf("HTML id = %s", got)
+	}
+	// A long string breaks after a space, a comma or an equals sign once it
+	// has 128 characters, as the reference breaks it.
+	long := strings.Repeat("a", 127)
+	for _, sep := range []string{" ", ",", "="} {
+		if got, want := c.id(long+sep+"b", false), `"`+long+sep+"\\\nb\""; got != want {
+			t.Errorf("break after %q: %s", sep, got)
+		}
+	}
+	if got := c.id(long+";b", false); strings.Contains(got, "\\\n") {
+		t.Errorf("break after a semicolon: %s", got)
 	}
 }
 

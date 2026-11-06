@@ -1,0 +1,1 @@
+digraph { a [style=filled]; b [style=filled, color="#FF0000"]; c [fillcolor="#00FF00"]; d [shape=box, style=filled, fillcolor="#0000FF"]; e [shape=box, style="filled,rounded"]; f [shape=plaintext, style=filled, fillcolor="#00FF00"]; g [shape=diamond, style=filled, fillcolor="#FFFF00"]; h [shape=point, style=filled, fillcolor="#00FFFF"] }

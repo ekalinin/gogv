@@ -1,8 +1,8 @@
 # Conformance report
 
 - Reference: Graphviz 16.1.0 built without Pango
-- Cases: 565
-- Corpora: curated 255, gopuml 260 (gopuml v0.3.0), gopuml-clusters 36 (gopuml v0.3.0), cli 14
+- Cases: 587
+- Corpora: curated 277, gopuml 260 (gopuml v0.3.0), gopuml-clusters 36 (gopuml v0.3.0), cli 14
 
 ## By capability
 
@@ -13,12 +13,13 @@
 | cli | 14 | 12 | 0 | 2 | 0 |
 | description-diagram | 11 | 11 | 0 | 0 | 0 |
 | diagram-source | 4 | 4 | 0 | 0 | 0 |
-| dot-language | 104 | 67 | 2 | 35 | 0 |
-| dot-layout | 132 | 122 | 9 | 1 | 0 |
+| dot-language | 107 | 68 | 3 | 36 | 0 |
+| dot-layout | 139 | 129 | 9 | 1 | 0 |
 | gopuml-clusters | 36 | 35 | 1 | 0 | 0 |
 | graph-layout | 1 | 1 | 0 | 0 | 0 |
 | legacy-activity-diagram | 13 | 13 | 0 | 0 | 0 |
-| output-formats | 20 | 20 | 0 | 0 | 0 |
+| output-formats | 25 | 24 | 1 | 0 | 0 |
+| pprof | 7 | 3 | 4 | 0 | 0 |
 | preprocessor | 2 | 2 | 0 | 0 | 0 |
 | state-diagram | 25 | 23 | 2 | 0 | 0 |
 | styling | 3 | 3 | 0 | 0 | 0 |
@@ -35,20 +36,20 @@
 
 | Name | Cases | Passed | Known differences | Not supported yet | Failed |
 |---|---|---|---|---|---|
-| canon | 551 | 515 | 0 | 36 | 0 |
-| plain | 551 | 504 | 11 | 36 | 0 |
-| plain-ext | 19 | 19 | 0 | 0 | 0 |
-| svg | 551 | 489 | 26 | 36 | 0 |
-| svg_inline | 19 | 19 | 0 | 0 | 0 |
-| dot | 255 | 216 | 3 | 36 | 0 |
-| gv | 19 | 19 | 0 | 0 | 0 |
-| xdot | 255 | 216 | 3 | 36 | 0 |
-| xdot1.2 | 19 | 19 | 0 | 0 | 0 |
-| xdot1.4 | 19 | 19 | 0 | 0 | 0 |
-| json | 255 | 216 | 3 | 36 | 0 |
-| json0 | 19 | 19 | 0 | 0 | 0 |
-| dot_json | 19 | 19 | 0 | 0 | 0 |
-| xdot_json | 19 | 19 | 0 | 0 | 0 |
+| canon | 573 | 536 | 0 | 37 | 0 |
+| plain | 573 | 521 | 15 | 37 | 0 |
+| plain-ext | 24 | 24 | 0 | 0 | 0 |
+| svg | 573 | 504 | 32 | 37 | 0 |
+| svg_inline | 24 | 23 | 1 | 0 | 0 |
+| dot | 277 | 233 | 7 | 37 | 0 |
+| gv | 24 | 24 | 0 | 0 | 0 |
+| xdot | 277 | 233 | 7 | 37 | 0 |
+| xdot1.2 | 24 | 24 | 0 | 0 | 0 |
+| xdot1.4 | 24 | 24 | 0 | 0 | 0 |
+| json | 277 | 233 | 7 | 37 | 0 |
+| json0 | 24 | 24 | 0 | 0 | 0 |
+| dot_json | 24 | 24 | 0 | 0 | 0 |
+| xdot_json | 24 | 24 | 0 | 0 | 0 |
 
 ## Cases not passed
 
@@ -88,6 +89,8 @@
 | dot-language/head-label-angle | not supported yet |  |
 | dot-language/node-lists | known difference | svg: SSIM 0.7385 is below 0.90 |
 | dot-language/port-loop | not supported yet |  |
+| dot-language/pprof-attributes | known difference | plain: plain width 1.1838 is not within 5% of the reference 1.0323; svg: svg width 93 is not within 5% of the reference 82 SSIM 0.5281 is below 0.90; dot: bb width 85.236 is not within 5% of the reference 74.324; xdot: bb width 85.236 is not within 5% of the reference 74.324; json: bb width 85.236 is not within 5% of the reference 74.324 |
+| dot-language/style-list-unsupported | not supported yet |  |
 | dot-language/table-bad-values | not supported yet |  |
 | dot-language/table-label-forms | not supported yet |  |
 | dot-language/table-row-span | not supported yet |  |
@@ -101,6 +104,11 @@
 | dot-layout/long-edges | known difference | svg: SSIM 0.4851 is below 0.90 |
 | dot-layout/port-flat-arc | known difference | plain: plain height 0.55556 is not within 5% of the reference 0.84095; svg: svg height 48 is not within 5% of the reference 69 SSIM 0.5692 is below 0.90; dot: bb height 40 is not within 5% of the reference 60.549; xdot: bb height 40 is not within 5% of the reference 60.549; json: bb height 40 is not within 5% of the reference 60.549 |
 | dot-layout/table-edge-not-fixed | known difference | svg: SSIM 0.8848 is below 0.90 |
+| output-formats/tooltips-ids | known difference | svg: SSIM 0.8994 is below 0.90; svg_inline: SSIM 0.8994 is below 0.90 |
+| pprof/cpu | known difference | plain: plain width 27.414 is not within 5% of the reference 24.544; svg: svg width 1982 is not within 5% of the reference 1775 SSIM 0.8179 is below 0.90; dot: bb width 1973.8 is not within 5% of the reference 1767.1; xdot: bb width 1973.8 is not within 5% of the reference 1767.1; json: bb width 1973.8 is not within 5% of the reference 1767.1 |
+| pprof/cpu-diff | known difference | plain: plain width 27.083 is not within 5% of the reference 19.167; svg: svg width 1958 is not within 5% of the reference 1388 SSIM 0.7666 is below 0.90; dot: bb width 1950 is not within 5% of the reference 1380; xdot: bb width 1950 is not within 5% of the reference 1380; json: bb width 1950 is not within 5% of the reference 1380 |
+| pprof/cpu-focus | known difference | plain: plain width 11.397 is not within 5% of the reference 12.022; svg: svg width 829 is not within 5% of the reference 874 SSIM 0.8835 is below 0.90; dot: bb width 820.6 is not within 5% of the reference 865.6; xdot: bb width 820.6 is not within 5% of the reference 865.6; json: bb width 820.6 is not within 5% of the reference 865.6 |
+| pprof/heap-nodecount | known difference | svg: SSIM 0.8458 is below 0.90 |
 | chen-eer-diagram/entities-relationship-and-attributes-1 | known difference | plain: plain width 4.6543 is not within 5% of the reference 3.3385; svg: svg width 343 is not within 5% of the reference 248 SSIM 0.7404 is below 0.90 |
 | state-diagram/choice-fork-join-1 | known difference | plain: plain width 4.1586 is not within 5% of the reference 3.5128; svg: svg width 307 is not within 5% of the reference 261 SSIM 0.7133 is below 0.90 |
 | state-diagram/history-style-1 | known difference | svg: SSIM 0.7064 is below 0.90 |

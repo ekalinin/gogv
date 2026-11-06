@@ -1,0 +1,19 @@
+graph 1 9.3045 8.9972
+node "File: workload" 3.3333 7.6542 6.2218 2.2417 "File: workload\lType: alloc_space\lTime: 2026-11-06 11:32:23 MSK\lShowing nodes accounting for 15.36MB, 37.31% of 41.16MB total\lDropped \
+91 nodes (cum <= 0.21MB)\lShowing top 4 nodes out of 27\l\lSee https://git.io/JfYMW for how to read the graph\l" filled box black #f8f8f8
+node N1 7.3472 7.6542 1.2931 0.51111 "runtime\nmain\n0 of 40.15MB (97.55%)" filled box #b20100 #edd5d5
+node N2 7.3472 2.0889 2.8239 1.7111 "strings\n(*Builder)\nWriteString\n15.36MB (37.31%)" filled box #b22d00 #eddbd5
+node NN2_0 5.8333 0.25 0.75 0.5 "2kB" filled box3d black #f8f8f8
+node NN2_1 6.8472 0.25 0.75 0.5 "1.38kB" filled box3d black #f8f8f8
+node NN2_2 7.8611 0.25 0.75933 0.5 "128B..512B" filled box3d black #f8f8f8
+node NN2_3 8.875 0.25 0.75 0.5 "896B" filled box3d black #f8f8f8
+node N3 7.3472 5.4778 1.2931 0.64444 "main\nmain\nfunc4\n0 of 38.83MB (94.33%)" filled box #b20300 #edd5d5
+node N4 7.3472 4.1667 1.2931 0.51111 "main\nstringLoop\n0 of 26.62MB (64.67%)" filled box #b21500 #edd8d5
+edge N1 N3 4 7.3472 7.3938 7.3472 7.0627 7.3472 6.4654 7.3472 6.0282 " 38.83MB" 7.7416 6.1667 dotted #b20300
+edge N2 NN2_0 7 6.2841 1.2329 6.2121 1.153 6.145 1.0695 6.0863 0.98333 6.0195 0.88514 5.9684 0.7674 5.9303 0.65589 " 5.86MB" 6.432 0.86667 solid black
+edge N2 NN2_1 7 6.9344 1.2278 6.9064 1.1465 6.8822 1.0642 6.8641 0.98333 6.8412 0.88092 6.8315 0.76825 6.8288 0.66309 " 4.03MB" 7.2098 0.86667 solid black
+edge N2 NN2_2 4 7.5876 1.2278 7.6446 1.0268 7.7027 0.82208 7.7506 0.65325 " 2.56MB" 8.055 0.86667 solid black
+edge N2 NN2_3 7 8.2495 1.2313 8.323 1.15 8.3937 1.0667 8.4583 0.98333 8.5404 0.87747 8.6178 0.7538 8.683 0.63915 " 2.56MB" 8.9587 0.86667 solid black
+edge N3 N4 4 7.3472 5.1532 7.3472 5.002 7.3472 4.8169 7.3472 4.649 " 26.62MB" 7.7416 4.7889 dotted #b21500
+edge N4 N2 4 7.3472 3.9055 7.3472 3.7088 7.3472 3.4195 7.3472 3.13 " 15.36MB\n (inline)" 7.7416 3.4278 solid #b22d00
+stop

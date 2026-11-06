@@ -6,8 +6,10 @@ package output
 
 import (
 	"bytes"
+	"cmp"
 	"fmt"
 	"math"
+	"slices"
 	"strings"
 
 	"github.com/ekalinin/gogv/internal/graph"
@@ -71,29 +73,40 @@ func writeSVG(res *layout.Result, inline bool) []byte {
 		writeCluster(&b, &res.Clusters[i], i+1)
 	}
 
-	written := map[*layout.NodeResult]bool{}
-	byNode := map[any]*layout.NodeResult{}
+	// As the reference draws them: the nodes in node order, each followed
+	// by its out-edges in the order of their heads, an edge drawing its head
+	// first when it is not drawn yet. Node groups are numbered in node order
+	// and edge groups in edge order; an invisible edge keeps its number and
+	// its comment.
+	index := map[*graph.Node]int{}
 	for i := range res.Nodes {
-		byNode[res.Nodes[i].Node] = &res.Nodes[i]
+		index[res.Nodes[i].Node] = i
 	}
-	edgeDone := make([]bool, len(res.Edges))
-	nodeID, edgeID := 0, 0
+	out := make([][]int, len(res.Nodes))
+	for j := range res.Edges {
+		t := index[res.Edges[j].Edge.Tail]
+		out[t] = append(out[t], j)
+	}
+	drawn := make([]bool, len(res.Nodes))
+	draw := func(i int) {
+		if !drawn[i] {
+			drawn[i] = true
+			writeNode(&b, &res.Nodes[i], i+1, g)
+		}
+	}
 	for i := range res.Nodes {
-		n := &res.Nodes[i]
-		nodeID++
-		writeNode(&b, n, nodeID)
-		written[n] = true
-		for j := range res.Edges {
+		draw(i)
+		slices.SortStableFunc(out[i], func(a, c int) int {
+			return cmp.Compare(res.Edges[a].Edge.Head.Seq, res.Edges[c].Edge.Head.Seq)
+		})
+		for _, j := range out[i] {
 			e := &res.Edges[j]
-			if edgeDone[j] || !written[byNode[e.Edge.Tail]] || !written[byNode[e.Edge.Head]] {
-				continue
-			}
-			edgeDone[j] = true
+			draw(index[e.Edge.Head])
 			if e.Invisible {
+				fmt.Fprintf(&b, "<!-- %s -->\n", edgeComment(e, g))
 				continue
 			}
-			edgeID++
-			writeEdge(&b, e, edgeID, g)
+			writeEdge(&b, e, j+1, g)
 		}
 	}
 	b.WriteString("</g>\n</svg>\n")
@@ -102,23 +115,68 @@ func writeSVG(res *layout.Result, inline bool) []byte {
 
 func y(v float64) string { return svgNumber(-v) }
 
+// strokeWidth writes the stroke-width attribute of a pen other than 1 point.
+func strokeWidth(w float64) string {
+	if w == 1 {
+		return ""
+	}
+	return ` stroke-width="` + svgNumber(w) + `"`
+}
+
 func svgColor(c string) string { return strings.ToLower(c) }
 
-func writeNode(b *bytes.Buffer, n *layout.NodeResult, id int) {
+// openTooltip opens the anchor of a tooltip, as the reference writes it: a
+// group named a_ and the id of what it wraps, around an a element.
+func openTooltip(b *bytes.Buffer, id, tooltip string) {
+	fmt.Fprintf(b, "<g id=\"a_%s\"><a xlink:title=\"%s\">\n", xmlText(id), xmlText(tooltip))
+}
+
+func closeTooltip(b *bytes.Buffer) { b.WriteString("</a>\n</g>\n") }
+
+func writeNode(b *bytes.Buffer, n *layout.NodeResult, id int, g *graph.Graph) {
 	name := xmlText(n.Node.Name)
-	fmt.Fprintf(b, "<!-- %s -->\n<g id=\"node%d\" class=\"node\">\n<title>%s</title>\n", name, id, name)
+	gid := fmt.Sprintf("node%d", id)
+	if v, _ := n.Node.Attr(g, "id"); v.S != "" {
+		gid = v.S
+	}
+	fmt.Fprintf(b, "<!-- %s -->\n<g id=\"%s\" class=\"node\">\n<title>%s</title>\n", name, xmlText(gid), name)
+	// A tooltip wraps the outline and the label, not the xlabel.
+	tooltip, _ := n.Node.Attr(g, "tooltip")
+	if tooltip.S != "" {
+		openTooltip(b, gid, tooltip.S)
+	}
 	color := svgColor(n.Color)
+	// The fill of a filled node, as the reference chooses it.
+	fill := "none"
+	if n.Filled {
+		fill = svgColor(n.Fill())
+	}
 	switch n.Shape {
 	case "ellipse", "oval", "circle":
-		fmt.Fprintf(b, "<ellipse fill=\"none\" stroke=\"%s\" cx=\"%s\" cy=\"%s\" rx=\"%s\" ry=\"%s\"/>\n",
-			color, svgNumber(n.X), y(n.Y), svgNumber(n.W/2), svgNumber(n.H/2))
-	case "point":
 		fmt.Fprintf(b, "<ellipse fill=\"%s\" stroke=\"%s\" cx=\"%s\" cy=\"%s\" rx=\"%s\" ry=\"%s\"/>\n",
-			color, color, svgNumber(n.X), y(n.Y), svgNumber(n.W/2), svgNumber(n.H/2))
+			fill, color, svgNumber(n.X), y(n.Y), svgNumber(n.W/2), svgNumber(n.H/2))
+	case "point":
+		// A point is always filled: with its fillcolor, or its color.
+		fill = color
+		if n.FillColor != "" {
+			fill = svgColor(n.FillColor)
+		}
+		fmt.Fprintf(b, "<ellipse fill=\"%s\" stroke=\"%s\" cx=\"%s\" cy=\"%s\" rx=\"%s\" ry=\"%s\"/>\n",
+			fill, color, svgNumber(n.X), y(n.Y), svgNumber(n.W/2), svgNumber(n.H/2))
 	case "plaintext":
+		// Filled, it is a polygon without a stroke.
+		if n.Filled {
+			writePolygon(b, n, "none", fill)
+		}
+	case "box3d":
+		writePolygon(b, n, color, fill)
+		for _, l := range layout.Box3DLines(n.W, n.H) {
+			fmt.Fprintf(b, "<polyline fill=\"none\" stroke=\"%s\" points=\"%s,%s %s,%s\"/>\n", color,
+				svgNumber(n.X+l[0].X), y(n.Y+l[0].Y), svgNumber(n.X+l[1].X), y(n.Y+l[1].Y))
+		}
 	case "box", "rect", "rectangle":
 		if !n.Rounded {
-			writePolygon(b, n, color)
+			writePolygon(b, n, color, fill)
 			break
 		}
 		var d strings.Builder
@@ -133,12 +191,15 @@ func writeNode(b *bytes.Buffer, n *layout.NodeResult, id int) {
 			}
 			d.WriteString(svgNumber(n.X+p.X) + "," + y(n.Y+p.Y))
 		}
-		fmt.Fprintf(b, "<path fill=\"none\" stroke=\"%s\" d=\"%s\"/>\n", color, d.String())
+		fmt.Fprintf(b, "<path fill=\"%s\" stroke=\"%s\" d=\"%s\"/>\n", fill, color, d.String())
 	default:
-		writePolygon(b, n, color)
+		writePolygon(b, n, color, fill)
 	}
 	if n.Shape != "point" {
 		writeLabel(b, n.Label, layout.Point{X: n.X, Y: n.Y}, color)
+	}
+	if tooltip.S != "" {
+		closeTooltip(b)
 	}
 	if n.XLabel.Present() {
 		writeLabel(b, n.XLabel, n.XLabelPos, color)
@@ -159,14 +220,14 @@ func writeCluster(b *bytes.Buffer, c *layout.ClusterResult, id int) {
 	b.WriteString("</g>\n")
 }
 
-// writePolygon writes the outline of a polygonal node.
-func writePolygon(b *bytes.Buffer, n *layout.NodeResult, color string) {
+// writePolygon writes the outline of a polygonal node, with its fill.
+func writePolygon(b *bytes.Buffer, n *layout.NodeResult, color, fill string) {
 	var pts []string
 	vs := layout.PolygonVertices(n.Shape, n.W, n.H)
 	for _, v := range append(vs, vs[0]) {
 		pts = append(pts, svgNumber(n.X+v.X)+","+y(n.Y+v.Y))
 	}
-	fmt.Fprintf(b, "<polygon fill=\"none\" stroke=\"%s\" points=\"%s\"/>\n", color, strings.Join(pts, " "))
+	fmt.Fprintf(b, "<polygon fill=\"%s\" stroke=\"%s\" points=\"%s\"/>\n", fill, color, strings.Join(pts, " "))
 }
 
 // writeLabel writes a label centered on c: its lines, or its table as
@@ -314,10 +375,16 @@ func writeEdge(b *bytes.Buffer, e *layout.EdgeResult, id int, g *graph.Graph) {
 		}
 		return n.Name
 	}
-	name := xmlText(e.Edge.Tail.Name + op + e.Edge.Head.Name)
 	title := xmlText(end(e.Edge.Tail, "tailport") + op + end(e.Edge.Head, "headport"))
-	fmt.Fprintf(b, "<!-- %s -->\n<g id=\"edge%d\" class=\"edge\">\n<title>%s</title>\n", name, id, title)
+	gid := fmt.Sprintf("edge%d", id)
+	fmt.Fprintf(b, "<!-- %s -->\n<g id=\"%s\" class=\"edge\">\n<title>%s</title>\n", edgeComment(e, g), gid, title)
 	color := svgColor(e.Color)
+	// A tooltip wraps the curve and the arrowheads, and a labeltooltip the
+	// label.
+	tooltip, _ := e.Edge.Attr(g, "tooltip")
+	if tooltip.S != "" {
+		openTooltip(b, gid, tooltip.S)
+	}
 	if len(e.Points) > 0 {
 		var d strings.Builder
 		for i, p := range e.Points {
@@ -331,7 +398,13 @@ func writeEdge(b *bytes.Buffer, e *layout.EdgeResult, id int, g *graph.Graph) {
 			}
 			d.WriteString(svgNumber(p.X) + "," + y(p.Y))
 		}
-		fmt.Fprintf(b, "<path fill=\"none\" stroke=\"%s\" d=\"%s\"/>\n", color, d.String())
+		// A pen other than 1 point has its width, and a dotted edge its
+		// dashes, which its arrowheads do not have.
+		dash := ""
+		if e.Dotted {
+			dash = ` stroke-dasharray="1,5"`
+		}
+		fmt.Fprintf(b, "<path fill=\"none\" stroke=\"%s\"%s%s d=\"%s\"/>\n", color, strokeWidth(e.PenWidth), dash, d.String())
 	}
 	for _, a := range []layout.Arrow{e.Tail, e.Head} {
 		if a.Shape == "" {
@@ -346,15 +419,36 @@ func writeEdge(b *bytes.Buffer, e *layout.EdgeResult, id int, g *graph.Graph) {
 		if a.Shape == "empty" {
 			fill = "none"
 		}
-		fmt.Fprintf(b, "<polygon fill=\"%s\" stroke=\"%s\" points=\"%s\"/>\n", fill, color, strings.Join(s, " "))
+		fmt.Fprintf(b, "<polygon fill=\"%s\" stroke=\"%s\"%s points=\"%s\"/>\n", fill, color, strokeWidth(e.PenWidth), strings.Join(s, " "))
 	}
-	for _, l := range []struct {
+	if tooltip.S != "" {
+		closeTooltip(b)
+	}
+	labelTooltip, _ := e.Edge.Attr(g, "labeltooltip")
+	for i, l := range []struct {
 		t layout.Text
 		c layout.Point
 	}{{e.Label, e.LabelPos}, {e.XLabel, e.XLabelPos}, {e.HeadLabel, e.HeadLabelPos}, {e.TailLabel, e.TailLabelPos}} {
-		if l.t.Present() {
-			writeLabel(b, l.t, l.c, color)
+		if !l.t.Present() {
+			continue
 		}
+		if i == 0 && labelTooltip.S != "" {
+			openTooltip(b, gid+"-label", labelTooltip.S)
+			writeLabel(b, l.t, l.c, color)
+			closeTooltip(b)
+			continue
+		}
+		writeLabel(b, l.t, l.c, color)
 	}
 	b.WriteString("</g>\n")
+}
+
+// edgeComment returns the name of an edge in the comment before its group:
+// tail->head, without its ports.
+func edgeComment(e *layout.EdgeResult, g *graph.Graph) string {
+	op := "--"
+	if g.Directed() {
+		op = "->"
+	}
+	return xmlText(e.Edge.Tail.Name + op + e.Edge.Head.Name)
 }

@@ -1,0 +1,9 @@
+digraph {
+	node [label="\N"];
+	a -> b	[penwidth=1];
+	c -> d	[penwidth=2];
+	e -> f	[penwidth=3];
+	g -> h	[penwidth=4];
+	i -> j	[penwidth=5];
+	k -> l	[penwidth=6];
+}

@@ -1,0 +1,165 @@
+graph 1 19.167 34.542
+node "File: workload" 2.9722 33.065 5.4933 2.5083 "File: workload\lType: cpu\lTime: 2026-11-06 11:32:22 MSK\lDuration: 2.02s, Total samples = 750ms (37.16%)\lShowing nodes accounting \
+for 30ms, 4.00% of 750ms total\lDropped 6 nodes (cum <= 3.75ms)\lShowing top 43 nodes out of 104\l\lSee https://git.io/JfYMW for \
+how to read the graph\l" filled box black #f8f8f8
+node N1 10.583 17.369 1.6976 1.3611 "runtime\nmProf_Malloc\nfunc1\n10ms (1.33%)\nof -40ms (5.33%)" filled box #9eb282 #eaede6
+node N1_0 10.583 15.7 0.75 0.5 "work:hash" filled box3d black #f8f8f8
+node N2 5.8333 8.4889 2.3782 1.6444 "runtime\npcvalue\n50ms (6.67%)\nof 70ms (9.33%)" filled box #b2895f #ede7e2
+node N2_0 4.8333 6.6833 0.75 0.5 "work:string" filled box3d black #f8f8f8
+node N2_1 5.8333 6.6833 0.75 0.5 "work:hash" filled box3d black #f8f8f8
+node N3 5.2778 15.7 1.1666 0.51111 "runtime\ntracebackPCs\n0 of 100ms (13.33%)" filled box #b2713b #ede4dd
+node N3_0 4.2778 14.456 0.75 0.5 "work:string" filled box3d black #f8f8f8
+node N3_1 5.2778 14.456 0.75 0.5 "work:hash" filled box3d black #f8f8f8
+node N4 13.75 12.378 3.2961 1.7111 "runtime\n(*mspan)\nspecialFindSplicePoint\n-60ms (8.00%)" filled box #91b26b #e8ede3
+node N4_0 14.25 10.533 0.75 0.5 "work:string" filled box3d black #f8f8f8
+node N4_1 13.25 10.533 0.75 0.5 "work:hash" filled box3d black #f8f8f8
+node N5 5.8194 5.2389 1.6283 1.3611 "runtime\nfuncInfo\nentry\n10ms (1.33%)\nof 50ms (6.67%)" filled box #b29877 #ede9e5
+node N5_0 5.8194 3.575 0.75 0.5 "work:string" filled box3d black #f8f8f8
+node N6 6.6944 2.0222 2.0039 1.5778 "runtime\n(*moduledata)\ntextAddr\n40ms (5.33%)" filled box #b29e82 #edeae6
+node N6_0 6.1944 0.25 0.75 0.5 "work:string" filled box3d black #f8f8f8
+node N6_1 7.1944 0.25 0.75 0.5 "work:hash" filled box3d black #f8f8f8
+node N7 1.3889 17.369 2.0553 1.2111 "runtime\nkevent\n-40ms (5.33%)" filled box #9eb282 #eaede6
+node N7_0 1.6111 15.7 0.75 0.5 "work:string" filled box3d black #f8f8f8
+node N7_1 0.61111 15.7 0.75 0.5 "work:hash" filled box3d black #f8f8f8
+node N8 5.2778 19.339 1.0554 0.51111 "runtime\nsystemstack\n0 of 20ms (2.67%)" filled box #b2aa9a #edece9
+node N9 3.5694 17.369 1.7961 1.1111 "runtime\nmadvise\n30ms (4.00%)" filled box #b2a48e #edebe8
+node N9_0 3.8194 15.7 0.75 0.5 "work:string" filled box3d black #f8f8f8
+node N9_1 2.8194 15.7 0.75 0.5 "work:hash" filled box3d black #f8f8f8
+node N10 17.333 8.4889 2.6382 1.0111 "runtime\nmemclrNoHeapPointers\n20ms (2.67%)" filled box #b2aa9a #edece9
+node N10_0 17.333 6.6833 0.75 0.5 "work:string" filled box3d black #f8f8f8
+node N11 7.8333 5.2389 1.8886 1.1111 "runtime\nstep\n-30ms (4.00%)" filled box #a4b28e #ebede8
+node N11_0 7.8333 3.575 0.75 0.5 "work:string" filled box3d black #f8f8f8
+node N12 5.2778 22.761 1.0554 0.51111 "runtime\nprofilealloc\n0 of 40ms (5.33%)" filled box #b29e82 #edeae6
+node N13 6.5 30.756 1.0554 0.64444 "main\nmain\nfunc4\n0 of 30ms (4.00%)" filled box #b2a48e #edebe8
+node N14 10.514 14.456 1.0554 0.51111 "runtime\nbgsweep\n0 of 20ms (2.67%)" filled box #b2aa9a #edece9
+node N15 3.0278 12.378 1.9162 1.0111 "runtime\nfindmoduledatap\n-20ms (2.67%)" filled box #aab29a #ecede9
+node N15_0 3.0278 10.533 0.75 0.5 "work:string" filled box3d black #f8f8f8
+node N16 15.708 24.956 2.2215 1.6111 "slices\npartitionOrdered[go\nshape\nint]\n-20ms (2.67%)" filled box #aab29a #ecede9
+node N16_0 15.708 22.761 0.75 0.5 "work:sort" filled box3d black #f8f8f8
+node N17 10.472 24.956 2.7348 1.6111 "slices\nreverseRangeOrdered[go\nshape\nint]\n20ms (2.67%)" filled box #b2aa9a #edece9
+node N17_0 10.472 22.761 0.75 0.5 "work:sort" filled box3d black #f8f8f8
+node N18 1.2778 22.761 1.6387 1.3111 "strings\n(*Builder)\nWriteByte\n20ms (2.67%)" filled box #b2aa9a #edece9
+node N18_0 1.2778 21.117 0.75 0.5 "work:string" filled box3d black #f8f8f8
+node N19 5.0556 29.019 1.0554 0.51111 "main\nstringLoop\n0 of 30ms (4.00%)" filled box #b2a48e #edebe8
+node N20 5.2778 17.369 1.111 0.64444 "runtime\ncallers\nfunc1\n0 of 80ms (10.67%)" filled box #b28153 #ede6e0
+node N21 4.4028 27.05 1.6283 1.1111 "bytealg\nMakeNoZero\n10ms (1.33%)\nof 30ms (4.00%)" filled box #b2a48e #edebe8
+node N21_0 4.4028 24.956 0.75 0.5 "work:string" filled box3d black #f8f8f8
+node N22 7.9444 29.019 1.6283 1.3611 "sha256\n(*Digest)\nSum\n10ms (1.33%)\nof 20ms (2.67%)" filled box #b2aa9a #edece9
+node N22_0 7.9444 27.05 0.75 0.5 "work:hash" filled box3d black #f8f8f8
+node N23 12.111 29.019 1.472 0.86111 "main\nsortLoop\n-10ms (1.33%)" filled box #afb2a6 #ecedeb
+node N23_0 12.111 27.05 0.75 0.5 "work:sort" filled box3d black #f8f8f8
+node N24 16.458 12.378 1.6283 1.3611 "runtime\n(*fixalloc)\nalloc\n10ms (1.33%)\nof 20ms (2.67%)" filled box #b2aa9a #edece9
+node N24_0 16.458 10.533 0.75 0.5 "work:hash" filled box3d black #f8f8f8
+node N25 6.1528 12.378 1.0554 0.64444 "runtime\n(*unwinder)\nresolveInternal\n0 of 60ms (8.00%)" filled box #b2916b #ede8e3
+node N25_0 6.9306 10.533 0.75 0.5 "work:hash" filled box3d black #f8f8f8
+node N25_1 4.9583 10.533 0.75 0.5 "work:string" filled box3d black #f8f8f8
+node N26 6.5 33.065 1.0554 0.51111 "runtime\nmain\n0 of 30ms (4.00%)" filled box #b2a48e #edebe8
+node N27 2.5278 27.05 1.6283 1.1111 "strings\nToUpper\n-10ms (1.33%)\nof 10ms (1.33%)" filled box #b2afa6 #edeceb
+node N27_0 2.5278 24.956 0.75 0.5 "work:string" filled box3d black #f8f8f8
+node N28 13.75 14.456 1.0924 0.51111 "runtime\nsetprofilebucket\n0 of -50ms (6.67%)" filled box #98b277 #e9ede5
+node N29 8.1528 24.956 1.4026 0.86111 "sha256\nblockSHA2\n10ms (1.33%)" filled box #b2afa6 #edeceb
+node N29_0 8.1528 22.761 0.75 0.5 "work:hash" filled box3d black #f8f8f8
+node N30 12.056 19.339 1.657 1.1111 "atomic\n(*UnsafePointer)\nLoad\n-10ms (1.33%)" filled box #afb2a6 #ecedeb
+node N30_0 12.056 17.369 0.75 0.5 "work:hash" filled box3d black #f8f8f8
+node N31 9.7083 12.378 1.657 1.1111 "atomic\n(*UnsafePointer)\nStoreNoWB\n10ms (1.33%)" filled box #b2afa6 #edeceb
+node N32 6.8194 17.369 1.472 1.1111 "runtime\n(*mspan)\ninit\n-10ms (1.33%)" filled box #afb2a6 #ecedeb
+node N32_0 6.8194 15.7 0.75 0.5 "work:string" filled box3d black #f8f8f8
+node N33 8.5417 17.369 1.472 1.1111 "runtime\n(*pageAlloc)\nfind\n-10ms (1.33%)" filled box #afb2a6 #ecedeb
+node N33_0 8.5417 15.7 0.75 0.5 "work:string" filled box3d black #f8f8f8
+node N34 7.9306 12.378 1.4026 1.1111 "runtime\n(*unwinder)\ncgoCallers\n10ms (1.33%)" filled box #b2afa6 #edeceb
+node N34_0 7.9306 10.533 0.75 0.5 "work:string" filled box3d black #f8f8f8
+node N35 9.7222 5.2389 1.4026 0.86111 "runtime\nacquirem\n10ms (1.33%)" filled box #b2afa6 #edeceb
+node N35_0 9.7222 3.575 0.75 0.5 "work:string" filled box3d black #f8f8f8
+node N36 6.7917 22.761 1.472 0.86111 "runtime\nmemmove\n-10ms (1.33%)" filled box #afb2a6 #ecedeb
+node N36_0 6.7917 21.117 0.75 0.5 "work:string" filled box3d black #f8f8f8
+node N37 11.319 8.4889 2.2938 0.86111 "runtime\nmutexSampleContention\n10ms (1.33%)" filled box #b2afa6 #edeceb
+node N37_0 11.319 6.6833 0.75 0.5 "work:string" filled box3d black #f8f8f8
+node N38 11.319 12.378 1.0554 0.51111 "runtime\nunlock\n0 of 20ms (2.67%)" filled box #b2aa9a #edece9
+node N39 18.431 12.378 1.472 0.86111 "runtime\nusleep\n-10ms (1.33%)" filled box #afb2a6 #ecedeb
+node N39_0 18.431 10.533 0.75 0.5 "work:string" filled box3d black #f8f8f8
+node N40 13.222 24.956 2.2588 1.3611 "slices\ninsertionSortOrdered[go\nshape\nint]\n-10ms (1.33%)" filled box #afb2a6 #ecedeb
+node N40_0 13.222 22.761 0.75 0.5 "work:sort" filled box3d black #f8f8f8
+node N41 5.2778 21.117 1.0554 0.51111 "runtime\nmProf_Malloc\n0 of 40ms (5.33%)" filled box #b29e82 #edeae6
+node N42 6.5417 24.956 1.0924 0.64444 "strings\n(*Builder)\nWriteString\n0 of -10ms (1.33%)" filled box #afb2a6 #ecedeb
+node N43 11.319 10.533 1.0554 0.51111 "runtime\nunlock2\n0 of 20ms (2.67%)" filled box #b2aa9a #edece9
+edge N1 N1_0 4 10.583 16.683 10.583 16.489 10.583 16.284 10.583 16.112 " 10ms" 10.818 16.322 solid black
+edge N1 N28 7 9.8407 16.684 9.5069 16.3 9.2482 15.823 9.5486 15.444 9.9776 14.905 11.964 14.637 13.045 14.529 " -50ms" 9.816 15.7 solid #98b277
+edge N2 N2_0 4 5.3772 7.6641 5.2613 7.4581 5.1423 7.2464 5.0452 7.0738 " 80ms" 5.4493 7.3 solid black
+edge N2 N2_1 4 5.8333 7.6641 5.8333 7.4663 5.8333 7.2633 5.8333 7.0947 " -30ms" 6.1007 7.3 solid black
+edge N2 N5 7 6.3312 7.6657 6.3657 7.5837 6.3952 7.5 6.4167 7.4167 6.5317 6.9696 6.4124 6.473 6.251 6.0684 " 40ms\n (inline)" 6.7692 6.6833 solid #b29e82
+edge N2 N11 7 6.6018 7.6631 6.7923 7.4374 6.9856 7.1849 7.1389 6.9333 7.3259 6.6264 7.484 6.26 7.6018 5.9478 " -30ms" 7.6635 6.6833 solid #a4b28e
+edge N2 N35 7 7.0245 7.6694 7.344 7.4407 7.6843 7.1851 7.9861 6.9333 8.4188 6.5724 8.8753 6.1276 9.2116 5.7863 " 10ms\n (inline)" 8.8482 6.6833 solid #b2afa6
+edge N3 N3_0 7 4.9398 15.44 4.8517 15.367 4.761 15.283 4.6875 15.194 4.6015 15.091 4.524 14.968 4.4602 14.852 " -10ms" 4.9549 15.078 solid black
+edge N3 N3_1 4 5.2778 15.44 5.2778 15.276 5.2778 15.056 5.2778 14.867 " 10ms" 5.5128 15.078 solid black
+edge N3 N15 7 4.6889 15.493 4.1271 15.295 3.3399 14.98 3.1568 14.711 2.8261 14.225 2.8301 13.541 2.8949 13.042 " -20ms\n (inline)" 3.4673 14.456 dotted #aab29a
+edge N3 N25 7 5.6131 15.44 5.6879 15.369 5.7589 15.286 5.8056 15.194 6.187 14.447 6.2137 13.447 6.1894 12.865 " 80ms" 6.347 14.456 dotted #b28153
+edge N3 N34 7 5.7344 15.441 6.0233 15.268 6.388 15.013 6.6389 14.711 7.0514 14.215 7.3991 13.568 7.6294 13.083 " 10ms" 7.2314 14.456 solid #b2afa6
+edge N4 N4_0 4 13.982 11.519 14.038 11.317 14.095 11.111 14.142 10.94 " -40ms" 14.37 11.156 solid black
+edge N4 N4_1 4 13.518 11.519 13.462 11.317 13.405 11.111 13.358 10.94 " -20ms" 13.708 11.156 solid black
+edge N5 N5_0 4 5.8194 4.5548 5.8194 4.3629 5.8194 4.1597 5.8194 3.9895 " 10ms" 6.0544 4.1917 solid black
+edge N5 N6 7 6.2433 4.5526 6.2828 4.4722 6.3187 4.3898 6.3472 4.3083 6.4964 3.8825 6.5816 3.3897 6.6301 2.972 " 40ms" 6.8158 3.575 solid #b29e82
+edge N6 N6_0 4 6.4708 1.228 6.414 1.03 6.3554 0.82559 6.3069 0.65626 " 30ms" 6.6346 0.86667 solid black
+edge N6 N6_1 4 6.9181 1.228 6.9749 1.03 7.0334 0.82559 7.082 0.65626 " 10ms" 7.2817 0.86667 solid black
+edge N7 N7_0 4 1.4697 16.758 1.4989 16.543 1.5311 16.305 1.5574 16.111 " -20ms" 1.8066 16.322 solid black
+edge N7 N7_1 7 1.0806 16.762 1.0271 16.655 0.97285 16.544 0.92361 16.439 0.87162 16.328 0.81784 16.206 0.76986 16.095 " -10ms" 1.191 16.322 solid black
+edge N8 N1 7 5.8117 19.199 6.6107 19.002 8.1568 18.587 9.4028 18.05 9.4653 18.023 9.5287 17.994 9.592 17.963 " -40ms" 9.0149 18.417 solid #9eb282
+edge N8 N7 4 4.7465 19.094 4.2196 18.862 3.3882 18.485 2.5507 18.053 " -30ms" 3.776 18.417 dotted #a4b28e
+edge N8 N9 4 5.0614 19.079 4.8339 18.821 4.4663 18.403 4.1528 18.046 " 30ms" 4.8116 18.417 dotted #b2a48e
+edge N8 N20 4 5.2778 19.079 5.2778 18.772 5.2778 18.24 5.2778 17.853 " 80ms" 5.5128 18.417 solid #b28153
+edge N8 N32 4 5.473 19.079 5.6774 18.822 6.0072 18.406 6.2893 18.051 " -10ms" 6.316 18.417 dotted #afb2a6
+edge N8 N33 7 5.8032 19.079 6.2999 18.838 7.0597 18.451 7.6806 18.05 7.6971 18.039 7.7137 18.028 7.7303 18.017 " -10ms" 7.5043 18.417 dotted #afb2a6
+edge N9 N9_0 4 3.6527 16.809 3.6874 16.581 3.727 16.321 3.7589 16.111 " 20ms" 3.9736 16.322 solid black
+edge N9 N9_1 4 3.3197 16.809 3.2134 16.576 3.0919 16.31 2.9953 16.099 " 10ms" 3.3845 16.322 solid black
+edge N10 N10_0 4 17.333 7.9798 17.333 7.7017 17.333 7.3591 17.333 7.098 " 20ms" 17.568 7.3 solid black
+edge N11 N11_0 4 7.8333 4.6802 7.8333 4.4528 7.8333 4.1936 7.8333 3.9849 " -30ms" 8.1007 4.1917 solid black
+edge N12 N41 4 5.2778 22.502 5.2778 22.245 5.2778 21.839 5.2778 21.535 " 40ms" 5.5128 21.739 solid #b29e82
+edge N13 N19 4 6.2351 30.428 5.9888 30.137 5.6221 29.703 5.363 29.397 " 30ms" 6.2265 30.067 dotted #b2a48e
+edge N13 N22 4 6.7649 30.428 6.9092 30.258 7.0949 30.038 7.2761 29.824 " 20ms" 7.3707 30.067 dotted #b2aa9a
+edge N13 N23 4 7.0329 30.579 7.9974 30.286 10.041 29.663 11.221 29.304 " -10ms" 9.237 30.067 dotted #afb2a6
+edge N14 N31 7 10.24 14.196 10.173 14.123 10.106 14.038 10.06 13.95 9.9215 13.687 9.8375 13.372 9.7864 13.093 " 10ms\n (inline)" 10.37 13.717 dotted #b2afa6
+edge N14 N38 4 10.611 14.194 10.748 13.845 11.001 13.203 11.164 12.787 " 10ms\n (inline)" 11.179 13.717 dotted #b2afa6
+edge N15 N15_0 4 3.0278 11.867 3.0278 11.578 3.0278 11.218 3.0278 10.947 " -20ms" 3.2951 11.156 solid black
+edge N16 N16_0 4 15.708 24.147 15.708 23.817 15.708 23.448 15.708 23.175 " -20ms" 15.976 23.783 solid black
+edge N17 N17_0 4 10.472 24.147 10.472 23.817 10.472 23.448 10.472 23.175 " 20ms" 10.707 23.783 solid black
+edge N18 N18_0 4 1.2778 22.099 1.2778 21.907 1.2778 21.702 1.2778 21.53 " 20ms" 1.5128 21.739 solid black
+edge N19 N21 4 4.9729 28.76 4.8886 28.509 4.754 28.108 4.6367 27.76 " 30ms" 4.9642 27.972 dotted #b2a48e
+edge N19 N27 4 4.7354 28.76 4.3915 28.495 3.831 28.065 3.3609 27.704 " 10ms" 4.0267 27.972 solid #b2afa6
+edge N19 N42 4 5.1463 28.759 5.3889 28.1 6.0558 26.289 6.3716 25.431 " -10ms\n (inline)" 6.2811 27.05 dotted #afb2a6
+edge N20 N3 4 5.2778 17.043 5.2778 16.78 5.2778 16.403 5.2778 16.117 " 100ms" 5.5614 16.322 solid #b2713b
+edge N21 N12 7 4.8164 26.488 4.8611 26.409 4.901 26.327 4.9306 26.244 5.3098 25.185 5.3214 23.836 5.2993 23.175 " 30ms" 5.5253 24.956 dotted #b2a48e
+edge N21 N21_0 4 4.4028 26.488 4.4028 26.135 4.4028 25.685 4.4028 25.366 " 10ms" 4.6378 26.128 solid black
+edge N22 N22_0 4 7.9444 28.337 7.9444 28.045 7.9444 27.713 7.9444 27.461 " 10ms" 8.1794 27.972 solid black
+edge N22 N29 10 7.3576 28.334 7.2021 28.116 7.0552 27.864 6.9745 27.606 6.8271 27.134 6.815 26.962 6.9745 26.494 7.1006 26.125 7.3567 25.775 7.598 25.504 " 10ms" 7.2095 27.05 dotted #b2afa6
+edge N23 N16 7 12.632 28.584 12.948 28.317 13.354 27.957 13.681 27.606 14.181 27.067 14.685 26.413 15.066 25.89 " -20ms" 14.86 27.05 dotted #aab29a
+edge N23 N17 7 11.682 28.583 11.443 28.323 11.159 27.97 10.99 27.606 10.745 27.078 10.616 26.44 10.548 25.923 " 20ms\n (inline)" 11.301 27.05 dotted #b2aa9a
+edge N23 N23_0 4 12.111 28.584 12.111 28.25 12.111 27.786 12.111 27.459 " -10ms" 12.378 27.972 solid black
+edge N23 N40 7 12.439 28.583 12.54 28.434 12.642 28.261 12.708 28.089 12.997 27.346 13.123 26.442 13.179 25.799 " -10ms" 13.363 27.05 dotted #afb2a6
+edge N24 N10 7 16.826 11.69 16.888 11.555 16.945 11.412 16.986 11.272 17.195 10.567 17.278 9.7235 17.311 9.1544 " 10ms" 17.427 10.533 solid #b2afa6
+edge N24 N24_0 4 16.458 11.693 16.458 11.44 16.458 11.16 16.458 10.941 " 10ms" 16.693 11.156 solid black
+edge N25 N2 7 6.1084 12.051 6.0649 11.733 5.9995 11.228 5.9606 10.789 5.9223 10.357 5.8935 9.8785 5.8731 9.4712 " 60ms" 6.1956 10.533 dotted #b2916b
+edge N25 N25_0 4 6.2865 12.052 6.4192 11.742 6.623 11.266 6.7657 10.932 " 20ms" 6.9357 11.156 solid black
+edge N25 N25_1 7 5.7558 12.051 5.5304 11.852 5.2625 11.575 5.1042 11.272 5.0514 11.171 5.0177 11.053 4.9962 10.942 " -20ms" 5.3715 11.156 solid black
+edge N26 N13 4 6.5 32.803 6.5 32.429 6.5 31.715 6.5 31.24 " 30ms" 6.735 31.444 dotted #b2a48e
+edge N27 N18 7 1.9029 26.491 1.708 26.284 1.5157 26.032 1.4068 25.761 1.1256 25.061 1.1221 24.194 1.1716 23.574 " 20ms\n (inline)" 1.7173 24.956 solid #b2aa9a
+edge N27 N27_0 4 2.5278 26.488 2.5278 26.135 2.5278 25.685 2.5278 25.366 " -10ms" 2.7951 26.128 solid black
+edge N28 N4 4 13.75 14.194 13.75 13.993 13.75 13.695 13.75 13.398 " -60ms\n (inline)" 14.06 13.717 dotted #91b26b
+edge N28 N24 7 14.146 14.195 14.514 13.961 15.072 13.592 15.528 13.233 15.558 13.21 15.588 13.186 15.618 13.161 " 20ms" 15.386 13.717 solid #b2aa9a
+edge N28 N38 7 13.305 14.193 12.928 13.97 12.383 13.619 11.972 13.233 11.824 13.094 11.683 12.92 11.57 12.766 " 10ms\n (inline)" 13.209 13.717 solid #b2afa6
+edge N28 N39 7 14.302 14.339 15.046 14.182 16.395 13.838 17.403 13.233 17.557 13.141 17.713 13.026 17.855 12.912 " -10ms" 17.116 13.717 dotted #afb2a6
+edge N29 N29_0 4 8.1528 24.519 8.1528 24.128 8.1528 23.553 8.1528 23.171 " 10ms" 8.3878 23.783 solid black
+edge N30 N30_0 4 12.056 18.779 12.056 18.462 12.056 18.07 12.056 17.782 " -10ms" 12.323 18.417 solid black
+edge N32 N32_0 4 6.8194 16.809 6.8194 16.581 6.8194 16.321 6.8194 16.111 " -10ms" 7.0868 16.322 solid black
+edge N33 N33_0 4 8.5417 16.809 8.5417 16.581 8.5417 16.321 8.5417 16.111 " -10ms" 8.809 16.322 solid black
+edge N34 N34_0 4 7.9306 11.819 7.9306 11.539 7.9306 11.204 7.9306 10.948 " 10ms" 8.1655 11.156 solid black
+edge N35 N35_0 4 9.7222 4.8037 9.7222 4.5529 9.7222 4.2365 9.7222 3.9894 " 10ms" 9.9572 4.1917 solid black
+edge N36 N36_0 4 6.7917 22.327 6.7917 22.082 6.7917 21.774 6.7917 21.532 " -10ms" 7.059 21.739 solid black
+edge N37 N37_0 4 11.319 8.0537 11.319 7.7632 11.319 7.3796 11.319 7.0945 " 10ms" 11.554 7.3 solid black
+edge N38 N43 4 11.319 12.119 11.319 11.82 11.319 11.309 11.319 10.951 " 20ms" 11.554 11.156 dotted #b2aa9a
+edge N39 N39_0 4 18.431 11.943 18.431 11.641 18.431 11.239 18.431 10.944 " -10ms" 18.698 11.156 solid black
+edge N40 N40_0 4 13.222 24.274 13.222 23.913 13.222 23.48 13.222 23.172 " -10ms" 13.49 23.783 solid black
+edge N41 N8 4 5.2778 20.856 5.2778 20.57 5.2778 20.097 5.2778 19.757 " 50ms" 5.5128 20.378 dotted #b29877
+edge N41 N30 4 5.8096 20.965 6.9433 20.673 9.6124 19.984 11.068 19.608 " -10ms\n (inline)" 9.1804 20.378 dotted #afb2a6
+edge N42 N12 4 6.3579 24.627 6.1313 24.238 5.7463 23.578 5.5024 23.16 " 20ms" 6.1447 23.783 dotted #b2aa9a
+edge N42 N36 4 6.578 24.627 6.6164 24.294 6.6777 23.762 6.7249 23.354 " -10ms" 6.949 23.783 solid #afb2a6
+edge N43 N37 4 11.319 10.272 11.319 9.9773 11.319 9.4748 11.319 9.0805 " 10ms\n (inline)" 11.63 9.7944 solid #b2afa6
+stop

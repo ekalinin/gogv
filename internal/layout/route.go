@@ -9,6 +9,7 @@ import (
 	"math"
 	"slices"
 
+	"github.com/ekalinin/gogv/internal/attrs"
 	"github.com/ekalinin/gogv/internal/graph"
 )
 
@@ -31,6 +32,12 @@ func PolygonVertices(shape string, w, h float64) []Point {
 	switch shape {
 	case "box", "rect", "rectangle", "plaintext":
 		return []Point{{hw, hh}, {-hw, hh}, {-hw, -hh}, {hw, -hh}}
+	case "box3d":
+		// A box whose upper left and lower right corners are cut by its
+		// depth.
+		d := float64(box3dDepth)
+		hw, hh := half(w), half(h)
+		return []Point{{hw, hh}, {-hw + d, hh}, {-hw, hh - d}, {-hw, -hh}, {hw - d, -hh}, {hw, -hh + d}}
 	case "diamond":
 		return []Point{{0, hh}, {-hw, 0}, {0, -hh}, {hw, 0}}
 	case "hexagon":
@@ -41,6 +48,19 @@ func PolygonVertices(shape string, w, h float64) []Point {
 		return []Point{{hw, -kh}, {hw, kh}, {kw, hh}, {-kw, hh}, {-hw, kh}, {-hw, -kh}, {-kw, -hh}, {kw, -hh}}
 	}
 	return nil
+}
+
+// box3dDepth is the depth of a box3d node, in points, whatever its size.
+const box3dDepth = 4
+
+// Box3DLines returns the three lines that draw the depth of a box3d node,
+// relative to its center, y growing upward: from the upper right corner of
+// its front face to the left side, to the bottom side and to the upper right
+// corner of the node.
+func Box3DLines(w, h float64) [3][2]Point {
+	hw, hh := half(w), half(h)
+	corner := Point{hw - box3dDepth, hh - box3dDepth}
+	return [3][2]Point{{corner, {-hw, hh - box3dDepth}}, {corner, {hw - box3dDepth, -hh}}, {corner, {hw, hh}}}
 }
 
 // CornerRadius is the radius of the corners of a rounded rectangle: a
@@ -475,10 +495,17 @@ func reverseCurve(pts []Point) []Point {
 // arrowAtEnd shortens a curve for an arrowhead at its end: the tip is
 // arrowMiter before the end along the curve, the base length further, and
 // the curve stops at the base. It returns the shortened curve and the arrow.
-func arrowAtEnd(segs [][4]Point, shape string, size float64) ([][4]Point, Arrow) {
+func arrowAtEnd(segs [][4]Point, shape string, size, penWidth float64) ([][4]Point, Arrow) {
 	end := segs[len(segs)-1][3]
 	length := float64(arrowLength * size)
 	reach := length + arrowMiter
+	if penWidth != 1 {
+		// The stroked tip of a wider pen reaches further: the miter of half
+		// the pen over the sine of the half angle of the arrowhead, which
+		// widens above 4 points.
+		hw := float64(arrowHalfWidth * size * max(1, penWidth/4))
+		reach = length + float64(half(penWidth)*hypot(length, hw))/hw
+	}
 	// The last point of the curve at least reach away from its end.
 	for i := len(segs) - 1; i >= 0; i-- {
 		s := segs[i]
@@ -500,13 +527,13 @@ func arrowAtEnd(segs [][4]Point, shape string, size float64) ([][4]Point, Arrow)
 		left, _ := splitCubic(s, t0)
 		base := left[3]
 		tip := add(base, scale(normalize(sub(end, base)), length))
-		return append(slices.Clone(segs[:i]), left), Arrow{Shape: shape, Size: size, Base: base, Tip: tip}
+		return append(slices.Clone(segs[:i]), left), Arrow{Shape: shape, Size: size, PenWidth: penWidth, Base: base, Tip: tip}
 	}
 	// The curve is shorter than the arrow: draw the arrow over it.
 	start := segs[0][0]
 	tip := end
 	base := sub(tip, scale(normalize(sub(end, start)), length))
-	return nil, Arrow{Shape: shape, Size: size, Base: base, Tip: tip}
+	return nil, Arrow{Shape: shape, Size: size, PenWidth: penWidth, Base: base, Tip: tip}
 }
 
 // ArrowPolygon returns the outline of an arrowhead: the two corners of its
@@ -515,22 +542,37 @@ func ArrowPolygon(a Arrow) []Point {
 	dir := normalize(sub(a.Tip, a.Base))
 	perp := Point{-dir.Y, dir.X}
 	hw := arrowHalfWidth * a.Size
+	if a.PenWidth > 4 {
+		// The arrowhead of a pen wider than 4 points widens with it.
+		hw = float64(hw * a.PenWidth / 4)
+	}
 	return []Point{add(a.Base, scale(perp, hw)), a.Tip, sub(a.Base, scale(perp, hw))}
 }
 
 // edgeAttrs are the attributes that decide how an edge is drawn.
 type edgeAttrs struct {
 	invisible  bool
+	style      string
+	dotted     bool
 	color      string
 	head, tail string // arrowhead shapes, "" for none
 	size       float64
+	penWidth   float64
 }
 
 func readEdgeAttrs(g *graph.Graph, e *graph.Edge) edgeAttrs {
+	style := supported(graph.EdgeKind, "style", edgeValue(g, e, "style"), "solid")
+	styles := attrs.Styles(style)
 	a := edgeAttrs{
-		invisible: supported(graph.EdgeKind, "style", edgeValue(g, e, "style"), "solid") == "invis",
+		invisible: slices.Contains(styles, "invis"),
+		style:     style,
+		dotted:    slices.Contains(styles, "dotted"),
 		color:     supported(graph.EdgeKind, "color", edgeValue(g, e, "color"), "black"),
 		size:      number(edgeValue(g, e, "arrowsize"), 1, 0),
+		penWidth:  1,
+	}
+	if v := supported(graph.EdgeKind, "penwidth", edgeValue(g, e, "penwidth"), ""); v != "" {
+		a.penWidth, _ = parseNumber(v)
 	}
 	defDir := "forward"
 	if !g.Directed() {
@@ -589,7 +631,7 @@ func (r *router) routeEdges(g *graph.Graph, ends [][2]int, chains [][]int, polyl
 	}
 	for i, e := range edges {
 		a := readEdgeAttrs(g, e)
-		res := EdgeResult{Edge: e, Invisible: a.invisible, Color: a.color}
+		res := EdgeResult{Edge: e, Invisible: a.invisible, Color: a.color, Style: a.style, Dotted: a.dotted, PenWidth: a.penWidth}
 		group := groups[keyOf(i)]
 		idx := slices.Index(group, i)
 		off := float64(idx) - half(float64(len(group)-1))
@@ -666,11 +708,11 @@ func (r *router) routeEdges(g *graph.Graph, ends [][2]int, chains [][]int, polyl
 			res.middle = curveMiddle(segs)
 		}
 		if a.head != "" && len(segs) > 0 {
-			segs, res.Head = arrowAtEnd(segs, a.head, a.size)
+			segs, res.Head = arrowAtEnd(segs, a.head, a.size, a.penWidth)
 		}
 		if a.tail != "" && len(segs) > 0 {
 			rev := segments(reverseCurve(join(segs)))
-			rev, res.Tail = arrowAtEnd(rev, a.tail, a.size)
+			rev, res.Tail = arrowAtEnd(rev, a.tail, a.size, a.penWidth)
 			segs = segments(reverseCurve(join(rev)))
 		}
 		res.Points = join(segs)

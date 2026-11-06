@@ -1,0 +1,39 @@
+digraph {
+	graph [_draw_="c 9 -#fffffe00 C 7 -#ffffff P 4 0 0 0 108 126 108 126 0 ",
+		bb="0,0,126,108",
+		xdotversion=1.7
+	];
+	node [label="\N"];
+	a	[_draw_="c 7 -#000000 e 27 90 27 18 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 27 85.8 0 6.21 1 -a ",
+		height=0.5,
+		pos="27,90",
+		width=0.75];
+	b	[_draw_="c 7 -#000000 e 27 18 27 18 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 27 13.8 0 7 1 -b ",
+		height=0.5,
+		pos="27,18",
+		width=0.75];
+	a -> b	[_draw_="S 15 -setlinewidth(4) c 7 -#000000 B 4 27 55.92 27 54.63 27 53.34 27 52.06 ",
+		_hdraw_="S 15 -setlinewidth(4) S 5 -solid c 7 -#000000 C 7 -#000000 P 3 30.5 52.16 27 42.16 23.5 52.16 ",
+		_tdraw_="S 15 -setlinewidth(4) S 5 -solid c 7 -#000000 p 3 23.5 55.64 27 65.64 30.5 55.64 ",
+		arrowtail=empty,
+		dir=both,
+		penwidth=4,
+		pos="s,27,71.697 e,27,36.104 27,55.917 27,54.631 27,53.341 27,52.055"];
+	c	[_draw_="c 7 -#000000 e 99 90 27 18 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 99 85.8 0 6.21 1 -c ",
+		height=0.5,
+		pos="99,90",
+		width=0.75];
+	d	[_draw_="c 7 -#000000 e 99 18 27 18 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 99 13.8 0 7 1 -d ",
+		height=0.5,
+		pos="99,18",
+		width=0.75];
+	c -> d	[_draw_="S 15 -setlinewidth(6) c 7 -#000000 B 4 99 71.7 99 68.81 99 65.72 99 62.51 ",
+		_hdraw_="S 15 -setlinewidth(6) S 5 -solid c 7 -#000000 C 7 -#000000 P 3 109.5 62.56 99 42.56 88.5 62.56 ",
+		arrowsize=2,
+		penwidth=6,
+		pos="e,99,36.104 99,71.697 99,68.815 99,65.715 99,62.515"];
+}

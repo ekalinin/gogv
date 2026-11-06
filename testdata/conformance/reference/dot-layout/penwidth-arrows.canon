@@ -1,0 +1,8 @@
+digraph {
+	node [label="\N"];
+	a -> b	[arrowtail=empty,
+		dir=both,
+		penwidth=4];
+	c -> d	[arrowsize=2,
+		penwidth=6];
+}

@@ -1,0 +1,199 @@
+digraph workload {
+	graph [_draw_="c 9 -#fffffe00 C 7 -#ffffff P 4 0 0 0 647.8 669.92 647.8 669.92 0 ",
+		bb="0,0,669.92,647.8",
+		xdotversion=1.7
+	];
+	node [fillcolor="#f8f8f8",
+		label="\N",
+		style=filled
+	];
+	subgraph cluster_L {
+		graph [_draw_="c 7 -#000000 p 4 8 462.4 8 639.8 472 639.8 472 462.4 ",
+			bb="8,462.4,472,639.8"
+		];
+		"File: workload"	[_draw_="c 7 -#000000 C 7 -#f8f8f8 P 4 463.98 631.8 16.02 631.8 16.02 470.4 463.98 470.4 ",
+			_ldraw_="F 16 11 -Times-Roman c 7 -#000000 T 24.02 613.4 -1 93.77 14 -File: workload F 16 11 -Times-Roman c 7 -#000000 T 24.02 594.2 -1 115.95 \
+17 -Type: alloc_space F 16 11 -Times-Roman c 7 -#000000 T 24.02 575 -1 216.44 29 -Time: 2026-11-06 11:32:23 MSK F 16 11 -Times-Roman \
+c 7 -#000000 T 24.02 555.8 -1 431.97 61 -Showing nodes accounting for 15.36MB, 37.31% of 41.16MB total F 16 11 -Times-Roman c 7 \
+-#000000 T 24.02 536.6 -1 238.46 32 -Dropped 91 nodes (cum <= 0.21MB) F 16 11 -Times-Roman c 7 -#000000 T 24.02 517.4 -1 196.45 \
+29 -Showing top 4 nodes out of 27 F 16 11 -Times-Roman c 7 -#000000 T 24.02 479.2 -1 327.94 50 -See https://git.io/JfYMW for how \
+to read the graph ",
+			fontsize=16,
+			height=2.2417,
+			label="File: workload\lType: alloc_space\lTime: 2026-11-06 11:32:23 MSK\lShowing nodes accounting for 15.36MB, 37.31% of 41.16MB total\lDropped \
+91 nodes (cum <= 0.21MB)\lShowing top 4 nodes out of 27\l\lSee https://git.io/JfYMW for how to read the graph\l",
+			pos="240,551.1",
+			shape=box,
+			tooltip=workload,
+			width=6.2218];
+	}
+	N1	[_draw_="c 7 -#b20100 C 7 -#edd5d5 P 4 575.55 569.5 482.45 569.5 482.45 532.7 575.55 532.7 ",
+		_ldraw_="F 8 11 -Times-Roman c 7 -#000000 T 529 558.3 0 24.88 7 -runtime F 8 11 -Times-Roman c 7 -#000000 T 529 548.7 0 16 4 -main F 8 11 \
+-Times-Roman c 7 -#000000 T 529 539.1 0 77.11 21 -0 of 40.15MB (97.55%) ",
+		color="#b20100",
+		fillcolor="#edd5d5",
+		fontsize=8,
+		height=0.51111,
+		id=node1,
+		label="runtime\nmain\n0 of 40.15MB (97.55%)",
+		pos="529,551.1",
+		shape=box,
+		tooltip="runtime.main (40.15MB)",
+		width=1.2931];
+	N3	[_draw_="c 7 -#b20300 C 7 -#edd5d5 P 4 575.55 417.6 482.45 417.6 482.45 371.2 575.55 371.2 ",
+		_ldraw_="F 8 11 -Times-Roman c 7 -#000000 T 529 406.4 0 16 4 -main F 8 11 -Times-Roman c 7 -#000000 T 529 396.8 0 16 4 -main F 8 11 -Times-Roman \
+c 7 -#000000 T 529 387.2 0 18.21 5 -func4 F 8 11 -Times-Roman c 7 -#000000 T 529 377.6 0 77.11 21 -0 of 38.83MB (94.33%) ",
+		color="#b20300",
+		fillcolor="#edd5d5",
+		fontsize=8,
+		height=0.64444,
+		id=node3,
+		label="main\nmain\nfunc4\n0 of 38.83MB (94.33%)",
+		pos="529,394.4",
+		shape=box,
+		tooltip="main.main.func4 (38.83MB)",
+		width=1.2931];
+	N1 -> N3	[_draw_="S 15 -setlinewidth(5) S 6 -dotted c 7 -#b20300 B 4 529 532.35 529 508.51 529 465.51 529 434.03 ",
+		_hdraw_="S 15 -setlinewidth(5) S 5 -solid c 7 -#b20300 C 7 -#b20300 P 3 533.38 434.16 529 424.16 524.63 434.16 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 557.39 439.8 0 56.79 8 - 38.83MB ",
+		color="#b20300",
+		label=" 38.83MB",
+		labeltooltip="runtime.main ... main.main.func4 (38.83MB)",
+		lp="557.39,444",
+		penwidth=5,
+		pos="e,529,417.93 529,532.35 529,508.51 529,465.51 529,434.03",
+		style=dotted,
+		tooltip="runtime.main ... main.main.func4 (38.83MB)",
+		weight=95];
+	N2	[_draw_="c 7 -#b22d00 C 7 -#eddbd5 P 4 630.66 212 427.34 212 427.34 88.8 630.66 88.8 ",
+		_ldraw_="F 24 11 -Times-Roman c 7 -#000000 T 529 186.4 0 64.01 7 -strings F 24 11 -Times-Roman c 7 -#000000 T 529 157.6 0 99.97 10 -(*Builder) \
+F 24 11 -Times-Roman c 7 -#000000 T 529 128.8 0 113.31 11 -WriteString F 24 11 -Times-Roman c 7 -#000000 T 529 100 0 187.32 16 -15.36MB (\
+37.31%) ",
+		color="#b22d00",
+		fillcolor="#eddbd5",
+		fontsize=24,
+		height=1.7111,
+		id=node2,
+		label="strings\n(*Builder)\nWriteString\n15.36MB (37.31%)",
+		pos="529,150.4",
+		shape=box,
+		tooltip="strings.(*Builder).WriteString (15.36MB)",
+		width=2.8239];
+	NN2_0	[_draw_="c 7 -#000000 C 7 -#f8f8f8 P 6 447 36 397 36 393 32 393 0 443 0 447 4 c 7 -#000000 L 2 443 32 393 32 c 7 -#000000 L 2 443 32 443 \
+0 c 7 -#000000 L 2 443 32 447 36 ",
+		_ldraw_="F 8 11 -Times-Roman c 7 -#000000 T 420 15.6 0 13.34 3 -2kB ",
+		fontsize=8,
+		height=0.5,
+		id=NN2_0,
+		label="2kB",
+		pos="420,18",
+		shape=box3d,
+		tooltip="5.86MB",
+		width=0.75];
+	N2 -> NN2_0	[_draw_="c 7 -#000000 B 7 452.45 88.77 447.27 83.02 442.44 77 438.21 70.8 433.4 63.73 429.72 55.25 426.98 47.22 ",
+		_hdraw_="S 5 -solid c 7 -#000000 C 7 -#000000 P 3 430.38 46.37 424.13 37.81 423.68 48.4 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 463.11 58.2 0 49.79 7 - 5.86MB ",
+		label=" 5.86MB",
+		labeltooltip="5.86MB",
+		lp="463.11,62.4",
+		pos="e,423.7,36.365 452.45,88.772 447.27,83.018 442.44,77.004 438.21,70.8 433.4,63.73 429.72,55.253 426.98,47.224",
+		tooltip="5.86MB",
+		weight=100];
+	NN2_1	[_draw_="c 7 -#000000 C 7 -#f8f8f8 P 6 520 36 470 36 466 32 466 0 516 0 520 4 c 7 -#000000 L 2 516 32 466 32 c 7 -#000000 L 2 516 32 516 \
+0 c 7 -#000000 L 2 516 32 520 36 ",
+		_ldraw_="F 8 11 -Times-Roman c 7 -#000000 T 493 15.6 0 23.34 6 -1.38kB ",
+		fontsize=8,
+		height=0.5,
+		id=NN2_1,
+		label="1.38kB",
+		pos="493,18",
+		shape=box3d,
+		tooltip="4.03MB",
+		width=0.75];
+	N2 -> NN2_1	[_draw_="c 7 -#000000 B 7 499.28 88.4 497.26 82.55 495.52 76.63 494.21 70.8 492.56 63.43 491.87 55.31 491.67 47.74 ",
+		_hdraw_="S 5 -solid c 7 -#000000 C 7 -#000000 P 3 495.17 48 491.72 37.99 488.17 47.97 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 519.11 58.2 0 49.79 7 - 4.03MB ",
+		label=" 4.03MB",
+		labeltooltip="4.03MB",
+		lp="519.11,62.4",
+		pos="e,491.72,36.473 499.28,88.398 497.26,82.549 495.52,76.625 494.21,70.8 492.56,63.426 491.87,55.314 491.67,47.742",
+		tooltip="4.03MB",
+		weight=100];
+	NN2_2	[_draw_="c 7 -#000000 C 7 -#f8f8f8 P 6 593.34 36 542.66 36 538.66 32 538.66 0 589.34 0 593.34 4 c 7 -#000000 L 2 589.34 32 538.66 32 c 7 \
+-#000000 L 2 589.34 32 589.34 0 c 7 -#000000 L 2 589.34 32 593.34 36 ",
+		_ldraw_="F 8 11 -Times-Roman c 7 -#000000 T 566 15.6 0 38.67 10 -128B..512B ",
+		fontsize=8,
+		height=0.5,
+		id=NN2_2,
+		label="128B..512B",
+		pos="566,18",
+		shape=box3d,
+		tooltip="2.56MB",
+		width=0.75933];
+	N2 -> NN2_2	[_draw_="c 7 -#000000 B 4 546.31 88.4 550.41 73.93 554.6 59.19 558.05 47.03 ",
+		_hdraw_="S 5 -solid c 7 -#000000 C 7 -#000000 P 3 561.33 48.3 560.69 37.72 554.59 46.39 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 579.96 58.2 0 49.79 7 - 2.56MB ",
+		label=" 2.56MB",
+		labeltooltip="2.56MB",
+		lp="579.96,62.4",
+		pos="e,561.1,36.266 546.31,88.4 550.41,73.933 554.6,59.189 558.05,47.034",
+		tooltip="2.56MB",
+		weight=100];
+	NN2_3	[_draw_="c 7 -#000000 C 7 -#f8f8f8 P 6 666 36 616 36 612 32 612 0 662 0 666 4 c 7 -#000000 L 2 662 32 612 32 c 7 -#000000 L 2 662 32 662 \
+0 c 7 -#000000 L 2 662 32 666 36 ",
+		_ldraw_="F 8 11 -Times-Roman c 7 -#000000 T 639 15.6 0 17.34 4 -896B ",
+		fontsize=8,
+		height=0.5,
+		id=NN2_3,
+		label="896B",
+		pos="639,18",
+		shape=box3d,
+		tooltip="2.56MB",
+		width=0.75];
+	N2 -> NN2_3	[_draw_="c 7 -#000000 B 7 593.97 88.65 599.25 82.8 604.35 76.8 609 70.8 614.91 63.18 620.48 54.27 625.18 46.02 ",
+		_hdraw_="S 5 -solid c 7 -#000000 C 7 -#000000 P 3 628.17 47.84 629.89 37.38 622.03 44.48 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 645.03 58.2 0 49.79 7 - 2.56MB ",
+		label=" 2.56MB",
+		labeltooltip="2.56MB",
+		lp="645.03,62.4",
+		pos="e,630.62,36.056 593.97,88.652 599.25,82.797 604.35,76.801 609,70.8 614.91,63.178 620.48,54.274 625.18,46.019",
+		tooltip="2.56MB",
+		weight=100];
+	N4	[_draw_="c 7 -#b21500 C 7 -#edd8d5 P 4 575.55 318.4 482.45 318.4 482.45 281.6 575.55 281.6 ",
+		_ldraw_="F 8 11 -Times-Roman c 7 -#000000 T 529 307.2 0 16 4 -main F 8 11 -Times-Roman c 7 -#000000 T 529 297.6 0 35.11 10 -stringLoop F \
+8 11 -Times-Roman c 7 -#000000 T 529 288 0 77.11 21 -0 of 26.62MB (64.67%) ",
+		color="#b21500",
+		fillcolor="#edd8d5",
+		fontsize=8,
+		height=0.51111,
+		id=node4,
+		label="main\nstringLoop\n0 of 26.62MB (64.67%)",
+		pos="529,300",
+		shape=box,
+		tooltip="main.stringLoop (26.62MB)",
+		width=1.2931];
+	N3 -> N4	[_draw_="S 15 -setlinewidth(4) S 6 -dotted c 7 -#b21500 B 4 529 371.03 529 360.14 529 346.82 529 334.73 ",
+		_hdraw_="S 15 -setlinewidth(4) S 5 -solid c 7 -#b21500 C 7 -#b21500 P 3 532.5 334.89 529 324.89 525.5 334.89 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 557.39 340.6 0 56.79 8 - 26.62MB ",
+		color="#b21500",
+		label=" 26.62MB",
+		labeltooltip="main.main.func4 ... main.stringLoop (26.62MB)",
+		lp="557.39,344.8",
+		penwidth=4,
+		pos="e,529,318.84 529,371.03 529,360.14 529,346.82 529,334.73",
+		style=dotted,
+		tooltip="main.main.func4 ... main.stringLoop (26.62MB)",
+		weight=65];
+	N4 -> N2	[_draw_="S 15 -setlinewidth(2) c 7 -#b22d00 B 4 529 281.2 529 267.04 529 246.21 529 225.36 ",
+		_hdraw_="S 15 -setlinewidth(2) S 5 -solid c 7 -#b22d00 C 7 -#b22d00 P 3 532.5 225.46 529 215.46 525.5 225.46 ",
+		_ldraw_="F 14 11 -Times-Roman c 7 -#000000 T 557.39 251 0 56.79 8 - 15.36MB F 14 11 -Times-Roman c 7 -#000000 T 557.39 234.2 0 44.71 9 - (\
+inline) ",
+		color="#b22d00",
+		label=" 15.36MB\n (inline)",
+		labeltooltip="main.stringLoop -> strings.(*Builder).WriteString (15.36MB)",
+		lp="557.39,246.8",
+		penwidth=2,
+		pos="e,529,212.43 529,281.2 529,267.04 529,246.21 529,225.36",
+		tooltip="main.stringLoop -> strings.(*Builder).WriteString (15.36MB)",
+		weight=38];
+}

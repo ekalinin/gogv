@@ -485,7 +485,7 @@ func compareJSONOps(p *problems, path string, ref, got any) {
 
 // CompareInlineSVG compares svg_inline outputs: the lines before the root
 // element, but for the version of the generator, then the drawing as
-// CompareSVG compares it, once the namespace that the rasterizer needs is
+// CompareSVG compares it, once the namespaces that the rasterizer needs are
 // put back.
 func CompareInlineSVG(r Rasterizer, ref, got []byte) error {
 	prolog := func(svg []byte) string {
@@ -503,7 +503,7 @@ func CompareInlineSVG(r Rasterizer, ref, got []byte) error {
 		return fmt.Errorf("prolog %q, the reference's %q", prolog(got), prolog(ref))
 	}
 	ns := func(svg []byte) []byte {
-		return bytes.Replace(svg, []byte("<svg "), []byte(`<svg xmlns="http://www.w3.org/2000/svg" `), 1)
+		return bytes.Replace(svg, []byte("<svg "), []byte(`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" `), 1)
 	}
 	_, err := CompareSVG(r, ns(ref), ns(got))
 	return err

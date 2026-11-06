@@ -1,0 +1,73 @@
+{
+  "name": "%1",
+  "directed": true,
+  "strict": false,
+  "bb": "0,0,154.16,124.8",
+  "_subgraph_cnt": 0,
+  "objects": [
+    {
+      "_gvid": 0,
+      "name": "N1",
+      "fillcolor": "#edd7d5",
+      "height": "0.5",
+      "id": "node1",
+      "label": "main",
+      "pos": "94.162,106.8",
+      "shape": "box",
+      "style": "filled",
+      "tooltip": "main (10ms)",
+      "width": "0.75"
+    },
+    {
+      "_gvid": 1,
+      "name": "N1_0",
+      "height": "0.5",
+      "id": "N1_0",
+      "label": "work:hash",
+      "pos": "37.162,18",
+      "shape": "box3d",
+      "tooltip": "10ms",
+      "width": "1.0323"
+    },
+    {
+      "_gvid": 2,
+      "name": "N2",
+      "height": "0.5",
+      "label": "bar",
+      "pos": "127.16,18",
+      "width": "0.75"
+    }
+  ],
+  "edges": [
+    {
+      "_gvid": 0,
+      "tail": 0,
+      "head": 1,
+      "label": " 10ms",
+      "labeltooltip": "10ms",
+      "lp": "70.243,62.4",
+      "pos": "e,40.051,36.376 69.471,88.503 63.518,83.371 57.638,77.351 53.324,70.8 48.729,63.822 45.378,55.462 42.961,47.515",
+      "tooltip": "10ms"
+    },
+    {
+      "_gvid": 1,
+      "tail": 0,
+      "head": 2,
+      "label": " 5ms",
+      "labeltooltip": "main -> bar (5ms)",
+      "lp": "108.74,62.4",
+      "penwidth": "2",
+      "pos": "e,110.51,32.64 91.575,88.398 90.752,78.047 90.984,64.859 95.324,54 96.991,49.831 99.397,45.847 102.15,42.159",
+      "tooltip": "main -> bar (5ms)"
+    },
+    {
+      "_gvid": 2,
+      "tail": 2,
+      "head": 0,
+      "label": "",
+      "pos": "e,111.18,88.562 127.93,36.384 127.8,46.729 126.58,59.917 122.16,70.8 121,73.675 119.51,76.504 117.84,79.231",
+      "style": "dotted",
+      "tooltip": "bar ... main"
+    }
+  ]
+}

@@ -7,7 +7,10 @@ package layout
 import (
 	"context"
 	"math"
+	"slices"
+	"strconv"
 
+	"github.com/ekalinin/gogv/internal/attrs"
 	"github.com/ekalinin/gogv/internal/graph"
 	"github.com/ekalinin/gogv/internal/label"
 )
@@ -28,10 +31,15 @@ type NodeResult struct {
 	Color     string
 	// ColorSet is set when the color attribute gives the color.
 	ColorSet bool
-	// Style is the supported style of the node: "solid" or "rounded".
+	// Style is the supported style of the node as it is written: "solid",
+	// or a list of "solid", "filled" and "rounded".
 	Style string
 	// Rounded is set for a rectangle with rounded corners.
 	Rounded bool
+	// Filled is set for a node with style=filled. FillColor is its
+	// fillcolor, or "" when it has none.
+	Filled    bool
+	FillColor string
 	// XLabel is the node's external label, centered on XLabelPos; it has
 	// no lines and no table when the node has none.
 	XLabel    Text
@@ -47,6 +55,12 @@ type EdgeResult struct {
 	Points    []Point
 	Invisible bool
 	Color     string
+	// Style is the supported style of the edge as it is written: "solid",
+	// or a list of "solid", "invis" and "dotted"; Dotted is set when it
+	// holds "dotted". PenWidth is the width of its pen, in points.
+	Style    string
+	Dotted   bool
+	PenWidth float64
 	// Head and Tail are the arrowheads at the ends: Shape is "" when the
 	// end has none; Tip is where the arrow points, Base where the curve
 	// ends.
@@ -68,10 +82,25 @@ type EdgeResult struct {
 	tailEnd, headEnd, middle Point
 }
 
+// Fill returns the color that fills the node, as the reference chooses it
+// and plain writes it: its fillcolor, or else its color when set, or else
+// lightgrey.
+func (n *NodeResult) Fill() string {
+	switch {
+	case n.FillColor != "":
+		return n.FillColor
+	case n.ColorSet:
+		return n.Color
+	}
+	return "lightgrey"
+}
+
 // Arrow is an arrowhead.
 type Arrow struct {
-	Shape     string
-	Size      float64
+	Shape string
+	Size  float64
+	// PenWidth is the width of the pen of the edge.
+	PenWidth  float64
 	Base, Tip Point
 }
 
@@ -160,11 +189,16 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 			// plain writes a table label as it is written.
 			lt = nodeValue(g, n, "label").S
 		}
+		colorSet := color == nodeValue(g, n, "color").S
+		fill := supported(graph.NodeKind, "fillcolor", nodeValue(g, n, "fillcolor"), "")
+		styles := attrs.Styles(style)
 		res.Nodes = append(res.Nodes, NodeResult{
 			Node: n, W: w, H: h, Shape: shape, Label: text, LabelText: lt,
-			Color: color, ColorSet: color == nodeValue(g, n, "color").S,
-			Style:   style,
-			Rounded: isRectangular(shape) && shape != "plaintext" && style == "rounded",
+			Color: color, ColorSet: colorSet,
+			Style:     style,
+			Rounded:   isRectangular(shape) && shape != "plaintext" && shape != "box3d" && slices.Contains(styles, "rounded"),
+			Filled:    slices.Contains(styles, "filled"),
+			FillColor: fill,
 		})
 		lw[i], lh[i] = w, h
 		if p.lr {
@@ -191,9 +225,17 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 
 	var rankEdges []rankEdge
 	ends := make([][2]int, 0, len(g.Edges()))
+	// Each edge weighs its weight in the ranking and in the positioning, as
+	// the weight of Gansner et al.
+	weights := make([]int, 0, len(g.Edges()))
 	for _, e := range g.Edges() {
 		t, h := index[e.Tail], index[e.Head]
 		ends = append(ends, [2]int{t, h})
+		weight, err := strconv.Atoi(supported(graph.EdgeKind, "weight", edgeValue(g, e, "weight"), "1"))
+		if err != nil {
+			weight = 1
+		}
+		weights = append(weights, weight)
 		if t == h || !boolean(edgeValue(g, e, "constraint"), true) {
 			continue
 		}
@@ -201,7 +243,7 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 		if doubled {
 			minlen *= 2
 		}
-		rankEdges = append(rankEdges, rankEdge{tail: t, head: h, minlen: minlen, weight: 1})
+		rankEdges = append(rankEdges, rankEdge{tail: t, head: h, minlen: minlen, weight: weight})
 	}
 	tree := buildClusterTree(g, index)
 	var ranks []int
@@ -222,7 +264,7 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 	for i := range own {
 		ownChain[i] = own[i] || hasPort(ports[i])
 	}
-	rg, chains := buildRanked(ranks, ends, ownChain)
+	rg, chains := buildRanked(ranks, ends, ownChain, weights)
 	rg.setPorts(chains, ends, ports, lw, p.lr)
 	// The label of an edge belongs to the virtual node halfway along its
 	// chain.

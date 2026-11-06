@@ -1,0 +1,16 @@
+digraph {
+	graph [bb="0,0,144,144"];
+	node [label="\N"];
+	a	[height=1,
+		label="",
+		pos="72,108",
+		shape=box3d,
+		width=2];
+	b	[fontsize=8,
+		height=0.5,
+		label="work:hash",
+		pos="72,18",
+		shape=box3d,
+		width=0.75];
+	a -> b	[pos="e,72,36.176 72,71.714 72,63.681 72,55.244 72,47.533"];
+}
