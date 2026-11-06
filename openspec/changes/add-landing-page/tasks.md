@@ -26,7 +26,7 @@
 
 ## 3. Site assembly
 
-- [ ] 3.1 Add `tools/site` with the local build (design D4), and the `site` target of the Makefile, which writes `.cache/site`. Add tests for "Preview" and "License files on the site". Verify that they pass, and that `make site` writes the following into `.cache/site`:
+- [x] 3.1 Add `tools/site` with the local build (design D4), and the `site` target of the Makefile, which writes `.cache/site`. Add tests for "Preview" and "License files on the site". Verify that they pass, and that `make site` writes the following into `.cache/site`:
   - `index.html` and `example.svg`;
   - `wasm/` with `gogv.wasm`, `wasm_exec.js`, `gogv.mjs`, `LICENSE` and `NOTICE`.
 - [ ] 3.2 Add the `-release` build (design D4), and its tests on temporary git repositories:
