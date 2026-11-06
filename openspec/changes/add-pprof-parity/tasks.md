@@ -43,7 +43,7 @@
 
 ## 5. Acceptance
 
-- [ ] 5.1 Run the conformance suite with the gopuml corpora, and list the remaining differences in `known-differences.yaml` with their reasons. Verify:
+- [x] 5.1 Run the conformance suite with the gopuml corpora, and list the remaining differences in `known-differences.yaml` with their reasons. Verify:
   - `make conformance` reports no failed case;
   - the pprof cases are judged, none of them reported as not supported yet;
   - no other case changes its outcome.

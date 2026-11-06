@@ -84,3 +84,21 @@
 - id: vega-svg/interactive-SVG0006_Svek-1
   reason: "labeled flat edges between ports: the reference raises their labels above the rank and routes the edges through them, the second one below the rank, so the drawing is 30 points higher; gogv draws them straight with the label above, as labeled flat edges without ports"
   change: tune-layout-heuristics
+- id: dot-language/pprof-attributes
+  reason: "a heavy labeled edge and a light edge back between the same nodes: the reference keeps the labeled edge straight and routes the other one within the width of the nodes, gogv bends both as parallel edges, so the drawing is 11 points wider; the nodes are where the reference puts them"
+  change: tune-layout-heuristics
+- id: output-formats/tooltips-ids
+  reason: "a labeled edge and an edge back between the same nodes: the edge back goes 4 points further right than the reference's (SSIM 0.899); the nodes are where the reference puts them"
+  change: tune-layout-heuristics
+- id: pprof/cpu
+  reason: "order within ranks of a large profile: subtrees are ordered otherwise than the reference's, so the drawing is 12% wider; without weights the two differ as much"
+  change: tune-layout-heuristics
+- id: pprof/cpu-diff
+  reason: "order within ranks of a large profile: subtrees are ordered otherwise than the reference's, so the drawing is 41% wider; without weights the two differ as much"
+  change: tune-layout-heuristics
+- id: pprof/cpu-focus
+  reason: "order within ranks: the drawing is 5% narrower than the reference's"
+  change: tune-layout-heuristics
+- id: pprof/heap-nodecount
+  reason: "the nodes are where the reference puts them, but its thick dotted edges have other control points, so their dots fall at other places (SSIM 0.846)"
+  change: tune-layout-heuristics
