@@ -18,7 +18,7 @@
 
   Add the presentation tests of `landing_test.go` for "Visit the page", "JavaScript disabled", "Output formats", "Example graph" and "Installation". Verify that they pass, and that the page, opened from the file with JavaScript disabled, shows every section except the playground.
 - [x] 2.2 Add the release tests of `landing_test.go` (design D2) for "Page behind the notes" and "Conformance results out of date". Mutations of the page must make the checks fail: another tag, a changed number. Verify that the tests pass and that each mutation makes them fail.
-- [ ] 2.3 Write `site/playground.mjs` (design D6): the controller created with a `load` function, the examples, the warnings, the error, the version and the download. Add `internal/playground/playground_test.go`, which builds the module and runs Node.js on it:
+- [x] 2.3 Write `site/playground.mjs` (design D6): the controller created with a `load` function, the examples, the warnings, the error, the version and the download. Add `internal/playground/playground_test.go`, which builds the module and runs Node.js on it:
   - with the real loader: "Simple graph", "Feature not supported yet", "Syntax error", "Example graph" for every example, and "Download";
   - with fake loaders: "Reading the top of the page", where nothing is loaded before activation, and "Module not available".
 

@@ -266,3 +266,24 @@ func TestLandingReleaseScenarios(t *testing.T) {
 		}
 	})
 }
+
+func TestPlaygroundFirstExample(t *testing.T) {
+	// The first example of the playground, its initial source, is the
+	// example of the README.
+	js, err := os.ReadFile("site/playground.mjs")
+	if err != nil {
+		t.Fatal(err)
+	}
+	m := regexp.MustCompile("(?s)export const examples = \\[\\s*\\{[^`]*source: `((?:[^`\\\\]|\\\\.)*)`").FindSubmatch(js)
+	if m == nil {
+		t.Fatal("no first example in site/playground.mjs")
+	}
+	source := strings.NewReplacer("\\\\", "\\", "\\`", "`", "\\$", "$").Replace(string(m[1]))
+	want, err := os.ReadFile("docs/example.gv")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if source != string(want) {
+		t.Errorf("the first example of the playground is not docs/example.gv:\n%s", source)
+	}
+}
