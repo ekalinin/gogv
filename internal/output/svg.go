@@ -102,23 +102,51 @@ func writeSVG(res *layout.Result, inline bool) []byte {
 
 func y(v float64) string { return svgNumber(-v) }
 
+// strokeWidth writes the stroke-width attribute of a pen other than 1 point.
+func strokeWidth(w float64) string {
+	if w == 1 {
+		return ""
+	}
+	return ` stroke-width="` + svgNumber(w) + `"`
+}
+
 func svgColor(c string) string { return strings.ToLower(c) }
 
 func writeNode(b *bytes.Buffer, n *layout.NodeResult, id int) {
 	name := xmlText(n.Node.Name)
 	fmt.Fprintf(b, "<!-- %s -->\n<g id=\"node%d\" class=\"node\">\n<title>%s</title>\n", name, id, name)
 	color := svgColor(n.Color)
+	// The fill of a filled node, as the reference chooses it.
+	fill := "none"
+	if n.Filled {
+		fill = svgColor(n.Fill())
+	}
 	switch n.Shape {
 	case "ellipse", "oval", "circle":
-		fmt.Fprintf(b, "<ellipse fill=\"none\" stroke=\"%s\" cx=\"%s\" cy=\"%s\" rx=\"%s\" ry=\"%s\"/>\n",
-			color, svgNumber(n.X), y(n.Y), svgNumber(n.W/2), svgNumber(n.H/2))
-	case "point":
 		fmt.Fprintf(b, "<ellipse fill=\"%s\" stroke=\"%s\" cx=\"%s\" cy=\"%s\" rx=\"%s\" ry=\"%s\"/>\n",
-			color, color, svgNumber(n.X), y(n.Y), svgNumber(n.W/2), svgNumber(n.H/2))
+			fill, color, svgNumber(n.X), y(n.Y), svgNumber(n.W/2), svgNumber(n.H/2))
+	case "point":
+		// A point is always filled: with its fillcolor, or its color.
+		fill = color
+		if n.FillColor != "" {
+			fill = svgColor(n.FillColor)
+		}
+		fmt.Fprintf(b, "<ellipse fill=\"%s\" stroke=\"%s\" cx=\"%s\" cy=\"%s\" rx=\"%s\" ry=\"%s\"/>\n",
+			fill, color, svgNumber(n.X), y(n.Y), svgNumber(n.W/2), svgNumber(n.H/2))
 	case "plaintext":
+		// Filled, it is a polygon without a stroke.
+		if n.Filled {
+			writePolygon(b, n, "none", fill)
+		}
+	case "box3d":
+		writePolygon(b, n, color, fill)
+		for _, l := range layout.Box3DLines(n.W, n.H) {
+			fmt.Fprintf(b, "<polyline fill=\"none\" stroke=\"%s\" points=\"%s,%s %s,%s\"/>\n", color,
+				svgNumber(n.X+l[0].X), y(n.Y+l[0].Y), svgNumber(n.X+l[1].X), y(n.Y+l[1].Y))
+		}
 	case "box", "rect", "rectangle":
 		if !n.Rounded {
-			writePolygon(b, n, color)
+			writePolygon(b, n, color, fill)
 			break
 		}
 		var d strings.Builder
@@ -133,9 +161,9 @@ func writeNode(b *bytes.Buffer, n *layout.NodeResult, id int) {
 			}
 			d.WriteString(svgNumber(n.X+p.X) + "," + y(n.Y+p.Y))
 		}
-		fmt.Fprintf(b, "<path fill=\"none\" stroke=\"%s\" d=\"%s\"/>\n", color, d.String())
+		fmt.Fprintf(b, "<path fill=\"%s\" stroke=\"%s\" d=\"%s\"/>\n", fill, color, d.String())
 	default:
-		writePolygon(b, n, color)
+		writePolygon(b, n, color, fill)
 	}
 	if n.Shape != "point" {
 		writeLabel(b, n.Label, layout.Point{X: n.X, Y: n.Y}, color)
@@ -159,14 +187,14 @@ func writeCluster(b *bytes.Buffer, c *layout.ClusterResult, id int) {
 	b.WriteString("</g>\n")
 }
 
-// writePolygon writes the outline of a polygonal node.
-func writePolygon(b *bytes.Buffer, n *layout.NodeResult, color string) {
+// writePolygon writes the outline of a polygonal node, with its fill.
+func writePolygon(b *bytes.Buffer, n *layout.NodeResult, color, fill string) {
 	var pts []string
 	vs := layout.PolygonVertices(n.Shape, n.W, n.H)
 	for _, v := range append(vs, vs[0]) {
 		pts = append(pts, svgNumber(n.X+v.X)+","+y(n.Y+v.Y))
 	}
-	fmt.Fprintf(b, "<polygon fill=\"none\" stroke=\"%s\" points=\"%s\"/>\n", color, strings.Join(pts, " "))
+	fmt.Fprintf(b, "<polygon fill=\"%s\" stroke=\"%s\" points=\"%s\"/>\n", fill, color, strings.Join(pts, " "))
 }
 
 // writeLabel writes a label centered on c: its lines, or its table as
@@ -331,7 +359,13 @@ func writeEdge(b *bytes.Buffer, e *layout.EdgeResult, id int, g *graph.Graph) {
 			}
 			d.WriteString(svgNumber(p.X) + "," + y(p.Y))
 		}
-		fmt.Fprintf(b, "<path fill=\"none\" stroke=\"%s\" d=\"%s\"/>\n", color, d.String())
+		// A pen other than 1 point has its width, and a dotted edge its
+		// dashes, which its arrowheads do not have.
+		dash := ""
+		if e.Dotted {
+			dash = ` stroke-dasharray="1,5"`
+		}
+		fmt.Fprintf(b, "<path fill=\"none\" stroke=\"%s\"%s%s d=\"%s\"/>\n", color, strokeWidth(e.PenWidth), dash, d.String())
 	}
 	for _, a := range []layout.Arrow{e.Tail, e.Head} {
 		if a.Shape == "" {
@@ -346,7 +380,7 @@ func writeEdge(b *bytes.Buffer, e *layout.EdgeResult, id int, g *graph.Graph) {
 		if a.Shape == "empty" {
 			fill = "none"
 		}
-		fmt.Fprintf(b, "<polygon fill=\"%s\" stroke=\"%s\" points=\"%s\"/>\n", fill, color, strings.Join(s, " "))
+		fmt.Fprintf(b, "<polygon fill=\"%s\" stroke=\"%s\"%s points=\"%s\"/>\n", fill, color, strokeWidth(e.PenWidth), strings.Join(s, " "))
 	}
 	for _, l := range []struct {
 		t layout.Text

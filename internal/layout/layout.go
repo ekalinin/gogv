@@ -36,9 +36,8 @@ type NodeResult struct {
 	Style string
 	// Rounded is set for a rectangle with rounded corners.
 	Rounded bool
-	// Filled is set for a node with style=filled. FillColor is the color
-	// that fills it, as plain writes it: its fillcolor, or else its color
-	// when set, or else lightgrey.
+	// Filled is set for a node with style=filled. FillColor is its
+	// fillcolor, or "" when it has none.
 	Filled    bool
 	FillColor string
 	// XLabel is the node's external label, centered on XLabelPos; it has
@@ -81,6 +80,19 @@ type EdgeResult struct {
 	// is halfway along it, in the layout orientation until the end of the
 	// layout.
 	tailEnd, headEnd, middle Point
+}
+
+// Fill returns the color that fills the node, as the reference chooses it
+// and plain writes it: its fillcolor, or else its color when set, or else
+// lightgrey.
+func (n *NodeResult) Fill() string {
+	switch {
+	case n.FillColor != "":
+		return n.FillColor
+	case n.ColorSet:
+		return n.Color
+	}
+	return "lightgrey"
 }
 
 // Arrow is an arrowhead.
@@ -179,13 +191,6 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 		}
 		colorSet := color == nodeValue(g, n, "color").S
 		fill := supported(graph.NodeKind, "fillcolor", nodeValue(g, n, "fillcolor"), "")
-		switch {
-		case fill != "":
-		case colorSet:
-			fill = color
-		default:
-			fill = "lightgrey"
-		}
 		styles := attrs.Styles(style)
 		res.Nodes = append(res.Nodes, NodeResult{
 			Node: n, W: w, H: h, Shape: shape, Label: text, LabelText: lt,

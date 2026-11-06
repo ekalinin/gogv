@@ -220,3 +220,27 @@ func TestPlainExtAndInlineSVG(t *testing.T) {
 		t.Errorf("svg_inline differs from svg beyond its prolog:\n%s", inline)
 	}
 }
+
+// TestSVGPprofDrawing checks the drawing scenarios of the pprof parity
+// change: fills, box3d, dotted edges and wider pens.
+func TestSVGPprofDrawing(t *testing.T) {
+	svg := render(t, `digraph { a [style=filled]; b [style=filled, color="#FF0000"]; c [fillcolor="#00FF00"]; d [shape=box, style=filled, fillcolor="#0000FF"]; f [shape=plaintext, style=filled, fillcolor="#00FF00"] }`, SVG)
+	for _, want := range []string{`<ellipse fill="lightgrey" stroke="black"`, `<ellipse fill="#ff0000" stroke="#ff0000"`, `<ellipse fill="none" stroke="black"`, `<polygon fill="#0000ff" stroke="black"`, `<polygon fill="#00ff00" stroke="none"`} {
+		if !strings.Contains(svg, want) {
+			t.Errorf("filled nodes: no %s in\n%s", want, svg)
+		}
+	}
+	svg = render(t, `digraph { a [shape=box3d] }`, SVG)
+	if !regexp.MustCompile(`<polygon fill="none" stroke="black" points="([-\d.]+,[-\d.]+ ){6}[-\d.]+,[-\d.]+"/>\n(<polyline fill="none" stroke="black" points="[^"]+"/>\n){3}`).MatchString(svg) {
+		t.Errorf("box with depth:\n%s", svg)
+	}
+	svg = render(t, `digraph { a -> b [style=dotted]; c -> d [penwidth=3] }`, SVG)
+	for _, re := range []string{
+		`<path fill="none" stroke="black" stroke-dasharray="1,5" d="[^"]+"/>\n<polygon fill="black" stroke="black" points=`,
+		`<path fill="none" stroke="black" stroke-width="3" d="[^"]+"/>\n<polygon fill="black" stroke="black" stroke-width="3" points=`,
+	} {
+		if !regexp.MustCompile(re).MatchString(svg) {
+			t.Errorf("dotted and wide edges: no %s in\n%s", re, svg)
+		}
+	}
+}
