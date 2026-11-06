@@ -1,0 +1,11 @@
+digraph {
+	node [label="\N"];
+	a	[height=1,
+		label="",
+		shape=box3d,
+		width=2];
+	b	[fontsize=8,
+		label="work:hash",
+		shape=box3d];
+	a -> b;
+}

@@ -1,0 +1,6 @@
+digraph {
+	node [label="\N"];
+	a	[fillcolor="#00FF00",
+		style=filled];
+	a -> b	[style=dotted];
+}

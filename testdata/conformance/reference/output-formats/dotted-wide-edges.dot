@@ -1,0 +1,30 @@
+digraph {
+	graph [bb="0,0,198,108"];
+	node [label="\N"];
+	a	[height=0.5,
+		pos="27,90",
+		width=0.75];
+	b	[height=0.5,
+		pos="27,18",
+		width=0.75];
+	a -> b	[pos="e,27,36.104 27,71.697 27,64.407 27,55.726 27,47.536",
+		style=dotted];
+	c	[height=0.5,
+		pos="99,90",
+		width=0.75];
+	d	[height=0.5,
+		pos="99,18",
+		width=0.75];
+	c -> d	[penwidth=3,
+		pos="e,99,36.104 99,71.697 99,65.254 99,57.726 99,50.41"];
+	e	[height=0.5,
+		pos="171,90",
+		width=0.75];
+	f	[height=0.5,
+		pos="171,18",
+		width=0.75];
+	e -> f	[color="#0000FF",
+		penwidth=2,
+		pos="e,171,36.104 171,71.697 171,64.83 171,56.731 171,48.969",
+		style=dotted];
+}

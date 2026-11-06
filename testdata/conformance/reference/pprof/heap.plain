@@ -1,0 +1,77 @@
+graph 1 14.839 19.097
+node "File: workload" 3.3333 17.887 6.2218 1.975 "File: workload\lType: alloc_space\lTime: 2026-11-06 11:32:23 MSK\lShowing nodes accounting for 40.52MB, 98.45% of 41.16MB total\lDropped \
+91 nodes (cum <= 0.21MB)\l\lSee https://git.io/JfYMW for how to read the graph\l" filled box black #f8f8f8
+node N1 7.3472 17.887 1.2931 0.51111 "runtime\nmain\n0 of 40.15MB (97.55%)" filled box #b20100 #edd5d5
+node N2 7.3472 9.4417 1.2931 0.51111 "main\nstringLoop\n0 of 26.62MB (64.67%)" filled box #b21500 #edd8d5
+node N3 7.3472 12.739 1.2931 0.64444 "main\nmain\nfunc4\n0 of 38.83MB (94.33%)" filled box #b20300 #edd5d5
+node N4 7.3472 6.9889 2.8239 1.7111 "strings\n(*Builder)\nWriteString\n15.36MB (37.31%)" filled box #b22d00 #eddbd5
+node NN4_0 5.3194 4.9778 0.75 0.5 "2kB" filled box3d black #f8f8f8
+node NN4_1 6.3333 4.9778 0.75 0.5 "1.38kB" filled box3d black #f8f8f8
+node NN4_2 7.3472 4.9778 0.75933 0.5 "128B..512B" filled box3d black #f8f8f8
+node NN4_3 8.3611 4.9778 0.75 0.5 "896B" filled box3d black #f8f8f8
+node N5 5.0972 9.4417 2.7155 1.2611 "main\nhashLoop\n12.21MB (29.66%)" filled box #b23600 #eddcd5
+node NN5_0 5.0972 6.9889 0.75 0.5 "32B" filled box3d black #f8f8f8
+node N6 9.6389 1.8389 2.6071 1.2111 "bytealg\nMakeNoZero\n11.26MB (27.36%)" filled box #b23900 #edddd5
+node NN6_0 9.1389 0.25 0.75 0.5 "16B" filled box3d black #f8f8f8
+node NN6_1 10.153 0.25 0.75 0.5 "1.75kB" filled box3d black #f8f8f8
+node N7 9.6389 4.9778 1.2931 0.64444 "strings\n(*Builder)\nGrow\n0 of 11.26MB (27.36%)" filled box #b23900 #edddd5
+node N8 7.3472 15.844 1.2931 0.51111 "main\nmain\n0 of 40.15MB (97.55%)" filled box #b20100 #edd5d5
+node N9 5.7222 14.408 1.4509 0.76111 "pprof\nStartCPUProfile\n1.13MB (2.73%)" filled box #b2aa9a #edece9
+node NN9_0 5.7222 12.739 0.75 0.5 "1MB" filled box3d black #f8f8f8
+node N10 14.125 17.887 1.182 0.51111 "pprof\nprofileWriter\n0 of 0.98MB (2.37%)" filled box #b2ab9d #edecea
+node N11 14.125 15.844 1.182 0.64444 "pprof\n(*profileBuilder)\nbuild\n0 of 0.95MB (2.30%)" filled box #b2ab9d #edecea
+node N12 14.125 9.4417 1.4274 0.84444 "flate\nNewWriter\n0.26MB (0.63%)\nof 0.46MB (1.13%)" filled box #b2afa8 #edeceb
+node NN12_0 14.125 6.9889 0.75 0.5 "264kB" filled box3d black #f8f8f8
+node N13 12.569 4.9778 1.2619 0.84444 "flate\n(*fastGen)\naddBlock\n0.31MB (0.76%)" filled box #b2b0ab #edecec
+node NN13_0 12.569 3.5 0.75 0.5 "320kB" filled box3d black #f8f8f8
+node N14 12.639 12.739 1.182 0.64444 "flate\n(*Writer)\nClose\n0 of 0.31MB (0.76%)" filled box #b2b0ab #edecec
+node N15 12.639 11.361 1.182 0.64444 "flate\n(*compressor)\nclose\n0 of 0.31MB (0.76%)" filled box #b2b0ab #edecec
+node N16 12.569 9.4417 1.182 0.64444 "flate\n(*compressor)\ndeflateFast\n0 of 0.31MB (0.76%)" filled box #b2b0ab #edecec
+node N17 12.569 6.9889 1.182 0.64444 "flate\n(*fastEncL1)\nencode\n0 of 0.31MB (0.76%)" filled box #b2b0ab #edecec
+node N18 12.667 14.408 1.182 0.64444 "gzip\n(*Writer)\nClose\n0 of 0.31MB (0.76%)" filled box #b2b0ab #edecec
+node N19 14.125 11.361 1.182 0.64444 "gzip\n(*Writer)\nWrite\n0 of 0.46MB (1.13%)" filled box #b2afa8 #edeceb
+node N20 5.625 11.361 1.2931 0.64444 "main\nmain\nfunc1\n0 of 12.21MB (29.66%)" filled box #b23600 #eddcd5
+node N21 7.3472 11.361 1.2931 0.64444 "main\nmain\nfunc3\n0 of 26.62MB (64.67%)" filled box #b21500 #edd8d5
+node N22 14.125 12.739 1.182 0.64444 "pprof\n(*profileBuilder)\nflush\n0 of 0.46MB (1.13%)" filled box #b2afa8 #edeceb
+node N23 14.125 14.408 1.182 0.64444 "pprof\n(*profileBuilder)\npbSample\n0 of 0.47MB (1.14%)" filled box #b2afa8 #edeceb
+node N24 7.3472 14.408 1.2931 0.51111 "pprof\nDo\n0 of 38.83MB (94.33%)" filled box #b20300 #edd5d5
+node N25 9.6389 3.5 1.2931 0.64444 "strings\n(*Builder)\ngrow\n0 of 11.26MB (27.36%)" filled box #b23900 #edddd5
+node N26 9.625 6.9889 1.2376 0.51111 "strings\nRepeat\n0 of 6.13MB (14.90%)" filled box #b2672d #ede3db
+node N27 11.111 6.9889 1.2376 0.51111 "strings\nToUpper\n0 of 5.13MB (12.46%)" filled box #b27643 #ede5de
+edge N1 N8 4 7.3472 17.626 7.3472 17.303 7.3472 16.729 7.3472 16.323 " 40.15MB" 7.7416 16.533 solid #b20100
+edge N2 N4 4 7.3472 9.1819 7.3472 8.9101 7.3472 8.4543 7.3472 8.0297 " 15.36MB\n (inline)" 7.7416 8.3278 solid #b22d00
+edge N2 N26 7 7.5973 9.1797 7.9059 8.8714 8.4445 8.3271 8.8889 7.8444 9.0306 7.6905 9.1836 7.5169 9.3131 7.3676 " 6.13MB" 8.9879 8.3278 solid #b2672d
+edge N2 N27 10 7.9996 9.1945 8.4095 9.0374 8.9432 8.8133 9.3889 8.5611 9.8604 8.2943 9.975 8.2099 10.375 7.8444 10.533 7.7002 10.691 7.5243 10.82 7.3706 " 5.13MB" 10.438 8.3278 solid #b27643
+edge N3 N20 7 6.8475 12.412 6.732 12.335 6.6113 12.251 6.503 12.167 6.3609 12.057 6.2132 11.929 6.0805 11.809 " 12.21MB" 6.8973 12.05 solid #b23600
+edge N3 N21 4 7.3472 12.412 7.3472 12.262 7.3472 12.078 7.3472 11.907 " 26.62MB" 7.7416 12.05 solid #b21500
+edge N4 NN4_0 7 6.0109 6.129 5.9238 6.051 5.8412 5.9689 5.7669 5.8833 5.639 5.7362 5.537 5.5461 5.463 5.3793 " 5.86MB" 6.1126 5.7667 solid black
+edge N4 NN4_1 7 6.7337 6.132 6.6852 6.0499 6.6398 5.9662 6.6002 5.8833 6.5258 5.7275 6.467 5.5464 6.4237 5.3882 " 4.03MB" 6.9459 5.7667 solid black
+edge N4 NN4_2 4 7.3472 6.1281 7.3472 5.8723 7.3472 5.6032 7.3472 5.3912 " 2.56MB" 7.693 5.7667 solid black
+edge N4 NN4_3 7 7.9246 6.1285 7.9715 6.0471 8.016 5.9646 8.0556 5.8833 8.1329 5.7244 8.1993 5.5409 8.2504 5.3818 " 2.56MB" 8.494 5.7667 solid black
+edge N5 NN5_0 4 5.0972 8.8096 5.0972 8.3646 5.0972 7.7778 5.0972 7.3955 " 12.21MB" 5.4916 8.3278 solid black
+edge N6 NN6_0 7 9.2501 1.2295 9.2119 1.1493 9.1789 1.0661 9.1557 0.98333 9.1271 0.88067 9.1157 0.76654 9.1132 0.65997 " 6.13MB" 9.5015 0.86667 solid black
+edge N6 NN6_1 4 9.8346 1.2304 9.898 1.0377 9.9667 0.82905 10.024 0.65507 " 5.13MB" 10.332 0.86667 solid black
+edge N7 N25 4 9.6389 4.6493 9.6389 4.4611 9.6389 4.2181 9.6389 4.0051 " 11.26MB" 10.033 4.1889 solid #b23900
+edge N8 N9 7 6.998 15.584 6.87 15.49 6.7259 15.379 6.6002 15.272 6.4654 15.157 6.3252 15.027 6.1974 14.904 " 1.13MB" 6.9459 15.156 solid #b2aa9a
+edge N8 N24 4 7.3472 15.585 7.3472 15.395 7.3472 15.124 7.3472 14.892 " 38.83MB" 7.7416 15.156 solid #b20300
+edge N9 NN9_0 4 5.7222 14.022 5.7222 13.761 5.7222 13.414 5.7222 13.149 " 1MB" 5.9464 13.544 solid black
+edge N10 N11 4 14.125 17.626 14.125 17.303 14.125 16.73 14.125 16.324 " 0.95MB" 14.471 16.533 solid #b2ab9d
+edge N11 N18 7 13.669 15.516 13.569 15.44 13.467 15.357 13.378 15.272 13.245 15.147 13.113 14.997 13 14.859 " 0.31MB" 13.724 15.156 solid #b2b0ab
+edge N11 N23 4 14.125 15.518 14.125 15.334 14.125 15.097 14.125 14.891 " 0.47MB" 14.471 15.156 solid #b2afa8
+edge N12 NN12_0 4 14.125 9.0164 14.125 8.5635 14.125 7.8406 14.125 7.3953 " 0.26MB" 14.471 8.3278 solid black
+edge N13 NN13_0 4 12.569 4.5523 12.569 4.3508 12.569 4.1093 12.569 3.91 " 0.31MB" 12.915 4.1889 solid black
+edge N14 N15 4 12.639 12.412 12.639 12.243 12.639 12.032 12.639 11.844 " 0.31MB" 12.985 12.05 solid #b2b0ab
+edge N15 N16 4 12.627 11.035 12.616 10.734 12.599 10.274 12.587 9.9279 " 0.31MB" 12.964 10.556 solid #b2b0ab
+edge N16 N17 4 12.569 9.1157 12.569 8.7003 12.569 7.962 12.569 7.4774 " 0.31MB" 12.915 8.3278 solid #b2b0ab
+edge N17 N13 4 12.569 6.6607 12.569 6.3662 12.569 5.9188 12.569 5.5614 " 0.31MB" 12.915 5.7667 solid #b2b0ab
+edge N18 N14 4 12.661 14.082 12.657 13.839 12.651 13.498 12.647 13.222 " 0.31MB\n (inline)" 13.002 13.544 solid #b2b0ab
+edge N19 N12 4 14.125 11.035 14.125 10.761 14.125 10.355 14.125 10.024 " 0.46MB\n (inline)" 14.471 10.556 solid #b2afa8
+edge N20 N5 4 5.5378 11.035 5.4782 10.821 5.3964 10.528 5.3194 10.252 " 12.21MB\n (inline)" 5.8634 10.556 solid #b23600
+edge N21 N2 4 7.3472 11.035 7.3472 10.733 7.3472 10.271 7.3472 9.9249 " 26.62MB" 7.7416 10.556 solid #b21500
+edge N22 N19 4 14.125 12.412 14.125 12.243 14.125 12.032 14.125 11.844 " 0.46MB" 14.471 12.05 solid #b2afa8
+edge N23 N22 4 14.125 14.082 14.125 13.839 14.125 13.498 14.125 13.222 " 0.46MB" 14.471 13.544 solid #b2afa8
+edge N24 N3 4 7.3472 14.149 7.3472 13.923 7.3472 13.579 7.3472 13.29 " 38.83MB" 7.7416 13.544 solid #b20300
+edge N25 N6 4 9.6389 3.1712 9.6389 3.0166 9.6389 2.8229 9.6389 2.632 " 11.26MB" 10.033 2.8111 solid #b23900
+edge N26 N7 4 9.6267 6.7278 9.6289 6.4116 9.6328 5.8575 9.6356 5.4602 " 6.13MB" 9.9797 5.7667 solid #b2672d
+edge N27 N7 7 11.006 6.7304 10.879 6.4526 10.649 5.9933 10.375 5.65 10.309 5.5672 10.232 5.486 10.153 5.4105 " 5.13MB" 10.867 5.7667 solid #b27643
+stop

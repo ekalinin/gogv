@@ -1,0 +1,5 @@
+graph 1 2 2
+node a 1 1.5 2 1 "" solid box3d black lightgrey
+node b 1 0.25 0.75 0.5 "work:hash" solid box3d black lightgrey
+edge a b 4 1 0.99603 1 0.88446 1 0.76728 1 0.66018 solid black
+stop

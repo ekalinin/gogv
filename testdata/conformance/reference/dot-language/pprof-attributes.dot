@@ -1,0 +1,34 @@
+digraph {
+	graph [bb="0,0,74.324,124.8"];
+	node [fillcolor="#f8f8f8",
+		label="\N",
+		style=filled
+	];
+	N1	[color="#b20e00",
+		fillcolor="#edd7d5",
+		height=0.5,
+		id=node1,
+		label=main,
+		pos="37.162,106.8",
+		shape=box,
+		tooltip="main (10ms)",
+		width=0.75];
+	N1_0	[height=0.5,
+		id=N1_0,
+		label="work:hash",
+		pos="37.162,18",
+		shape=box3d,
+		tooltip="10ms",
+		width=1.0323];
+	N1 -> N1_0	[label=" 10ms",
+		labeltooltip="10ms",
+		lp="54.081,62.4",
+		penwidth=2,
+		pos="e,37.162,36.41 37.162,88.651 37.162,77.43 37.162,62.46 37.162,49.274",
+		tooltip="10ms",
+		weight=100];
+	N1_0 -> N1	[pos="e,59.589,88.663 59.589,36.137 64.682,41.27 69.4,47.331 72.162,54 75.019,60.898 75.019,63.902 72.162,70.8 70.824,74.03 69.027,77.118 \
+66.951,80.026",
+		style=dotted,
+		weight=2];
+}

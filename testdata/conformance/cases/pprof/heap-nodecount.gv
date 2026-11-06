@@ -1,0 +1,19 @@
+digraph "workload" {
+node [style=filled fillcolor="#f8f8f8"]
+subgraph cluster_L { "File: workload" [shape=box fontsize=16 label="File: workload\lType: alloc_space\lTime: 2026-11-06 11:32:23 MSK\lShowing nodes accounting for 15.36MB, 37.31% of 41.16MB total\lDropped 91 nodes (cum <= 0.21MB)\lShowing top 4 nodes out of 27\l\lSee https://git.io/JfYMW for how to read the graph\l" tooltip="workload"] }
+N1 [label="runtime\nmain\n0 of 40.15MB (97.55%)" id="node1" fontsize=8 shape=box tooltip="runtime.main (40.15MB)" color="#b20100" fillcolor="#edd5d5"]
+N2 [label="strings\n(*Builder)\nWriteString\n15.36MB (37.31%)" id="node2" fontsize=24 shape=box tooltip="strings.(*Builder).WriteString (15.36MB)" color="#b22d00" fillcolor="#eddbd5"]
+NN2_0 [label = "2kB" id="NN2_0" fontsize=8 shape=box3d tooltip="5.86MB"]
+N2 -> NN2_0 [label=" 5.86MB" weight=100 tooltip="5.86MB" labeltooltip="5.86MB"]
+NN2_1 [label = "1.38kB" id="NN2_1" fontsize=8 shape=box3d tooltip="4.03MB"]
+N2 -> NN2_1 [label=" 4.03MB" weight=100 tooltip="4.03MB" labeltooltip="4.03MB"]
+NN2_2 [label = "128B..512B" id="NN2_2" fontsize=8 shape=box3d tooltip="2.56MB"]
+N2 -> NN2_2 [label=" 2.56MB" weight=100 tooltip="2.56MB" labeltooltip="2.56MB"]
+NN2_3 [label = "896B" id="NN2_3" fontsize=8 shape=box3d tooltip="2.56MB"]
+N2 -> NN2_3 [label=" 2.56MB" weight=100 tooltip="2.56MB" labeltooltip="2.56MB"]
+N3 [label="main\nmain\nfunc4\n0 of 38.83MB (94.33%)" id="node3" fontsize=8 shape=box tooltip="main.main.func4 (38.83MB)" color="#b20300" fillcolor="#edd5d5"]
+N4 [label="main\nstringLoop\n0 of 26.62MB (64.67%)" id="node4" fontsize=8 shape=box tooltip="main.stringLoop (26.62MB)" color="#b21500" fillcolor="#edd8d5"]
+N1 -> N3 [label=" 38.83MB" weight=95 penwidth=5 color="#b20300" tooltip="runtime.main ... main.main.func4 (38.83MB)" labeltooltip="runtime.main ... main.main.func4 (38.83MB)" style="dotted"]
+N3 -> N4 [label=" 26.62MB" weight=65 penwidth=4 color="#b21500" tooltip="main.main.func4 ... main.stringLoop (26.62MB)" labeltooltip="main.main.func4 ... main.stringLoop (26.62MB)" style="dotted"]
+N4 -> N2 [label=" 15.36MB\n (inline)" weight=38 penwidth=2 color="#b22d00" tooltip="main.stringLoop -> strings.(*Builder).WriteString (15.36MB)" labeltooltip="main.stringLoop -> strings.(*Builder).WriteString (15.36MB)"]
+}

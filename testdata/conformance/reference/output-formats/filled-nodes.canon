@@ -1,0 +1,21 @@
+digraph {
+	node [label="\N"];
+	a	[style=filled];
+	b	[color="#FF0000",
+		style=filled];
+	c	[fillcolor="#00FF00"];
+	d	[fillcolor="#0000FF",
+		shape=box,
+		style=filled];
+	e	[shape=box,
+		style="filled,rounded"];
+	f	[fillcolor="#00FF00",
+		shape=plaintext,
+		style=filled];
+	g	[fillcolor="#FFFF00",
+		shape=diamond,
+		style=filled];
+	h	[fillcolor="#00FFFF",
+		shape=point,
+		style=filled];
+}

@@ -1,7 +1,7 @@
 GO ?= go
 REFERENCE_IMAGE ?= gogv-reference
 
-.PHONY: build test lint provenance reference-image reference harvest conformance determinism perf release
+.PHONY: build test lint provenance reference-image reference pprof-corpus harvest conformance determinism perf release
 
 build:
 	$(GO) build ./...
@@ -24,6 +24,13 @@ reference-image:
 # xdot and json, and every format for the cases of output-formats.
 reference:
 	$(GO) run ./tools/refgen -image $(REFERENCE_IMAGE) -cases testdata/conformance/cases -out testdata/conformance/reference -formats "canon plain svg dot xdot json" -all output-formats
+
+# Writes the corpus of DOT that go tool pprof writes for profiles of
+# tools/pprofcorpus/workload into the curated cases of pprof. Profiles are
+# sampled, so each run writes other files; record their references with
+# make reference.
+pprof-corpus:
+	$(GO) run ./tools/pprofcorpus -out testdata/conformance/cases/pprof
 
 # Collects the DOT that gopuml generates for its conformance cases into
 # .cache/gopuml-dot, writes the variant of its graphs with clusters into

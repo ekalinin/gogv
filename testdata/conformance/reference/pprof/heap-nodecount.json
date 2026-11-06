@@ -1,0 +1,1396 @@
+{
+  "name": "workload",
+  "directed": true,
+  "strict": false,
+  "_draw_": 
+  [
+    {
+      "op": "c",
+      "grad": "none",
+      "color": "#fffffe00"
+    },
+    {
+      "op": "C",
+      "grad": "none",
+      "color": "#ffffff"
+    },
+    {
+      "op": "P",
+      "points": [[0.000,0.000],[0.000,647.800],[669.920,647.800],[669.920,0.000]]
+    }
+  ],
+  "bb": "0,0,669.92,647.8",
+  "xdotversion": "1.7",
+  "_subgraph_cnt": 1,
+  "objects": [
+    {
+      "name": "cluster_L",
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[8.000,462.400],[8.000,639.800],[472.000,639.800],[472.000,462.400]]
+        }
+      ],
+      "bb": "8,462.4,472,639.8",
+      "_gvid": 0,
+      "nodes": [
+        1
+      ]
+    },
+    {
+      "_gvid": 1,
+      "name": "File: workload",
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#f8f8f8"
+        },
+        {
+          "op": "P",
+          "points": [[463.980,631.800],[16.020,631.800],[16.020,470.400],[463.980,470.400]]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 16.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [24.020,613.400],
+          "align": "l",
+          "width": 93.770,
+          "text": "File: workload"
+        },
+        {
+          "op": "F",
+          "size": 16.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [24.020,594.200],
+          "align": "l",
+          "width": 115.950,
+          "text": "Type: alloc_space"
+        },
+        {
+          "op": "F",
+          "size": 16.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [24.020,575.000],
+          "align": "l",
+          "width": 216.440,
+          "text": "Time: 2026-11-06 11:32:23 MSK"
+        },
+        {
+          "op": "F",
+          "size": 16.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [24.020,555.800],
+          "align": "l",
+          "width": 431.970,
+          "text": "Showing nodes accounting for 15.36MB, 37.31% of 41.16MB total"
+        },
+        {
+          "op": "F",
+          "size": 16.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [24.020,536.600],
+          "align": "l",
+          "width": 238.460,
+          "text": "Dropped 91 nodes (cum <= 0.21MB)"
+        },
+        {
+          "op": "F",
+          "size": 16.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [24.020,517.400],
+          "align": "l",
+          "width": 196.450,
+          "text": "Showing top 4 nodes out of 27"
+        },
+        {
+          "op": "F",
+          "size": 16.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [24.020,479.200],
+          "align": "l",
+          "width": 327.940,
+          "text": "See https:\/\/git.io\/JfYMW for how to read the graph"
+        }
+      ],
+      "fillcolor": "#f8f8f8",
+      "fontsize": "16",
+      "height": "2.2417",
+      "label": "File: workload\\lType: alloc_space\\lTime: 2026-11-06 11:32:23 MSK\\lShowing nodes accounting for 15.36MB, 37.31% of 41.16MB total\\lDropped 91 nodes (cum <= 0.21MB)\\lShowing top 4 nodes out of 27\\l\\lSee https:\/\/git.io\/JfYMW for how to read the graph\\l",
+      "pos": "240,551.1",
+      "shape": "box",
+      "style": "filled",
+      "tooltip": "workload",
+      "width": "6.2218"
+    },
+    {
+      "_gvid": 2,
+      "name": "N1",
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#b20100"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#edd5d5"
+        },
+        {
+          "op": "P",
+          "points": [[575.550,569.500],[482.450,569.500],[482.450,532.700],[575.550,532.700]]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 8.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [529.000,558.300],
+          "align": "c",
+          "width": 24.880,
+          "text": "runtime"
+        },
+        {
+          "op": "F",
+          "size": 8.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [529.000,548.700],
+          "align": "c",
+          "width": 16.000,
+          "text": "main"
+        },
+        {
+          "op": "F",
+          "size": 8.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [529.000,539.100],
+          "align": "c",
+          "width": 77.110,
+          "text": "0 of 40.15MB (97.55%)"
+        }
+      ],
+      "color": "#b20100",
+      "fillcolor": "#edd5d5",
+      "fontsize": "8",
+      "height": "0.51111",
+      "id": "node1",
+      "label": "runtime\\nmain\\n0 of 40.15MB (97.55%)",
+      "pos": "529,551.1",
+      "shape": "box",
+      "style": "filled",
+      "tooltip": "runtime.main (40.15MB)",
+      "width": "1.2931"
+    },
+    {
+      "_gvid": 3,
+      "name": "N2",
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#b22d00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#eddbd5"
+        },
+        {
+          "op": "P",
+          "points": [[630.660,212.000],[427.340,212.000],[427.340,88.800],[630.660,88.800]]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 24.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [529.000,186.400],
+          "align": "c",
+          "width": 64.010,
+          "text": "strings"
+        },
+        {
+          "op": "F",
+          "size": 24.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [529.000,157.600],
+          "align": "c",
+          "width": 99.970,
+          "text": "(*Builder)"
+        },
+        {
+          "op": "F",
+          "size": 24.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [529.000,128.800],
+          "align": "c",
+          "width": 113.310,
+          "text": "WriteString"
+        },
+        {
+          "op": "F",
+          "size": 24.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [529.000,100.000],
+          "align": "c",
+          "width": 187.320,
+          "text": "15.36MB (37.31%)"
+        }
+      ],
+      "color": "#b22d00",
+      "fillcolor": "#eddbd5",
+      "fontsize": "24",
+      "height": "1.7111",
+      "id": "node2",
+      "label": "strings\\n(*Builder)\\nWriteString\\n15.36MB (37.31%)",
+      "pos": "529,150.4",
+      "shape": "box",
+      "style": "filled",
+      "tooltip": "strings.(*Builder).WriteString (15.36MB)",
+      "width": "2.8239"
+    },
+    {
+      "_gvid": 4,
+      "name": "NN2_0",
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#f8f8f8"
+        },
+        {
+          "op": "P",
+          "points": [[447.000,36.000],[397.000,36.000],[393.000,32.000],[393.000,0.000],[443.000,0.000],[447.000,4.000]]
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "L",
+          "points": [[443.000,32.000],[393.000,32.000]]
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "L",
+          "points": [[443.000,32.000],[443.000,0.000]]
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "L",
+          "points": [[443.000,32.000],[447.000,36.000]]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 8.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [420.000,15.600],
+          "align": "c",
+          "width": 13.340,
+          "text": "2kB"
+        }
+      ],
+      "fillcolor": "#f8f8f8",
+      "fontsize": "8",
+      "height": "0.5",
+      "id": "NN2_0",
+      "label": "2kB",
+      "pos": "420,18",
+      "shape": "box3d",
+      "style": "filled",
+      "tooltip": "5.86MB",
+      "width": "0.75"
+    },
+    {
+      "_gvid": 5,
+      "name": "NN2_1",
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#f8f8f8"
+        },
+        {
+          "op": "P",
+          "points": [[520.000,36.000],[470.000,36.000],[466.000,32.000],[466.000,0.000],[516.000,0.000],[520.000,4.000]]
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "L",
+          "points": [[516.000,32.000],[466.000,32.000]]
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "L",
+          "points": [[516.000,32.000],[516.000,0.000]]
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "L",
+          "points": [[516.000,32.000],[520.000,36.000]]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 8.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [493.000,15.600],
+          "align": "c",
+          "width": 23.340,
+          "text": "1.38kB"
+        }
+      ],
+      "fillcolor": "#f8f8f8",
+      "fontsize": "8",
+      "height": "0.5",
+      "id": "NN2_1",
+      "label": "1.38kB",
+      "pos": "493,18",
+      "shape": "box3d",
+      "style": "filled",
+      "tooltip": "4.03MB",
+      "width": "0.75"
+    },
+    {
+      "_gvid": 6,
+      "name": "NN2_2",
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#f8f8f8"
+        },
+        {
+          "op": "P",
+          "points": [[593.340,36.000],[542.660,36.000],[538.660,32.000],[538.660,0.000],[589.340,0.000],[593.340,4.000]]
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "L",
+          "points": [[589.340,32.000],[538.660,32.000]]
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "L",
+          "points": [[589.340,32.000],[589.340,0.000]]
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "L",
+          "points": [[589.340,32.000],[593.340,36.000]]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 8.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [566.000,15.600],
+          "align": "c",
+          "width": 38.670,
+          "text": "128B..512B"
+        }
+      ],
+      "fillcolor": "#f8f8f8",
+      "fontsize": "8",
+      "height": "0.5",
+      "id": "NN2_2",
+      "label": "128B..512B",
+      "pos": "566,18",
+      "shape": "box3d",
+      "style": "filled",
+      "tooltip": "2.56MB",
+      "width": "0.75933"
+    },
+    {
+      "_gvid": 7,
+      "name": "NN2_3",
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#f8f8f8"
+        },
+        {
+          "op": "P",
+          "points": [[666.000,36.000],[616.000,36.000],[612.000,32.000],[612.000,0.000],[662.000,0.000],[666.000,4.000]]
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "L",
+          "points": [[662.000,32.000],[612.000,32.000]]
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "L",
+          "points": [[662.000,32.000],[662.000,0.000]]
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "L",
+          "points": [[662.000,32.000],[666.000,36.000]]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 8.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [639.000,15.600],
+          "align": "c",
+          "width": 17.340,
+          "text": "896B"
+        }
+      ],
+      "fillcolor": "#f8f8f8",
+      "fontsize": "8",
+      "height": "0.5",
+      "id": "NN2_3",
+      "label": "896B",
+      "pos": "639,18",
+      "shape": "box3d",
+      "style": "filled",
+      "tooltip": "2.56MB",
+      "width": "0.75"
+    },
+    {
+      "_gvid": 8,
+      "name": "N3",
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#b20300"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#edd5d5"
+        },
+        {
+          "op": "P",
+          "points": [[575.550,417.600],[482.450,417.600],[482.450,371.200],[575.550,371.200]]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 8.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [529.000,406.400],
+          "align": "c",
+          "width": 16.000,
+          "text": "main"
+        },
+        {
+          "op": "F",
+          "size": 8.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [529.000,396.800],
+          "align": "c",
+          "width": 16.000,
+          "text": "main"
+        },
+        {
+          "op": "F",
+          "size": 8.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [529.000,387.200],
+          "align": "c",
+          "width": 18.210,
+          "text": "func4"
+        },
+        {
+          "op": "F",
+          "size": 8.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [529.000,377.600],
+          "align": "c",
+          "width": 77.110,
+          "text": "0 of 38.83MB (94.33%)"
+        }
+      ],
+      "color": "#b20300",
+      "fillcolor": "#edd5d5",
+      "fontsize": "8",
+      "height": "0.64444",
+      "id": "node3",
+      "label": "main\\nmain\\nfunc4\\n0 of 38.83MB (94.33%)",
+      "pos": "529,394.4",
+      "shape": "box",
+      "style": "filled",
+      "tooltip": "main.main.func4 (38.83MB)",
+      "width": "1.2931"
+    },
+    {
+      "_gvid": 9,
+      "name": "N4",
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#b21500"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#edd8d5"
+        },
+        {
+          "op": "P",
+          "points": [[575.550,318.400],[482.450,318.400],[482.450,281.600],[575.550,281.600]]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 8.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [529.000,307.200],
+          "align": "c",
+          "width": 16.000,
+          "text": "main"
+        },
+        {
+          "op": "F",
+          "size": 8.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [529.000,297.600],
+          "align": "c",
+          "width": 35.110,
+          "text": "stringLoop"
+        },
+        {
+          "op": "F",
+          "size": 8.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [529.000,288.000],
+          "align": "c",
+          "width": 77.110,
+          "text": "0 of 26.62MB (64.67%)"
+        }
+      ],
+      "color": "#b21500",
+      "fillcolor": "#edd8d5",
+      "fontsize": "8",
+      "height": "0.51111",
+      "id": "node4",
+      "label": "main\\nstringLoop\\n0 of 26.62MB (64.67%)",
+      "pos": "529,300",
+      "shape": "box",
+      "style": "filled",
+      "tooltip": "main.stringLoop (26.62MB)",
+      "width": "1.2931"
+    }
+  ],
+  "edges": [
+    {
+      "_gvid": 1,
+      "tail": 3,
+      "head": 4,
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "b",
+          "points": [[452.450,88.770],[447.270,83.020],[442.440,77.000],[438.210,70.800],[433.400,63.730],[429.720,55.250],[426.980,47.220]]
+        }
+      ],
+      "_hdraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "P",
+          "points": [[430.380,46.370],[424.130,37.810],[423.680,48.400]]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [463.110,58.200],
+          "align": "c",
+          "width": 49.790,
+          "text": " 5.86MB"
+        }
+      ],
+      "label": " 5.86MB",
+      "labeltooltip": "5.86MB",
+      "lp": "463.11,62.4",
+      "pos": "e,423.7,36.365 452.45,88.772 447.27,83.018 442.44,77.004 438.21,70.8 433.4,63.73 429.72,55.253 426.98,47.224",
+      "tooltip": "5.86MB",
+      "weight": "100"
+    },
+    {
+      "_gvid": 2,
+      "tail": 3,
+      "head": 5,
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "b",
+          "points": [[499.280,88.400],[497.260,82.550],[495.520,76.630],[494.210,70.800],[492.560,63.430],[491.870,55.310],[491.670,47.740]]
+        }
+      ],
+      "_hdraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "P",
+          "points": [[495.170,48.000],[491.720,37.990],[488.170,47.970]]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [519.110,58.200],
+          "align": "c",
+          "width": 49.790,
+          "text": " 4.03MB"
+        }
+      ],
+      "label": " 4.03MB",
+      "labeltooltip": "4.03MB",
+      "lp": "519.11,62.4",
+      "pos": "e,491.72,36.473 499.28,88.398 497.26,82.549 495.52,76.625 494.21,70.8 492.56,63.426 491.87,55.314 491.67,47.742",
+      "tooltip": "4.03MB",
+      "weight": "100"
+    },
+    {
+      "_gvid": 3,
+      "tail": 3,
+      "head": 6,
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "b",
+          "points": [[546.310,88.400],[550.410,73.930],[554.600,59.190],[558.050,47.030]]
+        }
+      ],
+      "_hdraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "P",
+          "points": [[561.330,48.300],[560.690,37.720],[554.590,46.390]]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [579.960,58.200],
+          "align": "c",
+          "width": 49.790,
+          "text": " 2.56MB"
+        }
+      ],
+      "label": " 2.56MB",
+      "labeltooltip": "2.56MB",
+      "lp": "579.96,62.4",
+      "pos": "e,561.1,36.266 546.31,88.4 550.41,73.933 554.6,59.189 558.05,47.034",
+      "tooltip": "2.56MB",
+      "weight": "100"
+    },
+    {
+      "_gvid": 4,
+      "tail": 3,
+      "head": 7,
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "b",
+          "points": [[593.970,88.650],[599.250,82.800],[604.350,76.800],[609.000,70.800],[614.910,63.180],[620.480,54.270],[625.180,46.020]]
+        }
+      ],
+      "_hdraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "P",
+          "points": [[628.170,47.840],[629.890,37.380],[622.030,44.480]]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [645.030,58.200],
+          "align": "c",
+          "width": 49.790,
+          "text": " 2.56MB"
+        }
+      ],
+      "label": " 2.56MB",
+      "labeltooltip": "2.56MB",
+      "lp": "645.03,62.4",
+      "pos": "e,630.62,36.056 593.97,88.652 599.25,82.797 604.35,76.801 609,70.8 614.91,63.178 620.48,54.274 625.18,46.019",
+      "tooltip": "2.56MB",
+      "weight": "100"
+    },
+    {
+      "_gvid": 0,
+      "tail": 2,
+      "head": 8,
+      "_draw_": 
+      [
+        {
+          "op": "S",
+          "style": "setlinewidth(5)"
+        },
+        {
+          "op": "S",
+          "style": "dotted"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#b20300"
+        },
+        {
+          "op": "b",
+          "points": [[529.000,532.350],[529.000,508.510],[529.000,465.510],[529.000,434.030]]
+        }
+      ],
+      "_hdraw_": 
+      [
+        {
+          "op": "S",
+          "style": "setlinewidth(5)"
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#b20300"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#b20300"
+        },
+        {
+          "op": "P",
+          "points": [[533.380,434.160],[529.000,424.160],[524.630,434.160]]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [557.390,439.800],
+          "align": "c",
+          "width": 56.790,
+          "text": " 38.83MB"
+        }
+      ],
+      "color": "#b20300",
+      "label": " 38.83MB",
+      "labeltooltip": "runtime.main ... main.main.func4 (38.83MB)",
+      "lp": "557.39,444",
+      "penwidth": "5",
+      "pos": "e,529,417.93 529,532.35 529,508.51 529,465.51 529,434.03",
+      "style": "dotted",
+      "tooltip": "runtime.main ... main.main.func4 (38.83MB)",
+      "weight": "95"
+    },
+    {
+      "_gvid": 5,
+      "tail": 8,
+      "head": 9,
+      "_draw_": 
+      [
+        {
+          "op": "S",
+          "style": "setlinewidth(4)"
+        },
+        {
+          "op": "S",
+          "style": "dotted"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#b21500"
+        },
+        {
+          "op": "b",
+          "points": [[529.000,371.030],[529.000,360.140],[529.000,346.820],[529.000,334.730]]
+        }
+      ],
+      "_hdraw_": 
+      [
+        {
+          "op": "S",
+          "style": "setlinewidth(4)"
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#b21500"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#b21500"
+        },
+        {
+          "op": "P",
+          "points": [[532.500,334.890],[529.000,324.890],[525.500,334.890]]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [557.390,340.600],
+          "align": "c",
+          "width": 56.790,
+          "text": " 26.62MB"
+        }
+      ],
+      "color": "#b21500",
+      "label": " 26.62MB",
+      "labeltooltip": "main.main.func4 ... main.stringLoop (26.62MB)",
+      "lp": "557.39,344.8",
+      "penwidth": "4",
+      "pos": "e,529,318.84 529,371.03 529,360.14 529,346.82 529,334.73",
+      "style": "dotted",
+      "tooltip": "main.main.func4 ... main.stringLoop (26.62MB)",
+      "weight": "65"
+    },
+    {
+      "_gvid": 6,
+      "tail": 9,
+      "head": 3,
+      "_draw_": 
+      [
+        {
+          "op": "S",
+          "style": "setlinewidth(2)"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#b22d00"
+        },
+        {
+          "op": "b",
+          "points": [[529.000,281.200],[529.000,267.040],[529.000,246.210],[529.000,225.360]]
+        }
+      ],
+      "_hdraw_": 
+      [
+        {
+          "op": "S",
+          "style": "setlinewidth(2)"
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#b22d00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#b22d00"
+        },
+        {
+          "op": "P",
+          "points": [[532.500,225.460],[529.000,215.460],[525.500,225.460]]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [557.390,251.000],
+          "align": "c",
+          "width": 56.790,
+          "text": " 15.36MB"
+        },
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [557.390,234.200],
+          "align": "c",
+          "width": 44.710,
+          "text": " (inline)"
+        }
+      ],
+      "color": "#b22d00",
+      "label": " 15.36MB\\n (inline)",
+      "labeltooltip": "main.stringLoop -> strings.(*Builder).WriteString (15.36MB)",
+      "lp": "557.39,246.8",
+      "penwidth": "2",
+      "pos": "e,529,212.43 529,281.2 529,267.04 529,246.21 529,225.36",
+      "tooltip": "main.stringLoop -> strings.(*Builder).WriteString (15.36MB)",
+      "weight": "38"
+    }
+  ]
+}

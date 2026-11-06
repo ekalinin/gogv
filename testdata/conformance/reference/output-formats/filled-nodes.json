@@ -1,0 +1,380 @@
+{
+  "name": "%1",
+  "directed": true,
+  "strict": false,
+  "_draw_": 
+  [
+    {
+      "op": "c",
+      "grad": "none",
+      "color": "#fffffe00"
+    },
+    {
+      "op": "C",
+      "grad": "none",
+      "color": "#ffffff"
+    },
+    {
+      "op": "P",
+      "points": [[0.000,0.000],[0.000,36.000],[507.800,36.000],[507.800,0.000]]
+    }
+  ],
+  "bb": "0,0,507.8,36",
+  "xdotversion": "1.7",
+  "_subgraph_cnt": 0,
+  "objects": [
+    {
+      "_gvid": 0,
+      "name": "a",
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#d3d3d3"
+        },
+        {
+          "op": "E",
+          "rect": [27.000,18.000,27.000,18.000]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [27.000,13.800],
+          "align": "c",
+          "width": 6.210,
+          "text": "a"
+        }
+      ],
+      "height": "0.5",
+      "label": "\\N",
+      "pos": "27,18",
+      "style": "filled",
+      "width": "0.75"
+    },
+    {
+      "_gvid": 1,
+      "name": "b",
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#ff0000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#ff0000"
+        },
+        {
+          "op": "E",
+          "rect": [99.000,18.000,27.000,18.000]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [99.000,13.800],
+          "align": "c",
+          "width": 7.000,
+          "text": "b"
+        }
+      ],
+      "color": "#FF0000",
+      "height": "0.5",
+      "label": "\\N",
+      "pos": "99,18",
+      "style": "filled",
+      "width": "0.75"
+    },
+    {
+      "_gvid": 2,
+      "name": "c",
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "e",
+          "rect": [171.000,18.000,27.000,18.000]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [171.000,13.800],
+          "align": "c",
+          "width": 6.210,
+          "text": "c"
+        }
+      ],
+      "fillcolor": "#00FF00",
+      "height": "0.5",
+      "label": "\\N",
+      "pos": "171,18",
+      "width": "0.75"
+    },
+    {
+      "_gvid": 3,
+      "name": "d",
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#0000ff"
+        },
+        {
+          "op": "P",
+          "points": [[270.000,36.000],[216.000,36.000],[216.000,0.000],[270.000,0.000]]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [243.000,13.800],
+          "align": "c",
+          "width": 7.000,
+          "text": "d"
+        }
+      ],
+      "fillcolor": "#0000FF",
+      "height": "0.5",
+      "label": "\\N",
+      "pos": "243,18",
+      "shape": "box",
+      "style": "filled",
+      "width": "0.75"
+    },
+    {
+      "_gvid": 4,
+      "name": "e",
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#d3d3d3"
+        },
+        {
+          "op": "B",
+          "points": [[330.000,36.000],[330.000,36.000],[300.000,36.000],[300.000,36.000],[294.000,36.000],[288.000,30.000],[288.000,24.000],[288.000,24.000],[288.000,12.000],[288.000,12.000],[288.000,6.000],[294.000,0.000],[300.000,0.000],[300.000,0.000],[330.000,0.000],[330.000,0.000],[336.000,0.000],[342.000,6.000],[342.000,12.000],[342.000,12.000],[342.000,24.000],[342.000,24.000],[342.000,30.000],[336.000,36.000],[330.000,36.000]]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [315.000,13.800],
+          "align": "c",
+          "width": 6.210,
+          "text": "e"
+        }
+      ],
+      "height": "0.5",
+      "label": "\\N",
+      "pos": "315,18",
+      "shape": "box",
+      "style": "filled,rounded",
+      "width": "0.75"
+    },
+    {
+      "_gvid": 5,
+      "name": "f",
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#00ff00"
+        },
+        {
+          "op": "P",
+          "points": [[414.000,36.000],[360.000,36.000],[360.000,0.000],[414.000,0.000]]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [387.000,13.800],
+          "align": "c",
+          "width": 4.660,
+          "text": "f"
+        }
+      ],
+      "fillcolor": "#00FF00",
+      "height": "0.5",
+      "label": "\\N",
+      "pos": "387,18",
+      "shape": "plaintext",
+      "style": "filled",
+      "width": "0.75"
+    },
+    {
+      "_gvid": 6,
+      "name": "g",
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#ffff00"
+        },
+        {
+          "op": "P",
+          "points": [[459.000,36.000],[432.000,18.000],[459.000,0.000],[486.000,18.000]]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [459.000,13.800],
+          "align": "c",
+          "width": 7.000,
+          "text": "g"
+        }
+      ],
+      "fillcolor": "#FFFF00",
+      "height": "0.5",
+      "label": "\\N",
+      "pos": "459,18",
+      "shape": "diamond",
+      "style": "filled",
+      "width": "0.75"
+    },
+    {
+      "_gvid": 7,
+      "name": "h",
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#00ffff"
+        },
+        {
+          "op": "E",
+          "rect": [506.000,18.000,1.800,1.800]
+        }
+      ],
+      "fillcolor": "#00FFFF",
+      "height": "0.05",
+      "label": "\\N",
+      "pos": "506,18",
+      "shape": "point",
+      "style": "filled",
+      "width": "0.05"
+    }
+  ]
+}

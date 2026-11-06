@@ -1,0 +1,1 @@
+digraph { a [shape=box3d, width=2, height=1, label=""]; b [shape=box3d, fontsize=8, label="work:hash"]; a -> b }

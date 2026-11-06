@@ -1,0 +1,29 @@
+graph 1 12.022 19.167
+node "File: workload" 2.9722 17.69 5.4933 2.5083 "File: workload\lType: cpu\lTime: 2026-11-06 11:32:22 MSK\lDuration: 1.01s, Total samples = 770ms (76.36%)\lActive filters:\l   focus=\
+sortLoop\lShowing nodes accounting for 50ms, 6.49% of 770ms total\l\lSee https://git.io/JfYMW for how to read the graph\l" filled box black #f8f8f8
+node N1 6.5 6.1472 2.3358 2.1111 "slices\npdqsortOrdered[go\nshape\nint]\n10ms (1.30%)\nof 50ms (6.49%)" filled box #b29878 #ede9e5
+node N1_0 6.5 4.1083 0.75 0.5 "work:sort" filled box3d black #f8f8f8
+node N2 6.5 17.69 1.0554 0.51111 "runtime\nmain\n0 of 50ms (6.49%)" filled box #b29878 #ede9e5
+node N3 6.75 2.2889 2.8879 2.1111 "slices\npartitionOrdered[go\nshape\nint]\n20ms (2.60%)" filled box #b2aa9b #edecea
+node N3_0 6.75 0.25 0.75 0.5 "work:sort" filled box3d black #f8f8f8
+node N4 10.236 2.2889 3.5723 2.1111 "slices\nreverseRangeOrdered[go\nshape\nint]\n20ms (2.60%)" filled box #b2aa9b #edecea
+node N4_0 10.236 0.25 0.75 0.5 "work:sort" filled box3d black #f8f8f8
+node N5 6.5 15.447 1.0554 0.51111 "main\nmain\n0 of 50ms (6.49%)" filled box #b29878 #ede9e5
+node N6 6.5 11.514 1.0554 0.64444 "main\nmain\nfunc2\n0 of 50ms (6.49%)" filled box #b29878 #ede9e5
+node N7 6.5 12.892 1.0554 0.64444 "main\nmain\nfunc4\n0 of 50ms (6.49%)" filled box #b29878 #ede9e5
+node N8 6.5 10.203 1.0554 0.51111 "main\nsortLoop\n0 of 50ms (6.49%)" filled box #b29878 #ede9e5
+node N9 6.5 14.203 1.0554 0.51111 "pprof\nDo\n0 of 50ms (6.49%)" filled box #b29878 #ede9e5
+node N10 6.5 8.4583 1.0554 1.0444 "slices\nSort[go\nshape\n[]int,go\nshape\nint]\n0 of 50ms (6.49%)" filled box #b29878 #ede9e5
+edge N1 N1_0 4 6.5 5.0865 6.5 4.8854 6.5 4.6864 6.5 4.5219 " 10ms" 6.735 4.725 solid black
+edge N1 N3 7 6.9665 5.0863 6.9909 5.0046 7.0119 4.9225 7.0278 4.8417 7.113 4.4077 7.0897 3.9264 7.0294 3.5006 " 20ms" 7.3184 4.1083 solid #b2aa9b
+edge N1 N4 4 7.5209 5.0866 8.0131 4.582 8.6048 3.9754 9.11 3.4574 " 20ms\n (inline)" 9.0193 4.1083 solid #b2aa9b
+edge N2 N5 4 6.5 17.431 6.5 17.052 6.5 16.319 6.5 15.862 " 50ms" 6.735 16.069 solid #b29878
+edge N3 N3_0 4 6.75 1.2282 6.75 1.027 6.75 0.82807 6.75 0.66358 " 20ms" 6.985 0.86667 solid black
+edge N4 N4_0 4 10.236 1.2282 10.236 1.027 10.236 0.82807 10.236 0.66358 " 20ms" 10.471 0.86667 solid black
+edge N5 N9 4 6.5 15.187 6.5 15.024 6.5 14.806 6.5 14.618 " 50ms" 6.735 14.825 solid #b29878
+edge N6 N8 4 6.5 11.189 6.5 11.019 6.5 10.806 6.5 10.622 " 50ms" 6.735 10.825 solid #b29878
+edge N7 N6 4 6.5 12.565 6.5 12.396 6.5 12.184 6.5 11.997 " 50ms" 6.735 12.203 solid #b29878
+edge N8 N10 4 6.5 9.9429 6.5 9.7343 6.5 9.4248 6.5 9.1436 " 50ms\n (inline)" 6.8105 9.4639 solid #b29878
+edge N9 N7 4 6.5 13.941 6.5 13.781 6.5 13.567 6.5 13.375 " 50ms" 6.735 13.581 solid #b29878
+edge N10 N1 4 6.5 7.932 6.5 7.7629 6.5 7.567 6.5 7.3684 " 50ms" 6.735 7.5694 solid #b29878
+stop

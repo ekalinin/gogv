@@ -1,0 +1,66 @@
+{
+  "name": "%1",
+  "directed": true,
+  "strict": false,
+  "_subgraph_cnt": 0,
+  "objects": [
+    {
+      "_gvid": 0,
+      "name": "a",
+      "label": "\\N",
+      "style": "filled"
+    },
+    {
+      "_gvid": 1,
+      "name": "b",
+      "color": "#FF0000",
+      "label": "\\N",
+      "style": "filled"
+    },
+    {
+      "_gvid": 2,
+      "name": "c",
+      "fillcolor": "#00FF00",
+      "label": "\\N"
+    },
+    {
+      "_gvid": 3,
+      "name": "d",
+      "fillcolor": "#0000FF",
+      "label": "\\N",
+      "shape": "box",
+      "style": "filled"
+    },
+    {
+      "_gvid": 4,
+      "name": "e",
+      "label": "\\N",
+      "shape": "box",
+      "style": "filled,rounded"
+    },
+    {
+      "_gvid": 5,
+      "name": "f",
+      "fillcolor": "#00FF00",
+      "label": "\\N",
+      "shape": "plaintext",
+      "style": "filled"
+    },
+    {
+      "_gvid": 6,
+      "name": "g",
+      "fillcolor": "#FFFF00",
+      "label": "\\N",
+      "shape": "diamond",
+      "style": "filled"
+    },
+    {
+      "_gvid": 7,
+      "name": "h",
+      "fillcolor": "#00FFFF",
+      "label": "\\N",
+      "shape": "point",
+      "style": "filled"
+    }
+  ]
+}

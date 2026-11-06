@@ -2,13 +2,13 @@
 
 ## 1. Corpus and cases
 
-- [ ] 1.1 Add `tools/pprofcorpus` (design D7):
+- [x] 1.1 Add `tools/pprofcorpus` (design D7):
   - an embedded workload of hashing, sorting and string building under `pprof.Do` labels, and allocations of three sizes;
   - the DOT of `go tool pprof -dot` for CPU and heap profiles, with and without `-nodecount`, `-tagfocus`, `-focus` and `-diff_base`, written into `testdata/conformance/cases/pprof`;
   - a Makefile target that runs it.
 
   Run it and commit the corpus. Verify that the tool writes the 7 files, that gogv parses each of them, and that `make reference` records their references with exit status 0.
-- [ ] 1.2 Add curated cases for every scenario of the delta specs, and record them with `make reference`:
+- [x] 1.2 Add curated cases for every scenario of the delta specs, and record them with `make reference`:
   - the attributes that pprof writes, style lists and an unsupported style in a list;
   - weights in the ranking and the positioning;
   - `box3d`, and pen widths 1 to 6 at arrowheads;

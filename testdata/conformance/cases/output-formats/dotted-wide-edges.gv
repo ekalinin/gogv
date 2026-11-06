@@ -1,0 +1,1 @@
+digraph { a -> b [style=dotted]; c -> d [penwidth=3]; e -> f [style=dotted, penwidth=2, color="#0000FF"] }

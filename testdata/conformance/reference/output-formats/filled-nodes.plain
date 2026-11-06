@@ -1,0 +1,10 @@
+graph 1 7.0528 0.5
+node a 0.375 0.25 0.75 0.5 a filled ellipse black lightgrey
+node b 1.375 0.25 0.75 0.5 b filled ellipse #FF0000 #FF0000
+node c 2.375 0.25 0.75 0.5 c solid ellipse black #00FF00
+node d 3.375 0.25 0.75 0.5 d filled box black #0000FF
+node e 4.375 0.25 0.75 0.5 e filled,rounded box black lightgrey
+node f 5.375 0.25 0.75 0.5 f filled plaintext black #00FF00
+node g 6.375 0.25 0.75 0.5 g filled diamond black #FFFF00
+node h 7.0278 0.25 0.05 0.05 h filled point black #00FFFF
+stop
