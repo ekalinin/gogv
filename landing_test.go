@@ -4,10 +4,14 @@
 package gogv
 
 import (
+	"fmt"
 	"html"
+	"maps"
 	"os"
+	"path/filepath"
 	"regexp"
 	"slices"
+	"strconv"
 	"strings"
 	"testing"
 )
@@ -146,6 +150,118 @@ func TestLandingPresentationScenarios(t *testing.T) {
 		} {
 			if !strings.Contains(install, want) {
 				t.Errorf("the installation does not show %q", want)
+			}
+		}
+	})
+}
+
+var (
+	releaseNotesPattern = regexp.MustCompile(`^v(\d+)\.(\d+)\.(\d+)\.md$`)
+	resultsPattern      = regexp.MustCompile(`(\d+) cases: (\d+) passed, (\d+) known differences, (\d+) not supported yet, (\d+) failed`)
+	// versionPattern matches the mentions of a release of gogv.
+	versionPattern = regexp.MustCompile(`\bv\d+\.\d+\.\d+\b|gogv \d+\.\d+\.\d+`)
+)
+
+// newestRelease returns the newest release among the names of release notes,
+// as "v0.3.0.md", by semantic version.
+func newestRelease(names []string) string {
+	var newest string
+	var best [3]int
+	for _, name := range names {
+		m := releaseNotesPattern.FindStringSubmatch(name)
+		if m == nil {
+			continue
+		}
+		var v [3]int
+		for i := range v {
+			v[i], _ = strconv.Atoi(m[i+1])
+		}
+		if newest == "" || slices.Compare(v[:], best[:]) > 0 {
+			newest, best = strings.TrimSuffix(name, ".md"), v
+		}
+	}
+	return newest
+}
+
+// landingReleaseProblems checks the page against the release notes, given
+// by file name: the page must name the newest release, name no other one,
+// and give the conformance results of its notes.
+func landingReleaseProblems(page string, notes map[string]string) []string {
+	var problems []string
+	release := pageRelease(page)
+	newest := newestRelease(slices.Collect(maps.Keys(notes)))
+	if release != newest {
+		problems = append(problems, fmt.Sprintf("the page names %q, but the newest release notes are those of %q", release, newest))
+	}
+	for _, mention := range versionPattern.FindAllString(page, -1) {
+		if !strings.HasSuffix(mention, release) && !strings.HasSuffix(mention, " "+strings.TrimPrefix(release, "v")) {
+			problems = append(problems, fmt.Sprintf("the page mentions %q, not the release %q", mention, release))
+		}
+	}
+	want := resultsPattern.FindStringSubmatch(strings.Join(strings.Fields(notes[release+".md"]), " "))
+	if want == nil {
+		return append(problems, fmt.Sprintf("the notes of %q state no conformance results", release))
+	}
+	section := pageSection(page, "conformance")
+	var got []string
+	for _, p := range []string{
+		`<strong class="cases">(\d+)</strong> cases`,
+		`<strong>(\d+)</strong> cases pass`,
+		`<strong>(\d+)</strong> cases are known differences`,
+		`<strong>(\d+)</strong> cases use features that are not supported yet`,
+		`<strong>(\d+)</strong> cases fail`,
+	} {
+		m := regexp.MustCompile(p).FindStringSubmatch(section)
+		if m == nil {
+			got = append(got, "")
+			continue
+		}
+		got = append(got, m[1])
+	}
+	if !slices.Equal(got, want[1:]) {
+		problems = append(problems, fmt.Sprintf("the conformance results of the page (cases, passed, known differences, not supported yet, failed) are %q, but those of the notes of %s are %q", got, release, want[1:]))
+	}
+	return problems
+}
+
+func TestLandingReleaseScenarios(t *testing.T) {
+	page := landingPage(t)
+	entries, err := os.ReadDir("docs/releases")
+	if err != nil {
+		t.Fatal(err)
+	}
+	notes := map[string]string{}
+	for _, e := range entries {
+		data, err := os.ReadFile(filepath.Join("docs/releases", e.Name()))
+		if err != nil {
+			t.Fatal(err)
+		}
+		notes[e.Name()] = string(data)
+	}
+	if problems := landingReleaseProblems(page, notes); len(problems) > 0 {
+		t.Fatalf("the page and the release notes disagree:\n%s", strings.Join(problems, "\n"))
+	}
+	release := pageRelease(page)
+
+	t.Run("Page behind the notes", func(t *testing.T) {
+		ahead := maps.Clone(notes)
+		ahead["v9.0.0.md"] = notes[release+".md"]
+		if len(landingReleaseProblems(page, ahead)) == 0 {
+			t.Error("newer release notes than the release of the page give no problem")
+		}
+		// A mention of another release in the text of the page.
+		other := strings.Replace(page, "cmd/dot@"+release, "cmd/dot@v0.0.1", 1)
+		if len(landingReleaseProblems(other, notes)) == 0 {
+			t.Error("an installation command at another release gives no problem")
+		}
+	})
+
+	t.Run("Conformance results out of date", func(t *testing.T) {
+		section := pageSection(page, "conformance")
+		for _, m := range regexp.MustCompile(`<strong[^>]*>(\d+)</strong>`).FindAllStringSubmatch(section, -1) {
+			changed := strings.Replace(section, m[0], strings.Replace(m[0], ">"+m[1]+"<", ">"+m[1]+"1<", 1), 1)
+			if len(landingReleaseProblems(strings.Replace(page, section, changed, 1), notes)) == 0 {
+				t.Errorf("changing %s on the page gives no problem", m[0])
 			}
 		}
 	})
