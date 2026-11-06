@@ -52,7 +52,7 @@
 
 ## 5. Deployment
 
-- [ ] 5.1 Add `.github/workflows/pages.yml` (design D5), and `TestPagesWorkflow` in the root package, for the tag trigger of "Release tag pushed after the notes" and for "Change of the notices". Each of these mutations must make it fail:
+- [x] 5.1 Add `.github/workflows/pages.yml` (design D5), and `TestPagesWorkflow` in the root package, for the tag trigger of "Release tag pushed after the notes" and for "Change of the notices". Each of these mutations must make it fail:
   - no trigger on tags;
   - a `pull_request` trigger;
   - no `id-token: write`;
@@ -81,7 +81,7 @@
 
   Verify that all pass, that the playground tests ran rather than skipped, and that the hash of `make determinism` is the same as on `main`.
 - [ ] 7.2 Push the branch and open a pull request with the template, with the user's approval. Verify that the CI jobs pass.
-- [ ] 7.3 After the merge, the user enables GitHub Pages with "GitHub Actions" as the source. The first release that contains this change then pushes its tag. Verify:
+- [ ] 7.3 After the merge, the user enables GitHub Pages with "GitHub Actions" as the source, and allows the tags `v*` to deploy to the `github-pages` environment (design, Migration Plan). The first release that contains this change then pushes its tag. Verify:
   - that the tag push starts the workflow and deploys, and record the answer in the Open Questions of the design;
   - that `https://ekalinin.github.io/gogv/` shows the page, and that its playground renders `digraph { a -> b }`;
   - whether `gogv.wasm` is served with `content-encoding: gzip`.

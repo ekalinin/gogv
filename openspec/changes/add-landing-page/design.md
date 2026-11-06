@@ -165,12 +165,12 @@ The DOM glue of `page.mjs` (the observer, the delay, the `<img>`) is checked by 
 - [Page behind after a release] → the tests of D2 fail the pull request of the notes until the page names the new release.
 - [`wasm_exec.js` from another toolchain] → it would not run the module. Both come from the toolchain that built the module, in the worktree of the tag.
 - [Node.js not installed locally] → the playground tests skip. CI runs them, and the skip shows in `go test -v`.
-- [Repository settings] → the workflow cannot enable GitHub Pages or set the homepage. They are tasks for the maintainer.
+- [Repository settings] → the workflow cannot enable GitHub Pages, allow the release tags to deploy to the `github-pages` environment, or set the homepage. They are tasks for the maintainer.
 
 ## Migration Plan
 
 1. Merge the pull request of this change. The page names v0.3.0, which has no playground module, so the workflow deploys nothing, with a notice.
-2. The maintainer enables GitHub Pages with "GitHub Actions" as the source (`gh api -X POST repos/ekalinin/gogv/pages -f build_type=workflow`).
+2. The maintainer enables GitHub Pages with "GitHub Actions" as the source (`gh api -X POST repos/ekalinin/gogv/pages -f build_type=workflow`). The `github-pages` environment that this creates lets only `main` deploy, so the maintainer also allows the release tags (`gh api -X POST repos/ekalinin/gogv/environments/github-pages/deployment-branch-policies -f name='v*' -f type=tag`).
 3. Release the next version: its notes pull request names it on the page, and `make release` pushes its tag, which deploys the site.
 4. Check the page and the playground at `https://ekalinin.github.io/gogv/`, and set the page as the homepage of the repository (`gh repo edit --homepage`).
 

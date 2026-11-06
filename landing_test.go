@@ -287,3 +287,78 @@ func TestPlaygroundFirstExample(t *testing.T) {
 		t.Errorf("the first example of the playground is not docs/example.gv:\n%s", source)
 	}
 }
+
+// pagesWorkflowProblems checks the text of the pages workflow: it has no
+// YAML parser to use, as the module has no dependencies.
+func pagesWorkflowProblems(workflow string) []string {
+	var problems []string
+	for _, want := range []string{
+		"\n  push:\n    branches: [main]\n",
+		"\n    tags: [\"v*\"]\n",
+		"\n  workflow_dispatch:\n",
+		"\n  pages: write\n",
+		"\n  id-token: write\n",
+		"\n          ref: main\n",
+		"\n          fetch-depth: 0\n",
+		"\n        run: go run ./tools/site -release -out _site\n",
+	} {
+		if !strings.Contains(workflow, want) {
+			problems = append(problems, fmt.Sprintf("no %q", strings.TrimSpace(want)))
+		}
+	}
+	for _, path := range []string{"site/**", "tools/site/**", ".github/workflows/pages.yml", "docs/example.svg", "LICENSE", "NOTICE"} {
+		if !strings.Contains(workflow, "\n      - \""+path+"\"\n") {
+			problems = append(problems, fmt.Sprintf("no path %q", path))
+		}
+	}
+	if strings.Contains(workflow, "pull_request") {
+		problems = append(problems, "a pull_request trigger, which would deploy unmerged pages")
+	}
+	steps := strings.Split(workflow, "\n      - ")
+	for _, action := range []string{"actions/configure-pages@", "actions/upload-pages-artifact@", "actions/deploy-pages@"} {
+		found := false
+		for _, step := range steps {
+			if strings.Contains(step, action) {
+				found = true
+				if !strings.Contains(step, "\n        if: steps.site.outputs.deploy == 'true'\n") {
+					problems = append(problems, fmt.Sprintf("the step of %s does not depend on deploy=true", strings.TrimSuffix(action, "@")))
+				}
+			}
+		}
+		if !found {
+			problems = append(problems, fmt.Sprintf("no step of %s", strings.TrimSuffix(action, "@")))
+		}
+	}
+	return problems
+}
+
+func TestPagesWorkflow(t *testing.T) {
+	// The triggers of the spec scenarios "Release tag pushed after the
+	// notes" and "Change of the notices" of landing-page, and the
+	// conditions of the deployment.
+	data, err := os.ReadFile(".github/workflows/pages.yml")
+	if err != nil {
+		t.Fatal(err)
+	}
+	workflow := string(data)
+	if problems := pagesWorkflowProblems(workflow); len(problems) > 0 {
+		t.Fatalf(".github/workflows/pages.yml:\n%s", strings.Join(problems, "\n"))
+	}
+	for _, m := range []struct{ name, old, new string }{
+		{"no trigger on tags", "    tags: [\"v*\"]\n", ""},
+		{"a pull_request trigger", "  workflow_dispatch:\n", "  workflow_dispatch:\n  pull_request:\n"},
+		{"no id-token: write", "  id-token: write\n", ""},
+		{"a deployment not conditional on deploy=true", "        id: deployment\n        if: steps.site.outputs.deploy == 'true'\n", "        id: deployment\n"},
+		{"a checkout without ref: main", "          ref: main\n", ""},
+		{"NOTICE missing from the paths", "      - \"NOTICE\"\n", ""},
+	} {
+		mutated := strings.Replace(workflow, m.old, m.new, 1)
+		if mutated == workflow {
+			t.Errorf("%s: the mutation does not apply", m.name)
+			continue
+		}
+		if len(pagesWorkflowProblems(mutated)) == 0 {
+			t.Errorf("%s: no problem found", m.name)
+		}
+	}
+}
