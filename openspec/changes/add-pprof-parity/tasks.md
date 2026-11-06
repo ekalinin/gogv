@@ -37,7 +37,7 @@
 
 - [x] 4.1 Draw fills, `box3d` outlines, dotted edges and pen widths in `svg` (design D6); verify the "Filled nodes", "Box with depth in svg" and "Dotted and wide edges" scenarios, and that `svg` is byte-identical to `main` for the curated cases without the new attributes, edge group ids aside
 - [x] 4.2 Give node groups their `id`, number edge groups in edge order, and wrap tooltips in `a` elements as the reference does (design D6); verify the "Tooltips and ids that pprof uses" and "Edge groups in edge order" scenarios
-- [ ] 4.3 Write the new styles, fills and pen widths in `plain` and xdot, and through xdot in JSON. Verify:
+- [x] 4.3 Write the new styles, fills and pen widths in `plain` and xdot, and through xdot in JSON. Verify:
   - the "Styles in plain", "Filled node in xdot" and "Dotted and wide edges in xdot" scenarios;
   - the `dot`, `xdot` and `json` comparisons on the pprof cases.
 

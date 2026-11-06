@@ -4,6 +4,7 @@
 package output
 
 import (
+	"regexp"
 	"strings"
 	"testing"
 
@@ -77,5 +78,37 @@ func TestXdotScenarios(t *testing.T) {
 	}
 	if node := attrsOf(t, x, "b"); !strings.Contains(node, `_draw_="S 5 -solid c 7 -#000000 e `) {
 		t.Errorf("explicit style: %s", node)
+	}
+}
+
+func TestXdotPprofScenarios(t *testing.T) {
+	// Filled node in xdot.
+	if x := render(t, `digraph { a [style=filled] }`, xdotOf("1.7")); !strings.Contains(x, `_draw_="c 7 -#000000 C 7 -#d3d3d3 E 27 18 27 18 "`) {
+		t.Errorf("filled node in xdot:\n%s", x)
+	}
+	// Dotted and wide edges in xdot.
+	x := render(t, `digraph { a -> b [style=dotted]; c -> d [penwidth=3] }`, xdotOf("1.7"))
+	dotted, wide := attrsOf(t, x, "a -> b"), attrsOf(t, x, "c -> d")
+	for _, tt := range []struct{ attrs, want string }{
+		{dotted, `_draw_="S 6 -dotted c 7 -#000000 B 4 `},
+		{dotted, `_hdraw_="S 5 -solid c 7 -#000000 C 7 -#000000 P 3 `},
+		{wide, `_draw_="S 15 -setlinewidth(3) c 7 -#000000 B 4 `},
+		{wide, `_hdraw_="S 15 -setlinewidth(3) S 5 -solid c 7 -#000000 C 7 -#000000 P 3 `},
+	} {
+		if !strings.Contains(tt.attrs, tt.want) {
+			t.Errorf("dotted and wide edges in xdot: no %s in %s", tt.want, tt.attrs)
+		}
+	}
+	// box3d draws its depth as three lines, each with its pen.
+	x = strings.ReplaceAll(render(t, `digraph { a [shape=box3d, style=filled] }`, xdotOf("1.7")), "\\\n", "")
+	if !regexp.MustCompile(`_draw_="c 7 -#000000 C 7 -#d3d3d3 P 6 [-\d. ]+(c 7 -#000000 L 2 [-\d. ]+){3}"`).MatchString(x) {
+		t.Errorf("box3d in xdot:\n%s", x)
+	}
+}
+
+func TestPlainStyles(t *testing.T) {
+	plain := render(t, `digraph { a [style=filled, fillcolor="#00FF00"]; a -> b [style=dotted] }`, Plain)
+	if !regexp.MustCompile(`(?m)^node a .* filled ellipse black #00FF00$`).MatchString(plain) || !regexp.MustCompile(`(?m)^edge a b .* dotted black$`).MatchString(plain) {
+		t.Errorf("styles in plain:\n%s", plain)
 	}
 }
