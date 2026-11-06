@@ -8,13 +8,17 @@
 // It copies the page (site/ of the repository -root), the picture of its
 // example (docs/example.svg) and, next to the module in wasm/, the LICENSE
 // and NOTICE of the repository. It builds the module from internal/playground
-// of the working tree, with the wasm_exec.js of the toolchain that built it.
+// with the wasm_exec.js of the toolchain that built it: from the working tree
+// by default, or with -release from the sources of the release tag that the
+// page names in its gogv-release meta tag, checked out in a temporary git
+// worktree. When the repository has no such tag, or the sources of the tag
+// have no playground, it prints a notice, writes nothing and succeeds.
 // Nothing is written when a step fails.
 //
 // When GITHUB_OUTPUT is set, it appends deploy=true, or deploy=false when it
 // wrote nothing, to the file it names.
 //
-// Usage: go run ./tools/site -out dir [-root dir]
+// Usage: go run ./tools/site -out dir [-release] [-root dir]
 package main
 
 import (
@@ -28,12 +32,23 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"strings"
 )
 
 // licenseFiles are the files of the repository root that go next to the
 // module.
 var licenseFiles = []string{"LICENSE", "NOTICE"}
+
+// playgroundMain is the file whose presence in the sources of a release
+// tells that the release has the playground.
+const playgroundMain = "internal/playground/main.go"
+
+var releaseMeta = regexp.MustCompile(`<meta name="gogv-release" content="(v\d+\.\d+\.\d+)">`)
+
+// errNoModule reports a release whose module cannot be built: its tag is
+// not in the repository yet, or its sources have no playground.
+var errNoModule = errors.New("no module to build")
 
 func main() {
 	log.SetFlags(0)
@@ -46,11 +61,12 @@ func run(args []string, stdout io.Writer) error {
 	fl := flag.NewFlagSet("site", flag.ContinueOnError)
 	root := fl.String("root", ".", "repository root, with the page in site/")
 	out := fl.String("out", "", "output directory, replaced by the site")
+	release := fl.Bool("release", false, "build the module from the release tag that the page names")
 	if err := fl.Parse(args); err != nil {
 		return err
 	}
 	if *out == "" || fl.NArg() > 0 {
-		return errors.New("usage: site -out dir [-root dir]")
+		return errors.New("usage: site -out dir [-release] [-root dir]")
 	}
 
 	files, err := readFiles(*root, map[string]string{"docs/example.svg": "example.svg"})
@@ -62,7 +78,21 @@ func run(args []string, stdout io.Writer) error {
 		return err
 	}
 	maps.Copy(files, module)
-	if module, err = buildModule(*root, "devel"); err != nil {
+	what := "the working tree"
+	if *release {
+		var tag string
+		if tag, err = pageRelease(*root); err == nil {
+			what = tag
+			module, err = buildRelease(*root, tag)
+		}
+	} else {
+		module, err = buildModule(*root, "devel")
+	}
+	if errors.Is(err, errNoModule) {
+		fmt.Fprintf(stdout, "::notice::%v; nothing to deploy\n", err)
+		return setOutput(false)
+	}
+	if err != nil {
 		return err
 	}
 	maps.Copy(files, module)
@@ -70,8 +100,59 @@ func run(args []string, stdout io.Writer) error {
 		os.RemoveAll(*out)
 		return err
 	}
-	fmt.Fprintf(stdout, "site of the working tree written to %s\n", *out)
+	fmt.Fprintf(stdout, "site of %s written to %s\n", what, *out)
 	return setOutput(true)
+}
+
+// pageRelease returns the release that the page of the repository in root
+// names.
+func pageRelease(root string) (string, error) {
+	name := filepath.Join(root, "site", "index.html")
+	page, err := os.ReadFile(name)
+	if err != nil {
+		return "", err
+	}
+	m := releaseMeta.FindAllSubmatch(page, -1)
+	if len(m) != 1 {
+		return "", fmt.Errorf("%s: %d gogv-release meta tags, want 1", name, len(m))
+	}
+	return string(m[0][1]), nil
+}
+
+// git runs git in the repository root and returns its standard output.
+func git(root string, args ...string) (string, error) {
+	cmd := exec.Command("git", append([]string{"-C", root}, args...)...)
+	out, err := cmd.Output()
+	if err != nil {
+		var stderr []byte
+		if ee, ok := errors.AsType[*exec.ExitError](err); ok {
+			stderr = ee.Stderr
+		}
+		return "", fmt.Errorf("git %s: %v\n%s", strings.Join(args, " "), err, stderr)
+	}
+	return string(out), nil
+}
+
+// buildRelease builds the module from the sources of the release tag, in a
+// temporary worktree of the repository in root, with tag as its version.
+func buildRelease(root, tag string) (map[string][]byte, error) {
+	if _, err := git(root, "rev-parse", "--verify", "--quiet", "refs/tags/"+tag+"^{commit}"); err != nil {
+		return nil, fmt.Errorf("%w: the repository has no tag %s yet", errNoModule, tag)
+	}
+	if _, err := git(root, "cat-file", "-e", tag+":"+playgroundMain); err != nil {
+		return nil, fmt.Errorf("%w: the sources of %s have no %s", errNoModule, tag, playgroundMain)
+	}
+	tmp, err := os.MkdirTemp("", "site-release-")
+	if err != nil {
+		return nil, err
+	}
+	defer os.RemoveAll(tmp)
+	src := filepath.Join(tmp, "src")
+	if _, err := git(root, "worktree", "add", "--detach", src, tag); err != nil {
+		return nil, err
+	}
+	defer git(root, "worktree", "remove", "--force", src)
+	return buildModule(src, tag)
 }
 
 // readFiles reads files of dir, given by their path in dir and their path in

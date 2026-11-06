@@ -29,7 +29,7 @@
 - [x] 3.1 Add `tools/site` with the local build (design D4), and the `site` target of the Makefile, which writes `.cache/site`. Add tests for "Preview" and "License files on the site". Verify that they pass, and that `make site` writes the following into `.cache/site`:
   - `index.html` and `example.svg`;
   - `wasm/` with `gogv.wasm`, `wasm_exec.js`, `gogv.mjs`, `LICENSE` and `NOTICE`.
-- [ ] 3.2 Add the `-release` build (design D4), and its tests on temporary git repositories:
+- [x] 3.2 Add the `-release` build (design D4), and its tests on temporary git repositories:
   - a missing tag: a notice, no output, `deploy=false`, exit status 0 (the first half of "Release tag pushed after the notes");
   - a tag without the playground: the same ("Release without the playground");
   - a tag with a minimal playground module: the site with the module, its version set to the tag, and `deploy=true` ("Change of the page");
