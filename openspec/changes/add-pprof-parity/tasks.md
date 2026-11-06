@@ -50,7 +50,7 @@
 - [x] 5.2 Check pprof end to end with gogv installed as `dot`. Verify:
   - `go tool pprof -svg` writes the graph without a warning;
   - the Graph view of `go tool pprof -http` finds the groups `node<N>` with a `polygon` to highlight, fetched from its page.
-- [ ] 5.3 Check determinism and hygiene. Verify that these pass:
+- [x] 5.3 Check determinism and hygiene. Verify that these pass:
   - `go run ./tools/provenance`;
   - the fused multiply-add tests;
   - `go test -race ./...`;
