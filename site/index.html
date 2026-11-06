@@ -1,0 +1,210 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: MIT -->
+<!-- Provenance: gopuml site/index.html -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="gogv-release" content="v0.3.0">
+<meta name="description" content="gogv is a Go implementation of the Graphviz dot program: it lays out DOT graphs and writes them as SVG and in the other output formats of dot, with no cgo and no installed Graphviz.">
+<meta name="color-scheme" content="light dark">
+<title>gogv - Graphviz dot in pure Go</title>
+<link rel="stylesheet" href="style.css">
+<script type="module" src="page.mjs"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <a class="wordmark" href="#main">gogv</a>
+  <nav aria-label="Sections">
+    <a href="#install">Install</a>
+    <a href="#playground">Playground</a>
+    <a href="#pprof">pprof</a>
+    <a href="https://github.com/ekalinin/gogv">GitHub</a>
+  </nav>
+</header>
+
+<main id="main">
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-text">
+    <h1 id="hero-title">Graphviz dot,<br><span class="nowrap">in pure Go.</span></h1>
+    <p class="lede">gogv is a Go implementation of the <a href="https://graphviz.org">Graphviz</a> <code>dot</code> program, following Graphviz 16.1.0. It lays out graphs written in the DOT language and writes them as SVG and in the other output formats of <code>dot</code>. It needs no cgo, no embedded WebAssembly and no installed Graphviz.</p>
+    <p class="actions">
+      <a class="button primary" href="#install">Install v0.3.0</a>
+      <a class="button" href="#playground">Try it in the browser</a>
+      <a class="button" href="https://github.com/ekalinin/gogv">Source on GitHub</a>
+    </p>
+  </div>
+  <figure class="sheet sheet-wide">
+    <figcaption class="sheet-label">example.gv</figcaption>
+    <div class="sheet-panes">
+      <pre class="sheet-source"><code>digraph gogv {
+	rankdir=LR
+	node [shape=box, style=rounded, fontname=Helvetica, fontsize=12]
+	edge [fontname=Helvetica, fontsize=10, color="#555555"]
+
+	input [label="DOT text", shape=plaintext]
+
+	subgraph cluster_language {
+		label="dotlang"
+		fontname=Helvetica
+		color="#4a7ebb"
+		lexer -&gt; parser [label="tokens"]
+	}
+
+	subgraph cluster_layout {
+		label="layout"
+		fontname=Helvetica
+		color="#5a9e4b"
+		rank -&gt; order -&gt; position -&gt; route
+	}
+
+	subgraph cluster_output {
+		label="output"
+		fontname=Helvetica
+		color="#b36b2e"
+		node [shape=ellipse]
+		svg; xdot; json; canon
+	}
+
+	input -&gt; lexer
+	parser -&gt; rank [label="graph"]
+	parser -&gt; canon [label="no layout"]
+	route -&gt; svg
+	route -&gt; xdot
+	route -&gt; json
+}</code></pre>
+      <div class="sheet-result">
+        <p class="sheet-command"><code>$ dot -Tsvg example.gv -o example.svg</code></p>
+        <div class="sheet-paper">
+          <img src="example.svg" width="829" height="263" alt="The stages of gogv, laid out by gogv from left to right: DOT text goes through the lexer and the parser of dotlang, then through rank, order, position and route of the layout, to the svg, xdot and json outputs; canon is written without a layout.">
+        </div>
+      </div>
+    </div>
+  </figure>
+</section>
+
+<section id="ways" aria-labelledby="ways-title">
+  <h2 id="ways-title">Three ways to run it</h2>
+  <div class="ways">
+    <article>
+      <h3>Go library</h3>
+      <p><code>gogv.Render</code> writes the bytes that <code>dot -T&lt;format&gt;</code> writes, and returns the warnings and a <code>*gogv.SyntaxError</code> with its line. It is safe for concurrent use.</p>
+      <pre><code>out, warnings, err :=
+	gogv.Render(ctx, src, "svg")</code></pre>
+    </article>
+    <article>
+      <h3>Command line</h3>
+      <p>A <code>dot</code> that accepts <code>-T&lt;format&gt;</code>, <code>-o&lt;file&gt;</code>, <code>-V</code> and <code>-Kdot</code>, and rejects the other flags of Graphviz's <code>dot</code> with exit status 1 instead of ignoring them.</p>
+      <pre><code>dot -Tsvg graph.gv -o graph.svg</code></pre>
+    </article>
+    <article>
+      <h3>WebAssembly module</h3>
+      <p>The library starts no process and reads no file, environment variable or network, so it builds and runs in WebAssembly. The playground on this page runs it.</p>
+      <pre><code>GOOS=js GOARCH=wasm go build ./...</code></pre>
+    </article>
+  </div>
+</section>
+
+<section id="playground" aria-labelledby="playground-title">
+  <h2 id="playground-title">Playground</h2>
+  <p>Edit the DOT source, and gogv v0.3.0 lays it out in this page with WebAssembly. No server is involved.</p>
+  <aside class="note">A feature that is not supported yet gives a warning, as the command line writes it, and the graph is drawn with the default that the warning names.</aside>
+  <div class="pg" hidden>
+    <div class="pg-bar">
+      <label for="pg-example">Example</label>
+      <select id="pg-example"></select>
+      <a id="pg-download" class="button" download="graph.svg" hidden>Download SVG</a>
+    </div>
+    <div class="pg-panes">
+      <textarea id="pg-source" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="DOT source"></textarea>
+      <div class="pg-out">
+        <p id="pg-status" class="pg-status" role="status" aria-live="polite">The module loads when the playground is on screen.</p>
+        <ul id="pg-warnings" class="pg-warnings" hidden></ul>
+        <div class="sheet-paper"><img id="pg-image" alt="" hidden></div>
+      </div>
+    </div>
+  </div>
+  <p id="pg-start" class="note">If this message stays, the playground could not start: browsers do not run its scripts from a page opened as a file. Serve the page over HTTP, for example with <code>make site</code> and <code>python3 -m http.server -d .cache/site</code>.</p>
+  <noscript><p class="note">The playground needs JavaScript. The rest of this page works without it.</p></noscript>
+</section>
+
+<section id="pprof" aria-labelledby="pprof-title">
+  <h2 id="pprof-title">With go tool pprof</h2>
+  <p><code>go tool pprof</code> draws its call graphs with <code>dot</code>: <code>-svg</code>, <code>-web</code> and the Graph view of <code>-http</code>. With gogv installed as <code>dot</code>, they work without Graphviz: nodes are filled with their colors, hot edges are thicker and kept straight, residual edges are dotted, tag nodes are boxes with depth, and the Graph view selects nodes by their <code>id</code>.</p>
+  <pre><code>go install github.com/ekalinin/gogv/cmd/dot@v0.3.0
+export PATH="$(go env GOPATH)/bin:$PATH"
+go tool pprof -http=:8080 cpu.prof</code></pre>
+</section>
+
+<section id="formats" aria-labelledby="formats-title">
+  <h2 id="formats-title">Output formats</h2>
+  <ul class="formats">
+    <li><code>canon</code></li>
+    <li><code>plain</code></li>
+    <li><code>plain-ext</code></li>
+    <li><code>svg</code></li>
+    <li><code>svg_inline</code></li>
+    <li><code>dot</code></li>
+    <li><code>gv</code></li>
+    <li><code>xdot</code></li>
+    <li><code>xdot1.2</code></li>
+    <li><code>xdot1.4</code></li>
+    <li><code>json</code></li>
+    <li><code>json0</code></li>
+    <li><code>dot_json</code></li>
+    <li><code>xdot_json</code></li>
+  </ul>
+  <p>The layout is the layered layout of <code>dot</code>: ranking, crossing minimization, positioning, and spline or polyline routing, with clusters, edge labels, table labels and node ports. The <a href="https://github.com/ekalinin/gogv#status">Status and "Not supported yet" lists of the README</a> name the attributes and values that gogv supports. A feature that is not supported yet gives a warning that names the default used instead.</p>
+</section>
+
+<section id="install" aria-labelledby="install-title">
+  <h2 id="install-title">Install</h2>
+  <p>With Go 1.26 or later, install the <code>dot</code> command line of <a href="https://github.com/ekalinin/gogv/releases/tag/v0.3.0">v0.3.0</a>:</p>
+  <pre><code>go install github.com/ekalinin/gogv/cmd/dot@v0.3.0
+dot -V   # dot - graphviz version 16.1.0 (gogv 0.3.0)</code></pre>
+  <p>The command is named <code>dot</code>, as Graphviz's is: when Graphviz is installed too, the <code>dot</code> found first in <code>PATH</code> runs, and <code>dot -V</code> tells them apart. Add the library to a module with:</p>
+  <pre><code>go get github.com/ekalinin/gogv@v0.3.0</code></pre>
+  <p>Releases have no prebuilt binaries.</p>
+</section>
+
+<section id="conformance" aria-labelledby="conformance-title">
+  <h2 id="conformance-title">Conformance</h2>
+  <p><code>make conformance</code> compares v0.3.0 with Graphviz 16.1.0 built without Pango on <strong class="cases">587</strong> cases: <code>canon</code> byte for byte, <code>plain</code> by nodes, edges and size, <code>svg</code> by size and the structural similarity of the rasterized documents, and <code>dot</code>, xdot and JSON by their objects, attributes and drawing operations.</p>
+  <ul class="tally">
+    <li><strong>516</strong> cases pass</li>
+    <li><strong>32</strong> cases are known differences (<code>testdata/conformance/known-differences.yaml</code>)</li>
+    <li><strong>39</strong> cases use features that are not supported yet</li>
+    <li><strong>0</strong> cases fail</li>
+  </ul>
+  <p>The <a href="https://github.com/ekalinin/gogv/blob/main/conformance-report.md">conformance report</a> lists the cases by capability and by format.</p>
+</section>
+
+<section id="clean-room" aria-labelledby="clean-room-title">
+  <h2 id="clean-room-title">Clean-room implementation</h2>
+  <p>gogv is written from published papers, the Graphviz documentation and the observed behavior of Graphviz 16.1.0, used as a black box. It contains no code from Graphviz or from its ports and bindings. Every Go file names its sources in <code>Provenance:</code> lines:</p>
+  <ul class="sources">
+    <li>Gansner, Koutsofios, North and Vo, "A Technique for Drawing Directed Graphs" (IEEE TSE, 1993): ranking, crossing minimization, positioning</li>
+    <li>Dobkin, Gansner, Koutsofios and North, "Implementing a General-Purpose Edge Router" (Graph Drawing 1997): edge routing</li>
+    <li>the <a href="https://graphviz.org/documentation/">Graphviz documentation</a></li>
+    <li>outputs of Graphviz 16.1.0 for chosen inputs</li>
+  </ul>
+  <p>Text is measured with tables generated from the Liberation 2.1.5 fonts, and elementary functions come from a port of fdlibm, so that the output is the same, byte for byte, on every platform.</p>
+</section>
+
+</main>
+
+<footer id="license" class="bottom" aria-labelledby="license-title">
+  <h2 id="license-title">License</h2>
+  <p>MIT, see <a href="https://github.com/ekalinin/gogv/blob/main/LICENSE">LICENSE</a>. <a href="https://github.com/ekalinin/gogv/blob/main/NOTICE">NOTICE</a> lists the sources of the code and of the font tables. gogv is not affiliated with or endorsed by the Graphviz project.</p>
+  <ul class="links">
+    <li><a href="https://github.com/ekalinin/gogv">Repository</a></li>
+    <li><a href="https://github.com/ekalinin/gogv/releases">Releases</a></li>
+    <li><a href="https://pkg.go.dev/github.com/ekalinin/gogv">Go package documentation</a></li>
+  </ul>
+</footer>
+
+</body>
+</html>

@@ -1,7 +1,7 @@
 GO ?= go
 REFERENCE_IMAGE ?= gogv-reference
 
-.PHONY: build test lint provenance reference-image reference pprof-corpus harvest conformance determinism perf release
+.PHONY: build test lint provenance reference-image reference pprof-corpus harvest conformance determinism perf site release
 
 build:
 	$(GO) build ./...
@@ -77,6 +77,12 @@ perf:
 # CI passed with an annotated tag, pushes the tag, and creates the GitHub
 # release with the notes of docs/releases/VERSION.md. A pushed tag is never
 # moved: once the module proxy has fetched it, its content is fixed.
+# Assembles the landing page and the WebAssembly module of its playground,
+# built from the working tree, into .cache/site; serve it with any static
+# file server, such as python3 -m http.server -d .cache/site.
+site:
+	$(GO) run ./tools/site -out .cache/site
+
 release:
 	@echo "$(VERSION)" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$$' || { echo "release: VERSION must look like v0.1.0"; exit 1; }
 	@test -f docs/releases/$(VERSION).md || { echo "release: docs/releases/$(VERSION).md is missing"; exit 1; }
