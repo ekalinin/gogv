@@ -274,7 +274,8 @@ var (
 )
 
 // lineBreakAt is how many characters of a quoted string the reference writes
-// before it breaks the string, after a space, with a backslash and a newline.
+// before it breaks the string, after a space, a comma or an equals sign,
+// with a backslash and a newline.
 const lineBreakAt = 128
 
 func (c *canon) id(s string, html bool) string { return quoteID(s, html) }
@@ -299,7 +300,7 @@ func quoteID(s string, html bool) string {
 		}
 		b.WriteByte(ch)
 		run++
-		if ch == ' ' && run >= lineBreakAt && i+1 < len(s) {
+		if (ch == ' ' || ch == ',' || ch == '=') && run >= lineBreakAt && i+1 < len(s) {
 			b.WriteString("\\\n")
 			run = 0
 		}
