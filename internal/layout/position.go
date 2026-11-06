@@ -16,7 +16,7 @@ var omegaTable = [3]int{1, 1, 8}
 
 // placeX assigns integer x coordinates by the network simplex on the
 // auxiliary graph of section 4.2: an extra node for each edge pulls its ends
-// together with weight omega times the number of edges it stands for, its
+// together with weight omega times the weights of the edges it stands for, its
 // ports rather than its nodes when it has ports (the offsets δ of section
 // 4), and an
 // edge between neighbors in a rank keeps them apart by how far they reach
@@ -47,7 +47,7 @@ func (g *ranked) placeX(ctx context.Context, left, right []float64, nodesep floa
 		return m - u, m - v
 	}
 	for _, e := range g.edges {
-		w := omega(e) * e.count
+		w := omega(e) * e.weight
 		du, dv := delta(e.upperPort, e.lowerPort)
 		edges = append(edges,
 			nsEdge{tail: next, head: e.upper, minlen: du, weight: w},
@@ -57,8 +57,8 @@ func (g *ranked) placeX(ctx context.Context, left, right []float64, nodesep floa
 	for _, f := range g.flats {
 		dl, dr := delta(f.leftPort, f.rightPort)
 		edges = append(edges,
-			nsEdge{tail: next, head: f.left, minlen: dl, weight: 1},
-			nsEdge{tail: next, head: f.right, minlen: dr, weight: 1})
+			nsEdge{tail: next, head: f.left, minlen: dl, weight: f.weight},
+			nsEdge{tail: next, head: f.right, minlen: dr, weight: f.weight})
 		next++
 	}
 	for _, nodes := range g.ranks {

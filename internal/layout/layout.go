@@ -8,6 +8,7 @@ import (
 	"context"
 	"math"
 	"slices"
+	"strconv"
 
 	"github.com/ekalinin/gogv/internal/attrs"
 	"github.com/ekalinin/gogv/internal/graph"
@@ -217,9 +218,17 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 
 	var rankEdges []rankEdge
 	ends := make([][2]int, 0, len(g.Edges()))
+	// Each edge weighs its weight in the ranking and in the positioning, as
+	// the weight of Gansner et al.
+	weights := make([]int, 0, len(g.Edges()))
 	for _, e := range g.Edges() {
 		t, h := index[e.Tail], index[e.Head]
 		ends = append(ends, [2]int{t, h})
+		weight, err := strconv.Atoi(supported(graph.EdgeKind, "weight", edgeValue(g, e, "weight"), "1"))
+		if err != nil {
+			weight = 1
+		}
+		weights = append(weights, weight)
 		if t == h || !boolean(edgeValue(g, e, "constraint"), true) {
 			continue
 		}
@@ -227,7 +236,7 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 		if doubled {
 			minlen *= 2
 		}
-		rankEdges = append(rankEdges, rankEdge{tail: t, head: h, minlen: minlen, weight: 1})
+		rankEdges = append(rankEdges, rankEdge{tail: t, head: h, minlen: minlen, weight: weight})
 	}
 	tree := buildClusterTree(g, index)
 	var ranks []int
@@ -248,7 +257,7 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 	for i := range own {
 		ownChain[i] = own[i] || hasPort(ports[i])
 	}
-	rg, chains := buildRanked(ranks, ends, ownChain)
+	rg, chains := buildRanked(ranks, ends, ownChain, weights)
 	rg.setPorts(chains, ends, ports, lw, p.lr)
 	// The label of an edge belongs to the virtual node halfway along its
 	// chain.

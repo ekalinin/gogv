@@ -159,7 +159,7 @@ func TestSeparationAndPositioning(t *testing.T) {
 // Every rank between the ends of a long edge holds one virtual node of it.
 func TestVirtualNodes(t *testing.T) {
 	ranks := []int{0, 1, 2, 3}
-	g, chains := buildRanked(ranks, [][2]int{{0, 3}, {0, 1}, {3, 0}}, nil)
+	g, chains := buildRanked(ranks, [][2]int{{0, 3}, {0, 1}, {3, 0}}, nil, nil)
 	if len(chains[0]) != 4 || len(chains[1]) != 2 {
 		t.Fatalf("chains %v", chains)
 	}

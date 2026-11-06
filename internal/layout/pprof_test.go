@@ -20,4 +20,24 @@ func TestPprofLayoutScenarios(t *testing.T) {
 	if vs := PolygonVertices("box3d", 144, 72); len(vs) != 6 || vs[1] != (Point{-68, 36}) || vs[4] != (Point{68, -36}) {
 		t.Errorf("box3d outline %v", vs)
 	}
+
+	// Heavy edge kept short: e moves to the rank right below a.
+	n2 := nodesOf(layoutResolved(t, `digraph { a -> b -> c -> d; a -> e [weight=5]; e -> d }`))
+	if !approx(n2["e"].Y, n2["b"].Y) {
+		t.Errorf("heavy edge kept short: e at %v, b at %v", n2["e"].Y, n2["b"].Y)
+	}
+	n2 = nodesOf(layoutResolved(t, `digraph { a -> b -> c -> d; a -> e; e -> d }`))
+	if !approx(n2["e"].Y, n2["c"].Y) {
+		t.Errorf("without the weight: e at %v, c at %v", n2["e"].Y, n2["c"].Y)
+	}
+	// Heavy edge kept straight.
+	n2 = nodesOf(layoutResolved(t, `digraph { a -> b; a -> c [weight=10] }`))
+	if !approx(n2["a"].X, n2["c"].X) || !(n2["b"].X < n2["a"].X) {
+		t.Errorf("heavy edge kept straight: a %v, b %v, c %v", n2["a"].X, n2["b"].X, n2["c"].X)
+	}
+	// Heavy edge across ranks.
+	n2 = nodesOf(layoutResolved(t, `digraph { a -> b -> c; a -> c [weight=5] }`))
+	if !approx(n2["a"].X, n2["c"].X) || !(n2["b"].X < n2["a"].X) {
+		t.Errorf("heavy edge across ranks: a %v, b %v, c %v", n2["a"].X, n2["b"].X, n2["c"].X)
+	}
 }
