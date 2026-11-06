@@ -2,7 +2,7 @@
 
 ## 1. Playground module
 
-- [ ] 1.1 Add `internal/playground` (design D3): `main.go`, for `js && wasm`, with `gogv.version` and `gogv.render`, and `gogv.mjs` with `load(wasmURL)`. Verify:
+- [x] 1.1 Add `internal/playground` (design D3): `main.go`, for `js && wasm`, with `gogv.version` and `gogv.render`, and `gogv.mjs` with `load(wasmURL)`. Verify:
   - `GOOS=js GOARCH=wasm go build ./internal/playground` succeeds;
   - `go run ./tools/provenance` accepts `main.go`;
   - a Node.js run of `load` renders `digraph { a -> b }` as SVG, with no warning and no error.
