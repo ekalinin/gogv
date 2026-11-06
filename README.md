@@ -12,6 +12,8 @@ it works as:
 ![The stages of gogv, laid out by gogv](docs/example.svg)
 
 The picture is gogv's SVG output for [`docs/example.gv`](docs/example.gv).
+The [landing page](https://ekalinin.github.io/gogv/) has a playground that
+lays out DOT in the browser, with the WebAssembly build of the latest release.
 
 gogv is not affiliated with or endorsed by the Graphviz project.
 
@@ -203,8 +205,10 @@ are listed in `testdata/conformance/known-differences.yaml`.
 A release is a tag `vX.Y.Z` on a commit of `main` that CI passed, with its
 notes in `docs/releases/vX.Y.Z.md`:
 
-1. Write `docs/releases/vX.Y.Z.md` and merge it into `main` in a pull
-   request.
+1. Write `docs/releases/vX.Y.Z.md`, name `vX.Y.Z` on the landing page
+   (`site/index.html`: its `gogv-release` meta tag, its installation commands
+   and the conformance results of the notes), and merge them into `main` in
+   a pull request. The tests fail until the page names the newest notes.
 2. Once CI has passed on the merge commit, run on an up-to-date `main`:
 
    ```sh
@@ -215,7 +219,8 @@ notes in `docs/releases/vX.Y.Z.md`:
    uncommitted change (untracked files, such as an OpenSpec change not
    archived yet, do not count), that the tag does not exist yet and that CI
    passed, then tags the commit, pushes the tag and creates the GitHub
-   release with the notes. It needs `gh`, logged in.
+   release with the notes. It needs `gh`, logged in. The push of the tag
+   deploys the landing page with the playground of the release.
 
 A pushed tag is never moved: once the Go module proxy has fetched it, its
 content is fixed. The release is then installed with

@@ -64,7 +64,7 @@
 
 ## 6. Documentation
 
-- [ ] 6.1 Update `README.md`:
+- [x] 6.1 Update `README.md`:
   - add a link to the page and its playground near the top;
   - in step 1 of the Releasing section, name the release on the page in the pull request of its notes.
 
