@@ -179,3 +179,6 @@ Rollback: disable GitHub Pages, or revert the commit.
 ## Open Questions
 
 - Does the push of a tag start the workflow despite the path filters of the same `push` trigger? GitHub's documentation says that path filters are not evaluated for tag pushes. It is checked on the first release after the merge. If it does not start, a run by hand deploys, and a follow-up moves the tag trigger to the `create` event, without changing the spec.
+  - Answered with the release v0.3.1 (2026-11-06): yes. The push of the tag `v0.3.1` started the workflow, which deployed the site. No follow-up is needed.
+- Does GitHub Pages compress `gogv.wasm`?
+  - Answered after the first deployment (2026-11-06): yes. GitHub Pages serves it as `application/wasm` with `content-encoding: gzip`, 1.35 MB transferred for 4.6 MB.

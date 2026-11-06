@@ -81,7 +81,7 @@
 
   Verify that all pass, that the playground tests ran rather than skipped, and that the hash of `make determinism` is the same as on `main`.
 - [x] 7.2 Push the branch and open a pull request with the template, with the user's approval. Verify that the CI jobs pass.
-- [ ] 7.3 After the merge, the user enables GitHub Pages with "GitHub Actions" as the source, and allows the tags `v*` to deploy to the `github-pages` environment (design, Migration Plan). The first release that contains this change then pushes its tag. Verify:
+- [x] 7.3 After the merge, the user enables GitHub Pages with "GitHub Actions" as the source, and allows the tags `v*` to deploy to the `github-pages` environment (design, Migration Plan). The first release that contains this change then pushes its tag. Verify:
   - that the tag push starts the workflow and deploys, and record the answer in the Open Questions of the design;
   - that `https://ekalinin.github.io/gogv/` shows the page, and that its playground renders `digraph { a -> b }`;
   - whether `gogv.wasm` is served with `content-encoding: gzip`.
