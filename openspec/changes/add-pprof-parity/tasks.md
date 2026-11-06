@@ -19,7 +19,7 @@
 
 ## 2. Language
 
-- [ ] 2.1 Support the attributes and values of the `dot-language` delta in `internal/attrs`, with `style` checked as a list (design D2). Verify:
+- [x] 2.1 Support the attributes and values of the `dot-language` delta in `internal/attrs`, with `style` checked as a list (design D2). Verify:
   - the "Attributes that pprof writes give no warning", "List of styles" and "Style that is not supported in a list" scenarios;
   - that the existing attribute tests pass.
 
@@ -28,7 +28,7 @@
 - [ ] 3.1 Weigh rank edges and the pulls of the x positioning by `weight` (design D3). Verify:
   - the "Heavy edge kept short", "Heavy edge kept straight" and "Heavy edge across ranks" scenarios;
   - that the curated cases without `weight` keep their positions, compared with `main`.
-- [ ] 3.2 Size `box3d` nodes as boxes and give their outline from a geometry helper (design D5); verify the "Box with depth" scenario
+- [x] 3.2 Size `box3d` nodes as boxes and give their outline from a geometry helper (design D5); verify the "Box with depth" scenario
 - [ ] 3.3 Carry the fill color, the edge style and the pen width in `layout.Result`, and stop arrowheads short of their nodes by the miter of their pen, widening them above 4 points (design D4). Verify:
   - the "Wider pen" scenario;
   - the arrowheads of the pen width cases within 0.2 points of the reference's.

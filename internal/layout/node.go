@@ -68,7 +68,7 @@ const (
 
 // canonicalShape maps a supported shape to the name the outputs use.
 var canonicalShape = map[string]string{
-	"box": "box", "rect": "rect", "rectangle": "rectangle",
+	"box": "box", "rect": "rect", "rectangle": "rectangle", "box3d": "box3d",
 	"ellipse": "ellipse", "oval": "oval", "circle": "circle",
 	"diamond": "diamond", "hexagon": "hexagon", "octagon": "octagon",
 	"plaintext": "plaintext", "point": "point",
@@ -88,10 +88,10 @@ func polygonSides(shape string) int {
 	return 0
 }
 
-// isRectangular reports whether a shape is drawn as an upright rectangle.
+// isRectangular reports whether a shape is sized as an upright rectangle.
 func isRectangular(shape string) bool {
 	switch shape {
-	case "box", "rect", "rectangle", "plaintext":
+	case "box", "rect", "rectangle", "box3d", "plaintext":
 		return true
 	}
 	return false

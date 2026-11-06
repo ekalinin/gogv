@@ -137,7 +137,11 @@ func TestNotSupportedYetWarnings(t *testing.T) {
 		{`digraph { a -> b [labelangle=30, headlabel="H"] }`, "edge a->b: labelangle=30 is not supported yet"},
 		{"digraph { a -> b [label=<<TABLE><TR><TD>x</TD></TR></TABLE>>] }", "edge a->b: HTML labels are not supported yet"},
 		{`digraph { label=<<TABLE WIDTH="10"><TR><TD></TD></TR></TABLE>>; a }`, "graph: HTML labels are not supported yet"},
-		{"digraph { a [style=filled] }", "node a: style=filled is not supported yet"},
+		{"digraph { a [style=dashed] }", "node a: style=dashed is not supported yet, using solid"},
+		{`digraph { a [style="filled,dashed"] }`, "node a: style=filled,dashed is not supported yet, using solid"},
+		{"digraph { a -> b [weight=1.5] }", "edge a->b: weight=1.5 is not supported yet"},
+		{"digraph { a -> b [penwidth=-1] }", "edge a->b: penwidth=-1 is not supported yet"},
+		{"digraph { a [shape=diamond, style=\"filled,rounded\"] }", "node a: style=rounded with shape=diamond is not supported yet, using solid"},
 		{"digraph { a [shape=diamond, style=rounded] }", "node a: style=rounded with shape=diamond is not supported yet, using solid"},
 	}
 	for _, tt := range tests {
@@ -197,6 +201,17 @@ func TestUnknownPorts(t *testing.T) {
 		got := UnknownPorts(build(tt.src))
 		if strings.Join(got, "\n") != strings.Join(tt.want, "\n") {
 			t.Errorf("%s: warnings %q, want %q", tt.src, got, tt.want)
+		}
+	}
+}
+
+func TestPprofAttributesGiveNoWarning(t *testing.T) {
+	for _, src := range []string{
+		`digraph { node [style=filled fillcolor="#f8f8f8"]; N1 [label="main" id="node1" shape=box tooltip="main (10ms)" color="#b20e00" fillcolor="#edd7d5"]; N1_0 [label="work:hash" id="N1_0" shape=box3d tooltip="10ms"]; N1 -> N1_0 [label=" 10ms" weight=100 penwidth=2 tooltip="10ms" labeltooltip="10ms"]; N1_0 -> N1 [weight=2 style="dotted"] }`,
+		`digraph { a [shape=box, style="filled,rounded"]; b [style="solid, filled"]; a -> b [style="solid,dotted", penwidth=0.5, weight=0] }`,
+	} {
+		if w := check(t, src); len(w) != 0 {
+			t.Errorf("%s: warnings %q", src, w)
 		}
 	}
 }

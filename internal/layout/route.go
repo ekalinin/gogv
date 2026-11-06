@@ -9,6 +9,7 @@ import (
 	"math"
 	"slices"
 
+	"github.com/ekalinin/gogv/internal/attrs"
 	"github.com/ekalinin/gogv/internal/graph"
 )
 
@@ -31,6 +32,12 @@ func PolygonVertices(shape string, w, h float64) []Point {
 	switch shape {
 	case "box", "rect", "rectangle", "plaintext":
 		return []Point{{hw, hh}, {-hw, hh}, {-hw, -hh}, {hw, -hh}}
+	case "box3d":
+		// A box whose upper left and lower right corners are cut by its
+		// depth.
+		d := float64(box3dDepth)
+		hw, hh := half(w), half(h)
+		return []Point{{hw, hh}, {-hw + d, hh}, {-hw, hh - d}, {-hw, -hh}, {hw - d, -hh}, {hw, -hh + d}}
 	case "diamond":
 		return []Point{{0, hh}, {-hw, 0}, {0, -hh}, {hw, 0}}
 	case "hexagon":
@@ -41,6 +48,19 @@ func PolygonVertices(shape string, w, h float64) []Point {
 		return []Point{{hw, -kh}, {hw, kh}, {kw, hh}, {-kw, hh}, {-hw, kh}, {-hw, -kh}, {-kw, -hh}, {kw, -hh}}
 	}
 	return nil
+}
+
+// box3dDepth is the depth of a box3d node, in points, whatever its size.
+const box3dDepth = 4
+
+// Box3DLines returns the three lines that draw the depth of a box3d node,
+// relative to its center, y growing upward: from the upper right corner of
+// its front face to the left side, to the bottom side and to the upper right
+// corner of the node.
+func Box3DLines(w, h float64) [3][2]Point {
+	hw, hh := half(w), half(h)
+	corner := Point{hw - box3dDepth, hh - box3dDepth}
+	return [3][2]Point{{corner, {-hw, hh - box3dDepth}}, {corner, {hw - box3dDepth, -hh}}, {corner, {hw, hh}}}
 }
 
 // CornerRadius is the radius of the corners of a rounded rectangle: a
@@ -521,16 +541,27 @@ func ArrowPolygon(a Arrow) []Point {
 // edgeAttrs are the attributes that decide how an edge is drawn.
 type edgeAttrs struct {
 	invisible  bool
+	style      string
+	dotted     bool
 	color      string
 	head, tail string // arrowhead shapes, "" for none
 	size       float64
+	penWidth   float64
 }
 
 func readEdgeAttrs(g *graph.Graph, e *graph.Edge) edgeAttrs {
+	style := supported(graph.EdgeKind, "style", edgeValue(g, e, "style"), "solid")
+	styles := attrs.Styles(style)
 	a := edgeAttrs{
-		invisible: supported(graph.EdgeKind, "style", edgeValue(g, e, "style"), "solid") == "invis",
+		invisible: slices.Contains(styles, "invis"),
+		style:     style,
+		dotted:    slices.Contains(styles, "dotted"),
 		color:     supported(graph.EdgeKind, "color", edgeValue(g, e, "color"), "black"),
 		size:      number(edgeValue(g, e, "arrowsize"), 1, 0),
+		penWidth:  1,
+	}
+	if v := supported(graph.EdgeKind, "penwidth", edgeValue(g, e, "penwidth"), ""); v != "" {
+		a.penWidth, _ = parseNumber(v)
 	}
 	defDir := "forward"
 	if !g.Directed() {
@@ -589,7 +620,7 @@ func (r *router) routeEdges(g *graph.Graph, ends [][2]int, chains [][]int, polyl
 	}
 	for i, e := range edges {
 		a := readEdgeAttrs(g, e)
-		res := EdgeResult{Edge: e, Invisible: a.invisible, Color: a.color}
+		res := EdgeResult{Edge: e, Invisible: a.invisible, Color: a.color, Style: a.style, Dotted: a.dotted, PenWidth: a.penWidth}
 		group := groups[keyOf(i)]
 		idx := slices.Index(group, i)
 		off := float64(idx) - half(float64(len(group)-1))
