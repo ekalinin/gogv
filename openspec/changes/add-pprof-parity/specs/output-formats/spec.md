@@ -9,7 +9,8 @@
 - one group per drawn cluster, of class `cluster`, with the cluster name in its `title`, written before the node groups, a cluster before the clusters nested in it
 - one group per drawn node, of class `node`, with the node name in its `title`, whose `id` is the node's `id` attribute, or else `node` followed by the node's place among the drawn nodes
 - one group per drawn edge, of class `edge`, with the edge name (`tail->head`) in its `title`, each end followed by its port as it is written (`tail:port->head`), whose `id` is `edge` followed by the edge's place among the edges in the order they are read, as the reference numbers them
-- for a node with a `tooltip`, its outline and its labels within a group whose `id` is `a_` followed by the node group's `id`, around an `a` element whose `xlink:title` is the tooltip; for an edge with a `tooltip`, its curve and arrowheads likewise, and for an edge with a `labeltooltip`, its `label` within a group whose `id` is `a_` followed by the edge group's `id` and `-label`
+- the node and edge groups in the reference's order: the nodes in node order, each followed by its out-edges in the order of their heads, an edge preceded by its head when the head is not written yet; an invisible edge leaves only its comment, and keeps its place in the numbering
+- for a node with a `tooltip`, its outline and its label, but not its `xlabel`, within a group whose `id` is `a_` followed by the node group's `id`, around an `a` element whose `xlink:title` is the tooltip; for an edge with a `tooltip`, its curve and arrowheads likewise, and for an edge with a `labeltooltip`, its `label` within a group whose `id` is `a_` followed by the edge group's `id` and `-label`
 - coordinates written with at most two decimals
 - text escaped for XML as the reference escapes it
 
@@ -36,7 +37,7 @@
 #### Scenario: Edge groups in edge order
 
 - **WHEN** `digraph { a -> c; b -> a; a -> b }` is rendered as `svg`
-- **THEN** the edge groups of `a->c`, `b->a` and `a->b` have the ids `edge1`, `edge2` and `edge3`
+- **THEN** the edge groups of `a->c`, `b->a` and `a->b` have the ids `edge1`, `edge2` and `edge3`, and the groups come in the order `a`, `c`, `a->c`, `b`, `a->b`, `b->a`
 
 ### Requirement: SVG drawing
 
