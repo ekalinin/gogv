@@ -193,3 +193,40 @@ On the corpora, the section 4.3 tree changes the layout of few graphs:
 
 Conclusion so far: the ties depend on the whole path of the reference's network simplex, which a black box shows only through its results: the initial tree, the choice of the edges that leave and enter, the order of the balancing and its rounding. The section 4.3 tree is part of it, but not enough alone.
 
+### M4: flat edges over nodes (task 2.1)
+
+The reference reorders a rank so that a flat edge joins neighbors when it can: `{rank=same; a; b; c} a -> c` puts `c` next to `a`. An edge goes over nodes when the order forbids it, as with two flat edges into the same head: `a -> c [minlen=0]; b -> c [minlen=0]`.
+
+Rule, in points, with `top` the top of the rank (its center plus half the height of its highest node) and `ranksep` the separation between ranks as laid out (half of `ranksep` in a graph with edge labels):
+
+- **Path:** the center of the tail, `L`, `R`, and the center of the head. For the k-th of the n flat edges between the same two nodes, in input order:
+  - `L` is `k·ranksep/(n+1)` above `top`, at `nodesep/2 − k·nodesep/(n+1)` left of the left side of the first node between them;
+  - `R` is at the same height, as far right of the right side of the last node between them.
+
+  With one edge, `L` and `R` are half `ranksep` above `top`, at the sides of the nodes between.
+- **Tangents:** at `L` and `R`, the bisector of the angle that the path turns; none at the two centers (section "Spline Fitting" of Dobkin et al.: the tangent at a split point bisects the angle turned).
+- **Control points:** each at 4/9 of the length of its segment of the path, along the tangent of its end. That makes three cubic segments: center to `L`, `L` to `R`, `R` to center.
+- **Ends:** the curve is clipped at the outline of the tail, and at the arrowhead of the head, as other edges are.
+- **Box:** the drawing's box includes the curve, so the drawing is higher than its nodes. The rank above does not move: the gap between the ranks stays `ranksep`.
+
+Probes, the reference's control points against the rule's before the arrowhead (largest distance):
+
+| Graph | Largest distance |
+|---|---|
+| `a -> c [minlen=0]; b -> c [minlen=0]` | 0.27 |
+| the same with `node [width=2]` | 0.72 |
+| the same with `node [height=1]` | 0.29 |
+| the same with `nodesep=1` | 0.28 |
+| the same with `ranksep=1` and a rank above | 0.46 |
+| `b` of the same graph 1 inch high | 0.46 |
+| two edges `a -> c` over `b` | 0.32 |
+| three edges `a -> c` over `b` | 0.27 |
+| `ranksep=1`, two edges | 0.51 |
+
+The control points after the start of the arrowhead differ by up to 1.9 points in the script that checked the rule, which shortens the curve by the length of the arrowhead only. gogv's arrowheads also stop short by the miter of their pen, as the reference's do.
+
+Cases the rule does not cover, not met in the corpora:
+
+- with `ranksep=0.1` and edges from the rank above to the tail and to the node between, the reference's path also goes around those edges, in four segments;
+- the second of two edges with `nodesep=1` has two segments instead of three.
+

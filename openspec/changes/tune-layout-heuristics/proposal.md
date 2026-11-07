@@ -16,7 +16,7 @@ Issue #28: 12 of gopuml's conformance cases fail because gogv lays out their gra
   - a labeled edge in a cycle;
   - a label in one of two components.
 - M2. Ties in the order within ranks: in `digraph { a -> b [label="LLLLLL"]; a -> c; d -> b }`, gogv lays out the mirror of the reference's order.
-- M4. A flat edge over a node: in `digraph { a -> c [minlen=0]; b -> c [minlen=0] }`, the reference's curve of `a -> c` rises 26 points above the nodes, and gogv's 4 points.
+- M4. A flat edge over a node: in `digraph { a -> c [minlen=0]; b -> c [minlen=0] }`, the reference's curve of `a -> c` rises 24 points above the nodes, and gogv's 2 points.
 - M5. The label of a flat edge from a port of a table: the reference raises it 8.5 points higher than for the same edge without the port.
 
 ## What Changes

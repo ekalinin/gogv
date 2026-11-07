@@ -75,7 +75,7 @@ With `splines=spline` (the default), edges SHALL be smooth curves made of cubic 
 #### Scenario: Flat edge over a node
 
 - **WHEN** the graph is `digraph { a -> c [minlen=0]; b -> c [minlen=0] }`
-- **THEN** the curve of `a -> c` goes over `b`, its highest point 26 points above the top of the nodes, within 2 points, and the drawing is that much higher than its nodes
+- **THEN** the curve of `a -> c` goes over `b`, and the drawing is 60 points high, within 2%, where its nodes are 36 points high
 
 ### Requirement: Edge labels
 

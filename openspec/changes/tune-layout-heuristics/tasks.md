@@ -18,7 +18,7 @@ Each mechanism ends with the regression checks of design D1:
 
 Case: `reduced-state3-1`.
 
-- [ ] 2.1 Probe the curves of design D5, and record the curve and the room it takes with their probes in the Findings. Verify that the curve predicts the control points of every probe within a point.
+- [x] 2.1 Probe the curves of design D5, and record the curve and the room it takes with their probes in the Findings. Verify that the curve predicts the control points of every probe within a point.
 - [ ] 2.2 Implement the curve and its room. Add the test of the "Flat edge over a node" scenario. Remove the entry of the case if it passes the proxy. Verify:
   - the scenario test and `TestReducedCasesPassProxy` pass;
   - the regression checks pass.
