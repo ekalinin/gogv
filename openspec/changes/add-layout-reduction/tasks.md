@@ -25,7 +25,7 @@
   - each reduced case fails the proxy against its reference;
   - a second run of `make reference` leaves the references unchanged.
 - [x] 3.2 List each reduced case in `known-differences.yaml` with the precise cause of its difference, and name the reduced cases in the entries of the 13 original graphs. Verify that `make conformance` with the gopuml corpora reports no failed case, and that no other case changes its outcome.
-- [ ] 3.3 Fill the Findings section of the design: each mechanism, the reduced cases that show it, and the original graphs it explains. Verify that every one of the 13 graphs is explained by at least one mechanism.
+- [x] 3.3 Fill the Findings section of the design: each mechanism, the reduced cases that show it, and the original graphs it explains. Verify that every one of the 13 graphs is explained by at least one mechanism.
 
 ## 4. Documentation and checks
 

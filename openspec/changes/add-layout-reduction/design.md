@@ -93,4 +93,27 @@ The causes are classified in the Findings section of this design, which the impl
 
 ## Findings
 
-To be filled during the implementation: for each mechanism, the reduced cases that show it and the original graphs that it explains.
+The 13 graphs reduce to 20 distinct inputs of 2 to 6 statements, in less than 15 seconds each. They show five mechanisms. The reduced cases are under `dot-layout/`, and their entries in `known-differences.yaml` give the measured differences.
+
+| Mechanism | Reduced cases | Original graphs |
+|---|---|---|
+| M1. The x position of an edge label, and of the nodes around it | `reduced-entities-relationship-and-attributes-1` and its `-worst`, `reduced-ChenMovie_Test-1`, `reduced-ChenMovieAlias_Test-1` and its `-worst`, `reduced-choice-fork-join-1`, `reduced-simple-A0004-1-worst`, `reduced-simple-ComponentExtraArrows_0001-1` and its `-worst`, `reduced-state2-1` and its `-worst`, `reduced-state3-1-worst` | `chen-eer-diagram/entities-relationship-and-attributes-1`, `vega-migration/ChenMovie_Test-1`, `vega-migration/ChenMovieAlias_Test-1`, `vega-migration/ChenMovieExtended_Test-1`, `state-diagram/choice-fork-join-1`, `vega-nonreg/simple-A0004-1`, `vega-nonreg/simple-ComponentExtraArrows_0001-1`, `vega-scxml/state2-1`, `vega-scxml/state3-1`, `gopuml-clusters/vega-scxml-state3-1` |
+| M2. Order within ranks: the mirror of the reference's order, with no crossing in either | `reduced-ChenMovie_Test-1-worst`, `reduced-choice-fork-join-1-worst`, `reduced-simple-A0004-1` | `vega-migration/ChenMovie_Test-1`, `state-diagram/choice-fork-join-1`, `vega-nonreg/simple-A0004-1` |
+| M3. A head with two tails on the rank above is centered between them by the reference, and put under its first tail by gogv, in the second of two components | `reduced-history-style-1` and its `-worst` | `state-diagram/history-style-1`, `vega-nonreg/group2681-history_style_all_forms-1` |
+| M4. The curve of a flat edge that goes over a node leaves the box of the nodes in the reference, which makes the drawing higher | `reduced-state3-1` | `vega-scxml/state3-1`, `gopuml-clusters/vega-scxml-state3-1` |
+| M5. The label of a flat edge between ports of table nodes: its side and its height | `reduced-interactive-SVG0006_Svek-1` and its `-worst` | `vega-svg/interactive-SVG0006_Svek-1` |
+
+Every one of the 13 graphs is explained by at least one mechanism. M1 explains 10 of them, alone for 5.
+
+Observations for `tune-layout-heuristics`:
+
+- M1 takes several forms, all with an edge label:
+  - the tail of a labeled edge of minlen 2 that has a second out-edge (the Chen graphs). In `reduced-ChenMovie_Test-1`, the reference centers it between the label and its other head, within 0.2 points;
+  - the label alone moved, the nodes in place (`reduced-choice-fork-join-1`);
+  - two edges between the same nodes, labeled (`reduced-simple-ComponentExtraArrows_0001-1`);
+  - a labeled edge in a cycle (`reduced-state2-1`);
+  - the separation between two components when one has a label (`reduced-state3-1-worst`).
+
+  The sizes of the labels are the reference's: in the 17 reduced cases with a label, the tables have the same width and height in both SVGs.
+- M2 and M3 are ties: both orders, or both positions, cost the same, and gogv breaks the tie otherwise than the reference.
+- The first reductions, anchored on any failing object, kept a minor object for 8 of the 13 graphs and lost the largest deviation. The reductions anchored with `-on` on the object of largest deviation found M2 in 2 of the graphs and M1 in 2 others.
