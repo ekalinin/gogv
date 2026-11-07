@@ -24,7 +24,7 @@
 - [x] 3.1 Reduce the 13 graphs, read each reduced input, and reduce again from a variant when a reduction hides a cause. Add the distinct reduced graphs as curated cases under `dot-layout`, and record their references with `make reference` (design D5). Verify:
   - each reduced case fails the proxy against its reference;
   - a second run of `make reference` leaves the references unchanged.
-- [ ] 3.2 List each reduced case in `known-differences.yaml` with the precise cause of its difference, and name the reduced cases in the entries of the 13 original graphs. Verify that `make conformance` with the gopuml corpora reports no failed case, and that no other case changes its outcome.
+- [x] 3.2 List each reduced case in `known-differences.yaml` with the precise cause of its difference, and name the reduced cases in the entries of the 13 original graphs. Verify that `make conformance` with the gopuml corpora reports no failed case, and that no other case changes its outcome.
 - [ ] 3.3 Fill the Findings section of the design: each mechanism, the reduced cases that show it, and the original graphs it explains. Verify that every one of the 13 graphs is explained by at least one mechanism.
 
 ## 4. Documentation and checks
