@@ -30,11 +30,11 @@
 ## 4. Documentation and checks
 
 - [x] 4.1 Describe the proxy and `make reduce` in the Conformance section of `README.md`. Verify that the README tests pass.
-- [ ] 4.2 Run the checks:
+- [x] 4.2 Run the checks:
   - `make lint`;
   - `go test -race ./...`;
   - `go run ./tools/provenance`;
   - `make determinism`;
   - `openspec validate add-layout-reduction --strict`.
 
-  Verify that all pass, and that the hash of `make determinism` is the same as on `main`.
+  Verify that all pass, and that the code of `main` gives the same hashes as this change's on the same cases: the hash of `make determinism` covers the 20 new cases too.
