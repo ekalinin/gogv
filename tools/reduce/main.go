@@ -11,7 +11,11 @@
 // -cache by the SHA-256 of the input, so that a second run of the same
 // reduction runs no container.
 //
-// Usage: go run ./tools/reduce -in case.gv -out reduced.gv [-image name] [-cache dir]
+// With -on, the reduction keeps failing on the objects it names, as the
+// proxy names them ("node a", "label of a->b#0"), instead of any object
+// that fails in the input.
+//
+// Usage: go run ./tools/reduce -in case.gv -out reduced.gv [-on objects] [-image name] [-cache dir]
 package main
 
 import (
@@ -38,22 +42,27 @@ func run(args []string) error {
 	out := fl.String("out", "", "file for the reduced input")
 	image := fl.String("image", "gogv-reference", "image of the reference")
 	cache := fl.String("cache", ".cache/reduce", "directory of the cached reference outputs")
+	on := fl.String("on", "", "comma-separated objects to keep failing, as the proxy names them")
 	if err := fl.Parse(args); err != nil {
 		return err
 	}
 	if *in == "" || *out == "" || fl.NArg() > 0 {
-		return errors.New("usage: reduce -in case.gv -out reduced.gv [-image name] [-cache dir]")
+		return errors.New("usage: reduce -in case.gv -out reduced.gv [-on objects] [-image name] [-cache dir]")
 	}
 	src, err := os.ReadFile(*in)
 	if err != nil {
 		return err
 	}
 	ref := &referenceRunner{image: *image, cache: *cache}
-	test, failing, err := predicate(string(src), ref.layout, gogvLayout)
+	var objects []string
+	if *on != "" {
+		objects = strings.Split(*on, ",")
+	}
+	test, failing, err := predicate(string(src), ref.layout, gogvLayout, objects)
 	if err != nil {
 		return fmt.Errorf("%s: %w", *in, err)
 	}
-	fmt.Printf("%s fails the proxy on %s\n", *in, strings.Join(failing, ", "))
+	fmt.Printf("%s: reducing while it fails the proxy on %s\n", *in, strings.Join(failing, ", "))
 	// The search tries some candidates more than once.
 	seen := map[string]bool{}
 	memo := func(candidate string) bool {

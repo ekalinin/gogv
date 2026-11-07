@@ -1,0 +1,5 @@
+digraph unix {
+	node [label="\N"];
+	sh0039 -> sh0036	[minlen=0];
+	sh0038 -> sh0036	[minlen=0];
+}

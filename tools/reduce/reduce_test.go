@@ -168,7 +168,7 @@ func TestReduceScenarios(t *testing.T) {
 			}
 			return nil
 		})
-		test, failing, err := predicate(unrelated, ref, got)
+		test, failing, err := predicate(unrelated, ref, got, nil)
 		if err != nil || strings.Join(failing, ",") != "node x" {
 			t.Fatalf("failing objects %q, error %v", failing, err)
 		}
@@ -194,7 +194,7 @@ func TestReduceScenarios(t *testing.T) {
 			}
 			return []string{"c"}
 		})
-		test, failing, err := predicate(src, ref, got)
+		test, failing, err := predicate(src, ref, got, nil)
 		if err != nil || strings.Join(failing, ",") != "node a" {
 			t.Fatalf("failing objects %q, error %v", failing, err)
 		}
@@ -209,7 +209,7 @@ func TestReduceScenarios(t *testing.T) {
 
 	t.Run("Input that passes the proxy", func(t *testing.T) {
 		ref, got := fakeLayouts(t, func(string) []string { return nil })
-		if _, _, err := predicate(unrelated, ref, got); err == nil {
+		if _, _, err := predicate(unrelated, ref, got, nil); err == nil {
 			t.Error("an input that passes the proxy gives no error")
 		}
 	})
@@ -226,5 +226,35 @@ func TestDdmin(t *testing.T) {
 	}
 	if got := ddmin(indexes(20), test); len(got) != 2 || got[0] != 3 || got[1] != 7 {
 		t.Errorf("ddmin = %v, want [3 7]", got)
+	}
+}
+
+func TestReduceOnObjects(t *testing.T) {
+	// With -on, the reduction keeps failing on the named object: here node
+	// y, which only the edge from y to z moves, while node x fails too.
+	src := "digraph { x -> w; y -> z; n1 -> n2 }\n"
+	ref, got := fakeLayouts(t, func(src string) []string {
+		var moved []string
+		if hasEdge(t, src, "x", "w") {
+			moved = append(moved, "x")
+		}
+		if hasEdge(t, src, "y", "z") {
+			moved = append(moved, "y")
+		}
+		return moved
+	})
+	test, failing, err := predicate(src, ref, got, []string{"node y"})
+	if err != nil || strings.Join(failing, ",") != "node y" {
+		t.Fatalf("failing objects %q, error %v", failing, err)
+	}
+	reduced, err := reduce(src, test)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if names := strings.Join(nodesOf(t, reduced), ","); names != "y,z" {
+		t.Errorf("reduced input has the nodes %s, want y,z:\n%s", names, reduced)
+	}
+	if _, _, err := predicate(src, ref, got, []string{"node n1"}); err == nil {
+		t.Error("an object that does not fail in the input gives no error")
 	}
 }

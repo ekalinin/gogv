@@ -1,0 +1,9 @@
+graph 1 2.526 1.6944
+node sh0013 0.59635 1.4444 1.0816 0.5 sh0013 solid ellipse black lightgrey
+node sh0014 1.9297 0.25 1.0816 0.5 sh0014 solid ellipse black lightgrey
+node sh0015 0.54079 0.25 1.0816 0.5 sh0015 solid ellipse black lightgrey
+node sh0016 1.9852 1.4444 1.0816 0.5 sh0016 solid ellipse black lightgrey
+edge sh0013 sh0014 7 0.74408 1.1986 0.84096 1.058 0.97667 0.88118 1.1241 0.75 1.2185 0.66603 1.3294 0.58842 1.4382 0.521 "<TABLE>" 1.513 0.84722 solid black
+edge sh0013 sh0015 4 0.58484 1.1888 0.57761 1.0371 0.56812 0.83774 0.5598 0.66298 solid black
+edge sh0016 sh0014 4 1.9737 1.1888 1.9665 1.0371 1.957 0.83774 1.9487 0.66298 solid black
+stop

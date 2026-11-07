@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"slices"
+	"strings"
 
 	"github.com/ekalinin/gogv/internal/conformance"
 	"github.com/ekalinin/gogv/internal/dotlang"
@@ -18,15 +19,24 @@ type layout func(src string) (conformance.Plain, error)
 
 // predicate builds the test of a candidate input from the original one: a
 // candidate is interesting when both sides lay it out, and it fails the
-// plain part of the proxy on an object that fails it in the original. It
-// returns the test and the failing objects of the original.
-func predicate(src string, ref, got layout) (func(string) bool, []string, error) {
+// plain part of the proxy on an object that fails it in the original, or on
+// one of the objects of on when it is not empty, which must fail it in the
+// original. It returns the test and the objects it keeps failing.
+func predicate(src string, ref, got layout, on []string) (func(string) bool, []string, error) {
 	failing, err := failingObjects(src, ref, got)
 	if err != nil {
 		return nil, nil, err
 	}
 	if len(failing) == 0 {
 		return nil, nil, errors.New("the input passes the proxy: nothing to reduce")
+	}
+	if len(on) > 0 {
+		for _, o := range on {
+			if !slices.Contains(failing, o) {
+				return nil, nil, fmt.Errorf("%q does not fail the proxy in the input, which fails it on %s", o, strings.Join(failing, ", "))
+			}
+		}
+		failing = slices.Sorted(slices.Values(on))
 	}
 	test := func(candidate string) bool {
 		now, err := failingObjects(candidate, ref, got)

@@ -63,7 +63,7 @@ The section is written only when the run includes a harvested corpus, so the rep
   - the reference renders it without an error;
   - its `plain` deviation, measured on the objects it still has, exceeds 0.02 on at least one of the original's failing objects.
 
-  The last condition keeps the reduction from drifting to another difference.
+  The last condition keeps the reduction from drifting to another difference. With `-on`, the objects to keep failing are the ones it names, which must fail in the original, instead of all its failing objects: a reduction anchored on any failing object can keep a minor one and lose the largest deviation, as the first reductions of the 13 graphs did.
 - **Search:** delta debugging (Zeller's ddmin) over the statements, then over the attributes of the remaining statements, then the replacement of each subgraph by its statements, repeated until no step removes anything.
 - **Reference:** `docker run -i` on the `gogv-reference` image, as `tools/refgen` runs it, for `-Tplain`. The outputs are cached under `.cache/reduce`, by the SHA-256 of the input. gogv runs in the process, through the library.
 - **Testing:** the predicate is a function, so the search and the printing are tested with fake references.
@@ -74,10 +74,11 @@ Alternatives considered:
 
 ### D5. Reduced cases and their record
 
-Each of the 13 graphs is reduced. The reduced graphs that differ go into `testdata/conformance/cases/dot-layout/reduced-<case>.gv`, where `<case>` is the name of the gopuml case, and their references are recorded with `make reference`. Two graphs that reduce to the same input share one case:
+Each of the 13 graphs is reduced twice: anchored on any of its failing objects, into `testdata/conformance/cases/dot-layout/reduced-<case>.gv`, and anchored with `-on` on its node or label of largest deviation, into `reduced-<case>-worst.gv`, where `<case>` is the name of the gopuml case. Their references are recorded with `make reference`. Two graphs that reduce to the same input share one case, named after the first of them in #28:
 
 - the two `history-style` graphs, which are the same graph;
-- `vega-scxml/state3-1` and its variant with clusters, if they reduce to the same input.
+- `vega-scxml/state3-1` and its variant with clusters;
+- `vega-migration/ChenMovieAlias_Test-1` and `vega-migration/ChenMovieExtended_Test-1`.
 
 Each reduced case gets an entry in `known-differences.yaml`, with the precise cause of its difference and `change: tune-layout-heuristics`. The entries of the 13 original graphs stay, and name their reduced cases.
 

@@ -1,0 +1,202 @@
+{
+  "name": "unix",
+  "directed": true,
+  "strict": false,
+  "_draw_": 
+  [
+    {
+      "op": "c",
+      "grad": "none",
+      "color": "#fffffe00"
+    },
+    {
+      "op": "C",
+      "grad": "none",
+      "color": "#ffffff"
+    },
+    {
+      "op": "P",
+      "points": [[0.000,0.000],[0.000,82.020],[307.210,82.020],[307.210,0.000]]
+    }
+  ],
+  "bb": "0,0,307.21,82.024",
+  "xdotversion": "1.7",
+  "_subgraph_cnt": 0,
+  "objects": [
+    {
+      "_gvid": 0,
+      "name": "sh0006",
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "e",
+          "rect": [66.470,41.010,66.470,28.280]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000006"
+        },
+        {
+          "op": "P",
+          "points": [[27.470,25.010],[27.470,57.010],[68.470,57.010],[68.470,25.010]]
+        }
+      ],
+      "height": "0.78567",
+      "label": "<TABLE BORDER=\"0\" CELLBORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD><\/TD><TD FIXEDSIZE=\"TRUE\" WIDTH=\"1.0\" HEIGHT=\"0.0\"><\/TD><TD><\/TD><\/TR><TR><TD FIXEDSIZE=\"TRUE\" WIDTH=\"0.0\" HEIGHT=\"1.0\"><\/TD><TD BGCOLOR=\"#000006\" FIXEDSIZE=\"TRUE\" WIDTH=\"41.5771484375\" HEIGHT=\"32.0\" PORT=\"h\"><\/TD><TD FIXEDSIZE=\"TRUE\" WIDTH=\"37.9130859375\" HEIGHT=\"1.0\"><\/TD><\/TR><TR><TD><\/TD><TD FIXEDSIZE=\"TRUE\" WIDTH=\"1.0\" HEIGHT=\"0.0\"><\/TD><TD><\/TD><\/TR><\/TABLE>",
+      "pos": "66.468,41.012",
+      "width": "1.8463"
+    },
+    {
+      "_gvid": 1,
+      "name": "sh0007",
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "e",
+          "rect": [253.470,41.010,53.740,41.010]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000007"
+        },
+        {
+          "op": "P",
+          "points": [[223.470,34.010],[223.470,66.010],[283.470,66.010],[283.470,34.010]]
+        }
+      ],
+      "height": "1.1392",
+      "label": "<TABLE BORDER=\"0\" CELLBORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD><\/TD><TD FIXEDSIZE=\"TRUE\" WIDTH=\"1.0\" HEIGHT=\"0.0\"><\/TD><TD><\/TD><\/TR><TR><TD FIXEDSIZE=\"TRUE\" WIDTH=\"0.0\" HEIGHT=\"1.0\"><\/TD><TD BGCOLOR=\"#000007\" FIXEDSIZE=\"TRUE\" WIDTH=\"60.43984375\" HEIGHT=\"32.0\" PORT=\"h\"><\/TD><TD FIXEDSIZE=\"TRUE\" WIDTH=\"0.0\" HEIGHT=\"1.0\"><\/TD><\/TR><TR><TD><\/TD><TD FIXEDSIZE=\"TRUE\" WIDTH=\"1.0\" HEIGHT=\"18.296875\"><\/TD><TD><\/TD><\/TR><\/TABLE>",
+      "pos": "253.47,41.012",
+      "width": "1.4928"
+    }
+  ],
+  "edges": [
+    {
+      "_gvid": 0,
+      "tail": 0,
+      "head": 1,
+      "_draw_": 
+      [
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "b",
+          "points": [[68.120,43.950],[86.850,46.660],[116.230,50.500],[141.830,52.010],[163.570,53.300],[169.060,52.370],[190.830,52.010],[197.770,51.900],[205.150,51.720],[212.300,51.500]]
+        }
+      ],
+      "_hdraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "P",
+          "points": [[212.230,55.010],[222.110,51.190],[212.000,48.010]]
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#00000b"
+        },
+        {
+          "op": "P",
+          "points": [[141.830,52.670],[141.830,69.670],[190.830,69.670],[190.830,52.670]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[141.830,52.670],[141.830,69.670],[190.830,69.670],[190.830,52.670]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[144.830,60.670],[144.830,66.670],[150.830,66.670],[150.830,60.670]]
+        }
+      ],
+      "headport": "h",
+      "label": "<TABLE BGCOLOR=\"#00000B\" FIXEDSIZE=\"TRUE\" WIDTH=\"49\" HEIGHT=\"17\"><TR><TD><\/TD><\/TR><\/TABLE>",
+      "lp": "166.33,61.169",
+      "minlen": "0",
+      "pos": "e,223.62,51.142 68.118,43.95 86.853,46.665 116.23,50.501 141.83,52.012 163.57,53.295 169.06,52.365 190.83,52.012 197.77,51.9 205.15,51.716 212.3,51.504",
+      "tailport": "h"
+    }
+  ]
+}

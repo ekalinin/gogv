@@ -1,0 +1,7 @@
+digraph unix {
+	node [label="\N"];
+	sh0007 -> sh0006;
+	sh0010 -> sh0006	[label=<<TABLE BGCOLOR="#000019" FIXEDSIZE="TRUE" WIDTH="8" HEIGHT="14"><TR><TD></TD></TR></TABLE>>,
+		minlen=2];
+	sh0010 -> sh0008;
+}

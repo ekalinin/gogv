@@ -1,0 +1,9 @@
+digraph unix {
+	node [label="\N"];
+	{
+		graph [rank=source];
+		sh0010;
+	}
+	sh0038 -> sh0036;
+	sh0025 -> sh0017	[label=<<TABLE BGCOLOR="#000049" FIXEDSIZE="TRUE" WIDTH="19" HEIGHT="17"><TR><TD></TD></TR></TABLE>>];
+}

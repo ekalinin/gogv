@@ -1,0 +1,8 @@
+digraph "unix" {
+	"sh0013" -> "sh0006";
+	"sh0015" -> "sh0014";
+	"sh0020" -> "sh0018" ["label"=<<TABLE BGCOLOR="#000059" FIXEDSIZE="TRUE" WIDTH="10" HEIGHT="14"><TR><TD></TD></TR></TABLE>>];
+	"sh0034" -> "sh0035";
+	"sh0035" -> "sh0014" ["minlen"="2"];
+	"sh0035" -> "sh0006" ["minlen"="2"];
+}
