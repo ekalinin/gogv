@@ -66,17 +66,18 @@ The candidates for the implementation are:
 
 The probes choose between them. In both, the cost stays optimal: only positions of equal cost are chosen among.
 
-The first probes (Findings, M3) show that neither candidate alone matches the reference: its ties follow the path of its network simplex. The initial tree of section 4.3 matches it on two forks, but on no reduced case. The work on M3 therefore comes after the mechanisms of geometry, and continues with the experiments that the Findings list.
+The first probes (Findings, M3) show that neither candidate alone matches the reference: its ties follow the path of its network simplex. The initial tree of section 4.3 matches it on two forks, but on no reduced case. The work on M3 continues with the experiments that the Findings list: the initial tree, the edges that leave and enter, the order of the balancing and its rounding.
 
 ### D3. Label room (M1)
 
-Probe the room that the reference gives a label:
+The probes of M1 (Findings) split it into forms with different causes, and each goes with its mechanism:
 
-- two edges between the same nodes, one of them or both labeled;
-- a labeled edge reversed by a cycle;
-- a label in the second of two components.
+- a labeled edge in a cycle is a tie of the positioning (D2);
+- a label that the reference puts at another point of its curve comes from a route through the box of the label's rank. The route of the label of a flat edge with a port (D6) is the same kind, and both are probed together: the boxes, and the points of them that the path touches;
+- for edges between the same nodes with labels, measure the order of the edges, the room of each label and the effect of `nodesep`, then extend the extents of `layout.go` to them;
+- for two components next to a node with `rank=source` on a rank of its own, measure the separation of the components.
 
-For each, measure the extents of the label node left and right of its edge, and the separations on its rank. Then extend the extents of `layout.go` to these cases. The case of a single labeled edge keeps its extents, which match the reference today.
+A label in one of two components needs no change. The case of a single labeled edge keeps its extents, which match the reference today.
 
 ### D4. Ties in the order (M2)
 
@@ -133,7 +134,7 @@ The layouts change, so the release is a minor one: v0.4.0. Its notes and the lan
 
 - [Breaking ties changes the layouts of many graphs] → Any graph with a tie can move. The regression checks of D1 run after each mechanism, and an outcome that gets worse stops the mechanism until it is understood.
 - [A rule found on a few probes does not generalize] → The probes vary each case, and the gopuml corpora, 296 graphs, check each rule at scale.
-- [The mechanisms interact] → A changed order changes positions. The mechanisms go in the order of the tasks: flat edges, flat labels, label room, positioning ties, order ties. The rules of geometry come first; the ties, which depend on the path of the reference's network simplex (Findings, M3), come last. Each step's checks see the earlier steps.
+- [The mechanisms interact] → A changed order changes positions. The mechanisms go in the order of the tasks: flat edges, flat labels, ties in the positioning, routes through the boxes of labels, ties in the order, edges between the same nodes, the separation next to a rank of its own. The ties in the positioning come first among the rest, since they explain the most graphs (Findings, M1). Each step's checks see the earlier steps.
 - [An original graph still fails after its mechanisms are fixed] → It is reduced again with `tools/reduce -on` on its remaining largest deviation. A new mechanism is recorded in the Findings and raised before it is fixed, since it widens the change.
 - [A fix changes the cost of the layout] → Ties are chosen among, not costs: the network simplex keeps its optimum, and the order keeps its number of crossings. `make perf` checks the time.
 - [Determinism] → New arithmetic follows CONTRIBUTING: no fused multiply-add, and `internal/fdlibm`.
@@ -264,4 +265,25 @@ After this step:
 - `reduced-interactive-SVG0006_Svek-1` passes it in `plain` (0.3%), but its SVG reaches an SSIM of 0.898;
 - `vega-svg/interactive-SVG0006_Svek-1` goes from a deviation of 17.4% to 12.6%;
 - 607 cases: 518 passed, 50 known differences, 39 not supported yet, 0 failed; 273 of 296 gopuml cases pass the proxy.
+
+### M1: the room of labels (probes before task 4, revised map)
+
+M1 is not one mechanism. Its forms, probed one by one:
+
+- **A labeled edge in a cycle** (`digraph { a -> b [label="LLLLLLLLLLLL"]; b -> c; c -> a }`). The nodes keep the reference's positions relative to each other, and all lie 6.2 points left of the reference's. `a` is pulled equally by the label node and by the virtual node of the reversed edge: a tie of the x positioning (M3).
+- **A label in one of two components** (`digraph { x -> y; a -> b [label="LLLLLL"] }`, in both orders, with `nodesep=1`, with an isolated node). gogv lays it out as the reference does.
+- **The same with a node of `rank=source` on a rank of its own** (`reduced-state3-1-worst`). The reference puts the two components 13 points closer, so that `sh0038` and `sh0025` are 5.2 points apart, less than `nodesep`. Without that node, or with it on the rank of the others, the layouts are the same.
+- **A label not where the reference puts it** (`reduced-choice-fork-join-1`). The nodes are in place, and the reference's curve goes through the top left corner of the label, in two segments: the route passes through the box of the label's rank. gogv draws one curve, and puts the label at its rightmost point.
+- **Edges between the same nodes with labels** (`digraph { a -> b [label="LLLLLLLLLLLL"]; a -> b }` and the two edges in the other order, with `nodesep` from 0.25 to 1, measured where the curves cross the height of the label):
+  - a labeled edge has a chain of its own, as in gogv;
+  - an unlabeled edge after the labeled one runs 107.1 to 122.1 points right of it in the reference, and 118.9 to 160.6 in gogv;
+  - an unlabeled edge before the labeled one runs 2.2 to 17.2 points left of it in the reference, and 20.2 to 83.5 in gogv.
+
+The tasks follow this map:
+
+1. the ties of M3, which also cover the cycle;
+2. the routes through the boxes of labels, which also cover the route of M5;
+3. the ties of M2;
+4. the edges between the same nodes;
+5. the separation next to a rank of its own.
 
