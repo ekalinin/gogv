@@ -156,9 +156,6 @@
 - id: dot-layout/reduced-state2-1-worst
   reason: "reduced from vega-scxml/state2-1 on node sh0007: dot-layout/reduced-state2-1 with an isolated node, which moves as the others: the nodes are 10 points left of the reference's, and the drawing is 10 points narrower"
   change: tune-layout-heuristics
-- id: dot-layout/reduced-state3-1
-  reason: "reduced from vega-scxml/state3-1 and gopuml-clusters/vega-scxml-state3-1: two flat edges into the same node, one of them over the other node: the reference's curve of that edge leaves the box of the nodes, so its drawing is 23 points higher; the nodes are where the reference puts them"
-  change: tune-layout-heuristics
 - id: dot-layout/reduced-state3-1-worst
   reason: "reduced from vega-scxml/state3-1 and gopuml-clusters/vega-scxml-state3-1 on the label of sh0025 -> sh0017: of two components, the second has a labeled edge: it is 13 points right of the reference's, so the drawing is 13 points wider"
   change: tune-layout-heuristics

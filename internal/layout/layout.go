@@ -394,7 +394,7 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 	for v, rn := range rg.nodes {
 		pos[v] = Point{xs[v], ys[rn.rank]}
 	}
-	rt := &router{g: rg, pos: pos, left: left, right: right, ys: ys, nodesep: p.nodesep, lr: p.lr, nodes: res.Nodes, labelAlong: map[int]float64{}, ports: ports}
+	rt := &router{g: rg, pos: pos, left: left, right: right, ys: ys, nodesep: p.nodesep, ranksep: ranksep, lr: p.lr, nodes: res.Nodes, labelAlong: map[int]float64{}, ports: ports}
 	for v, i := range labelEdge {
 		rt.labelAlong[v], _ = labelSize(elabels[i])
 	}

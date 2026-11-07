@@ -7,6 +7,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"math"
 	"math/rand/v2"
 	"strings"
 	"sync"
@@ -247,6 +248,20 @@ func TestRoutingScenarios(t *testing.T) {
 	}
 	if es[0].Head.Shape == "" || !(maxX(es[0].Points) > a.X+a.W/2) {
 		t.Errorf("loop is not beside the node: %+v", es[0])
+	}
+
+	// Spec scenario "Flat edge over a node": the curve of a -> c goes over
+	// b, and the drawing is 60 points high, within 2%, where its nodes are 36.
+	res, es = edgesOf(t, "digraph { a -> c [minlen=0]; b -> c [minlen=0] }")
+	b = nodeNamed(res, "b")
+	over := false
+	for _, q := range sample(es[0].Points) {
+		if math.Abs(q.X-b.X) < b.W/2 && q.Y > b.Y+b.H/2 {
+			over = true
+		}
+	}
+	if !over || math.Abs(res.Height-60) > 1.2 || b.H != 36 {
+		t.Errorf("flat edge over a node: over b %v, drawing %g points high, nodes %g", over, res.Height, b.H)
 	}
 
 	_, es = edgesOf(t, "digraph { splines=polyline; a -> b -> c; a -> c }")

@@ -14,7 +14,7 @@
 | description-diagram | 11 | 11 | 0 | 0 | 0 |
 | diagram-source | 4 | 4 | 0 | 0 | 0 |
 | dot-language | 107 | 68 | 3 | 36 | 0 |
-| dot-layout | 159 | 129 | 29 | 1 | 0 |
+| dot-layout | 159 | 130 | 28 | 1 | 0 |
 | gopuml-clusters | 36 | 35 | 1 | 0 | 0 |
 | graph-layout | 1 | 1 | 0 | 0 | 0 |
 | legacy-activity-diagram | 13 | 13 | 0 | 0 | 0 |
@@ -37,16 +37,16 @@
 | Name | Cases | Passed | Known differences | Not supported yet | Failed |
 |---|---|---|---|---|---|
 | canon | 593 | 556 | 0 | 37 | 0 |
-| plain | 593 | 537 | 19 | 37 | 0 |
+| plain | 593 | 539 | 17 | 37 | 0 |
 | plain-ext | 24 | 24 | 0 | 0 | 0 |
-| svg | 593 | 505 | 51 | 37 | 0 |
+| svg | 593 | 507 | 49 | 37 | 0 |
 | svg_inline | 24 | 23 | 1 | 0 | 0 |
-| dot | 297 | 249 | 11 | 37 | 0 |
+| dot | 297 | 251 | 9 | 37 | 0 |
 | gv | 24 | 24 | 0 | 0 | 0 |
-| xdot | 297 | 249 | 11 | 37 | 0 |
+| xdot | 297 | 251 | 9 | 37 | 0 |
 | xdot1.2 | 24 | 24 | 0 | 0 | 0 |
 | xdot1.4 | 24 | 24 | 0 | 0 | 0 |
-| json | 297 | 249 | 11 | 37 | 0 |
+| json | 297 | 251 | 9 | 37 | 0 |
 | json0 | 24 | 24 | 0 | 0 | 0 |
 | dot_json | 24 | 24 | 0 | 0 | 0 |
 | xdot_json | 24 | 24 | 0 | 0 | 0 |
@@ -59,8 +59,8 @@
 |---|---|---|---|
 | chen-eer-diagram/entities-relationship-and-attributes-1 | 53.9% | label of sh0010->sh0006#0 | 0.7404 |
 | vega-migration/ChenMovie_Test-1 | 48.0% | node sh0007 | 0.8090 |
-| gopuml-clusters/vega-scxml-state3-1 | 37.1% | label of sh0025->sh0017#0 | 0.4361 |
-| vega-scxml/state3-1 | 37.1% | label of sh0025->sh0017#0 | 0.5923 |
+| gopuml-clusters/vega-scxml-state3-1 | 37.1% | label of sh0025->sh0017#0 | 0.4358 |
+| vega-scxml/state3-1 | 37.1% | label of sh0025->sh0017#0 | 0.5920 |
 | vega-migration/ChenMovieExtended_Test-1 | 30.8% | node sh0013 | 0.8670 |
 | vega-migration/ChenMovieAlias_Test-1 | 28.5% | node sh0013 | 0.8680 |
 | state-diagram/choice-fork-join-1 | 24.7% | node sh0006 | 0.7133 |
@@ -86,7 +86,7 @@
 | Case | Outcome | Problems |
 |---|---|---|
 | dot-language/canon-canon-02 | not supported yet |  |
-| dot-language/canon-canon-03 | known difference | plain: plain height 1.2889 is not within 5% of the reference 1.5467; svg: svg height 101 is not within 5% of the reference 119 SSIM 0.5505 is below 0.90; dot: bb height 92.8 is not within 5% of the reference 111.36; xdot: bb height 92.8 is not within 5% of the reference 111.36; json: bb height 92.8 is not within 5% of the reference 111.36 |
+| dot-language/canon-canon-03 | known difference | plain: plain height 1.2889 is not within 5% of the reference 1.5467; svg: svg height 101 is not within 5% of the reference 119 SSIM 0.5358 is below 0.90; dot: bb height 92.8 is not within 5% of the reference 111.36; xdot: bb height 92.8 is not within 5% of the reference 111.36; json: bb height 92.8 is not within 5% of the reference 111.36 |
 | dot-language/canon-canon-04 | not supported yet |  |
 | dot-language/canon-canon-05 | not supported yet |  |
 | dot-language/canon-canon-06 | not supported yet |  |
@@ -132,7 +132,7 @@
 | dot-layout/edge-label-parallel | known difference | svg: SSIM 0.8169 is below 0.90 |
 | dot-layout/fontname-verdana | not supported yet |  |
 | dot-layout/long-edges | known difference | svg: SSIM 0.4851 is below 0.90 |
-| dot-layout/port-flat-arc | known difference | plain: plain height 0.55556 is not within 5% of the reference 0.84095; svg: svg height 48 is not within 5% of the reference 69 SSIM 0.5692 is below 0.90; dot: bb height 40 is not within 5% of the reference 60.549; xdot: bb height 40 is not within 5% of the reference 60.549; json: bb height 40 is not within 5% of the reference 60.549 |
+| dot-layout/port-flat-arc | known difference |  |
 | dot-layout/reduced-ChenMovieAlias_Test-1 | known difference | svg: SSIM 0.8223 is below 0.90 |
 | dot-layout/reduced-ChenMovieAlias_Test-1-worst | known difference | svg: SSIM 0.6226 is below 0.90 |
 | dot-layout/reduced-ChenMovie_Test-1 | known difference | svg: SSIM 0.8738 is below 0.90 |
@@ -151,7 +151,6 @@
 | dot-layout/reduced-simple-ComponentExtraArrows_0001-1-worst | known difference | svg: SSIM 0.7624 is below 0.90 |
 | dot-layout/reduced-state2-1 | known difference | svg: SSIM 0.6513 is below 0.90 |
 | dot-layout/reduced-state2-1-worst | known difference | svg: SSIM 0.7130 is below 0.90 |
-| dot-layout/reduced-state3-1 | known difference | plain: plain height 0.53125 is not within 5% of the reference 0.85037; svg: svg height 46 is not within 5% of the reference 69 SSIM 0.2956 is below 0.90; dot: bb height 38.25 is not within 5% of the reference 61.227; xdot: bb height 38.25 is not within 5% of the reference 61.227; json: bb height 38.25 is not within 5% of the reference 61.227 |
 | dot-layout/reduced-state3-1-worst | known difference | plain: plain width 2.4149 is not within 5% of the reference 2.2344; svg: svg width 182 is not within 5% of the reference 169 SSIM 0.6828 is below 0.90; dot: bb width 173.87 is not within 5% of the reference 160.87; xdot: bb width 173.87 is not within 5% of the reference 160.87; json: bb width 173.87 is not within 5% of the reference 160.87 |
 | dot-layout/table-edge-not-fixed | known difference | svg: SSIM 0.8848 is below 0.90 |
 | output-formats/tooltips-ids | known difference | svg: SSIM 0.8994 is below 0.90; svg_inline: SSIM 0.8994 is below 0.90 |
@@ -170,9 +169,9 @@
 | vega-nonreg/simple-A0004-1 | known difference | svg: SSIM 0.8610 is below 0.90 |
 | vega-nonreg/simple-ComponentExtraArrows_0001-1 | known difference | svg: SSIM 0.8178 is below 0.90 |
 | vega-scxml/state2-1 | known difference | svg: SSIM 0.8736 is below 0.90 |
-| vega-scxml/state3-1 | known difference | plain: plain height 5.7346 is not within 5% of the reference 6.0401; svg: SSIM 0.5923 is below 0.90 |
+| vega-scxml/state3-1 | known difference | plain: plain height 5.7346 is not within 5% of the reference 6.0401; svg: SSIM 0.5920 is below 0.90 |
 | vega-svg/id-component_01-1 | known difference | plain: plain height 0.42083 is not within 5% of the reference 0.46307; svg: svg height 38 is not within 5% of the reference 41 SSIM 0.5905 is below 0.90 |
 | vega-svg/interactive-SVG0006_Svek-1 | known difference | plain: plain height 2.6806 is not within 5% of the reference 3.0929; svg: svg height 201 is not within 5% of the reference 231 SSIM 0.8028 is below 0.90 |
-| gopuml-clusters/vega-scxml-state3-1 | known difference | plain: plain height 4.947 is not within 5% of the reference 4.1137; svg: svg height 364 is not within 5% of the reference 304 SSIM 0.4361 is below 0.90 |
+| gopuml-clusters/vega-scxml-state3-1 | known difference | plain: plain height 4.947 is not within 5% of the reference 4.1137; svg: svg height 364 is not within 5% of the reference 304 SSIM 0.4358 is below 0.90 |
 | cli/other-engine | not supported yet |  |
 | cli/default-attribute-flag | not supported yet |  |

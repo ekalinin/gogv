@@ -138,8 +138,11 @@ type router struct {
 	bandDn      []float64 // and below
 	ys          []float64
 	nodesep     float64
-	lr          bool
-	nodes       []NodeResult
+	// ranksep is the separation between ranks as laid out: half of ranksep
+	// when the graph has edge labels.
+	ranksep float64
+	lr      bool
+	nodes   []NodeResult
 	// tree holds the clusters, when the graph has them.
 	tree *clusterTree
 	// labelAlong is, for the ranked nodes that hold an edge label, the
@@ -651,10 +654,13 @@ func (r *router) routeEdges(g *graph.Graph, ends [][2]int, chains [][]int, polyl
 			}
 			pts = r.loop(t, inner)
 		case chains[i] == nil:
+			ot, oh := r.g.nodes[t].order, r.g.nodes[h].order
 			if k, ok := r.flatLabels[i]; ok {
 				pts = r.labeledFlat(t, h, k, r.flatAcross[i])
-			} else {
+			} else if ot-oh == 1 || oh-ot == 1 {
 				pts = r.flat(t, h, off)
+			} else {
+				pts = r.flatArc(t, h, r.end(i, 0, t), r.end(i, 1, h), idx+1, len(group))
 			}
 			// From port to port: the ends move with their control points.
 			if n := len(pts); n == 4 {
@@ -762,17 +768,59 @@ func (r *router) chain(chain []int, top, bottom Point, off float64, polyline boo
 	return splineThrough(path)
 }
 
-// flat returns the curve of an edge between two nodes of the same rank: a
-// straight curve when they are neighbors, an arc above the rank otherwise.
+// flat returns the curve of an edge between two neighbors of the same rank:
+// a straight curve, moved off the others between them by off times
+// nodesep.
 func (r *router) flat(t, h int, off float64) []Point {
 	a, b := r.pos[t], r.pos[h]
-	ot, oh := r.g.nodes[t].order, r.g.nodes[h].order
-	if ot-oh == 1 || oh-ot == 1 {
-		d := Point{0, float64(off * r.nodesep)}
-		return []Point{a, add(a, d), add(b, d), b}
+	d := Point{0, float64(off * r.nodesep)}
+	return []Point{a, add(a, d), add(b, d), b}
+}
+
+// flatArc returns the curve of the k-th of n edges between two nodes of the
+// same rank that are not neighbors, from start to end, as observed on the
+// reference: it goes over the nodes between them through two points, k
+// times ranksep/(n+1) above the top of the rank, and nodesep/2 less k times
+// nodesep/(n+1) beyond the outer sides of the first and the last node
+// between them.
+func (r *router) flatArc(t, h int, start, end Point, k, n int) []Point {
+	rank := r.g.nodes[t].rank
+	lo, hi := r.g.nodes[t].order, r.g.nodes[h].order
+	if lo > hi {
+		lo, hi = hi, lo
 	}
-	lift := r.bandUp[r.g.nodes[t].rank] + half(r.nodesep) + math.Abs(float64(off*r.nodesep))
-	return []Point{a, add(a, Point{0, lift}), add(b, Point{0, lift}), b}
+	nodes := r.g.ranks[rank]
+	first, last := nodes[lo+1], nodes[hi-1]
+	y := r.ys[rank] + r.bandUp[rank] + float64(float64(k)*r.ranksep)/float64(n+1)
+	in := half(r.nodesep) - float64(float64(k)*r.nodesep)/float64(n+1)
+	left := Point{r.pos[first].X - r.left[first] - in, y}
+	right := Point{r.pos[last].X + r.right[last] + in, y}
+	if r.g.nodes[t].order > r.g.nodes[h].order {
+		left, right = right, left
+	}
+	return bisectorSpline([]Point{start, left, right, end})
+}
+
+// bisectorSpline returns a piecewise cubic Bezier curve through the points
+// of a path, as the reference fits the path of a flat edge: the tangent at
+// an inner point bisects the angle that the path turns there (Dobkin et
+// al., spline fitting), there is none at the ends, and each control point
+// lies at 4/9 of its segment along its tangent.
+func bisectorSpline(path []Point) []Point {
+	n := len(path)
+	tangent := make([]Point, n)
+	for i := 1; i+1 < n; i++ {
+		tangent[i] = normalize(add(normalize(sub(path[i], path[i-1])), normalize(sub(path[i+1], path[i]))))
+	}
+	out := []Point{path[0]}
+	for i := 0; i+1 < n; i++ {
+		l := float64(dist(path[i], path[i+1])*4) / 9
+		out = append(out,
+			add(path[i], scale(tangent[i], l)),
+			sub(path[i+1], scale(tangent[i+1], l)),
+			path[i+1])
+	}
+	return out
 }
 
 // labeledFlat returns the curve of the k-th labeled flat edge between two

@@ -230,3 +230,11 @@ Cases the rule does not cover, not met in the corpora:
 - with `ranksep=0.1` and edges from the rank above to the tail and to the node between, the reference's path also goes around those edges, in four segments;
 - the second of two edges with `nodesep=1` has two segments instead of three.
 
+After M4 (task 2.2):
+
+- gogv draws the probes within 0.4 points of the reference, arrowheads included;
+- `reduced-state3-1` passes the proxy and leaves `known-differences.yaml`;
+- 607 cases: 517 passed, 51 known differences, 39 not supported yet, 0 failed;
+- 273 of 296 gopuml cases pass the proxy, as before: `vega-scxml/state3-1` and its variant also need M1;
+- no other case changes its outcome.
+
