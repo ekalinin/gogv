@@ -69,5 +69,5 @@ The conformance run SHALL fail when a case is failed, and SHALL NOT fail for kno
 
 #### Scenario: Proxy in the report
 
-- **WHEN** the conformance run includes the gopuml corpus and its variant with clusters, and 22 of their cases do not pass the proxy
-- **THEN** the report gives the number of cases that pass the proxy, and lists the 22 others with their largest deviation, while their outcomes stay those of the layered similarity contract
+- **WHEN** the conformance run includes the gopuml corpus and its variant with clusters, and 23 of their cases do not pass the proxy
+- **THEN** the report gives the number of cases that pass the proxy, and lists the 23 others with their largest deviation, while their outcomes stay those of the layered similarity contract

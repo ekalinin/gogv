@@ -18,7 +18,7 @@ This change gives the work on #28 a measure and minimal inputs, before any heuri
   - the center of each node and of each edge label within 2% of the reference's graph size, on each axis;
   - `svg`: an SSIM of at least 0.90.
 
-  The report shows how many cases pass it and lists the others with their largest deviation. It changes no outcome and never fails the run. Today 274 of the 296 gopuml cases pass it. The 22 others are the 12 graphs of #28, the variant with clusters of `vega-scxml/state3-1`, and 9 graphs that gopuml passes.
+  The report shows how many cases pass it and lists the others with their largest deviation. It changes no outcome and never fails the run. Today 273 of the 296 gopuml cases pass it. The 23 others are the 12 graphs of #28, the variant with clusters of `vega-scxml/state3-1`, and 10 graphs that gopuml passes.
 - `tools/reduce` and `make reduce`: a tool that reduces a DOT input whose layout fails the proxy against the reference. It removes statements, attributes and subgraphs while gogv's layout still fails the proxy on an object that fails in the original, and writes the smallest input it finds.
 - The 13 graphs (the 12 of #28 and the variant of `vega-scxml/state3-1`) reduced with it:
   - committed as curated cases with their references, one per distinct reduced graph;
@@ -28,7 +28,7 @@ This change gives the work on #28 a measure and minimal inputs, before any heuri
 Out of scope:
 - changes to the layout: fixing the differences is `tune-layout-heuristics`, which closes #28;
 - making the proxy a requirement for passing: it stays a measure in the report;
-- the 9 graphs that fail the proxy and that gopuml passes.
+- the 10 graphs that fail the proxy and that gopuml passes.
 
 ## Capabilities
 

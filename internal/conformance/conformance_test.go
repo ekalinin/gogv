@@ -67,6 +67,9 @@ func TestConformance(t *testing.T) {
 		all.Corpora = append(all.Corpora, conformance.CorpusRun{Name: c.Name, Cases: len(cases), Source: strings.TrimSpace(string(source))})
 		report, err := conformance.Run(cases, filepath.Join(root, c.References), known, render, rasterizer)
 		all.Results = append(all.Results, report.Results...)
+		if c.Proxy {
+			all.Proxy = append(all.Proxy, report.Results...)
+		}
 		if err != nil {
 			failures = append(failures, c.Name+": "+err.Error())
 		}

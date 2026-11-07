@@ -51,6 +51,36 @@
 | dot_json | 24 | 24 | 0 | 0 | 0 |
 | xdot_json | 24 | 24 | 0 | 0 | 0 |
 
+## gopuml contract proxy
+
+273 of 296 cases of the gopuml corpora pass the proxy of gopuml's contract: a `plain` size within 2%, every node and edge label center within 2% of the graph size, and an SVG at SSIM 0.90 or more. The proxy does not change the outcomes.
+
+| Case | Largest deviation | Object | SSIM |
+|---|---|---|---|
+| chen-eer-diagram/entities-relationship-and-attributes-1 | 53.9% | label of sh0010->sh0006#0 | 0.7404 |
+| vega-migration/ChenMovie_Test-1 | 48.0% | node sh0007 | 0.8090 |
+| gopuml-clusters/vega-scxml-state3-1 | 37.1% | label of sh0025->sh0017#0 | 0.4361 |
+| vega-scxml/state3-1 | 37.1% | label of sh0025->sh0017#0 | 0.5923 |
+| vega-migration/ChenMovieExtended_Test-1 | 30.8% | node sh0013 | 0.8670 |
+| vega-migration/ChenMovieAlias_Test-1 | 28.5% | node sh0013 | 0.8680 |
+| state-diagram/choice-fork-join-1 | 24.7% | node sh0006 | 0.7133 |
+| state-diagram/junction-1 | 21.2% | label of sh0006->sh0008#0 | 0.9190 |
+| gopuml-clusters/state-diagram-history-state-1 | 18.2% | label of sh0014->sh0013#0 | 0.9738 |
+| state-diagram/history-state-1 | 18.2% | label of sh0014->sh0013#0 | 0.9753 |
+| vega-svg/interactive-SVG0006_Svek-1 | 17.4% | label of sh0006->sh0007#0 | 0.8028 |
+| vega-scxml/junction-pseudostate-1 | 12.3% | label of sh0006->sh0008#0 | 0.9084 |
+| vega-state/junction-pseudostate-1 | 12.3% | label of sh0006->sh0008#0 | 0.9084 |
+| gopuml-clusters/vega-scxml-state4-1 | 10.6% | node sh0010 | 0.9786 |
+| vega-scxml/state4-1 | 10.6% | node sh0010 | 0.9786 |
+| vega-svg/id-component_01-1 | 9.1% | graph height | 0.5905 |
+| vega-nonreg/simple-A0004-1 | 8.0% | node sh0012 | 0.8610 |
+| state-diagram/history-style-1 | 6.8% | node sh0006 | 0.7064 |
+| vega-nonreg/group2681-history_style_all_forms-1 | 6.8% | node sh0006 | 0.7064 |
+| vega-nonreg/simple-ComponentExtraArrows_0001-1 | 4.1% | node sh0007 | 0.8178 |
+| vega-scxml/state2-1 | 4.1% | graph width | 0.8736 |
+| chen-eer-diagram/bold-only-from-the-left-1 | 3.9% | label of sh0006->sh0008#0 | 0.9194 |
+| vega-nonreg/group2917-smetana_hide_state_plain_edges-1 | 1.0% | label of sh0007->sh0008#0 | 0.8669 |
+
 ## Cases not passed
 
 | Case | Outcome | Problems |

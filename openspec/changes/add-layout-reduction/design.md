@@ -11,9 +11,9 @@ See proposal.md for the motivation, and the delta spec of `upstream-compatibilit
   - `Report.Markdown` writes the counts per capability and per format, then the cases that do not pass.
 - The references of the harvested corpora are in `.cache/reference/gopuml-dot` and `.cache/reference/gopuml-cluster-dot`, with `canon`, `plain` and `svg`. `tools/refgen` runs the reference with `docker run` on the `gogv-reference` image; one run takes about a second.
 - `internal/dotlang` parses DOT into an AST: graphs with their statements (`NodeStmt`, `EdgeStmt`, `AttrStmt`, `AssignStmt`, `Subgraph`), each with its attributes. `internal/graph` has no removal of edges. `canon` breaks attribute lists over several lines, so the lines of its output are not statements.
-- The proxy, measured with a script during the exploration of #28 on the `plain` outputs of v0.3.1, against the recorded references:
-  - 274 of the 296 gopuml cases pass it, and none differs in its nodes or labels;
-  - the 22 others are the 12 graphs of #28, the variant with clusters of `vega-scxml/state3-1`, and 9 graphs that gopuml passes. The largest deviation of these 9 goes up to 18%.
+- The proxy, measured with a script during the exploration of #28 on the `plain` outputs of v0.3.1, against the recorded references, and then by the implementation with the SSIM:
+  - 273 of the 296 gopuml cases pass it, and none differs in its nodes or labels;
+  - the 23 others are the 12 graphs of #28, the variant with clusters of `vega-scxml/state3-1`, and 10 graphs that gopuml passes. The largest deviation of these 10 goes up to 21%, and one of them, `vega-nonreg/group2917-smetana_hide_state_plain_edges-1`, fails the proxy only by its SSIM of 0.87, with a deviation of 1%.
 - Reduced by hand, `vega-scxml/state2-1` differs by 30 points only with its isolated nodes and its labeled flat edge together. Without its isolated nodes, a difference of 1 point remains, from another cause.
 
 ## Goals / Non-Goals
@@ -41,7 +41,7 @@ Alternative considered: a second parser for the proxy. Rejected: the statements,
 
 `ProxyDeviation(ref, got Plain)` returns the largest deviation and the object that has it. The deviation of the size is its relative difference. The deviation of a center is its distance to the reference's on each axis, divided by the reference's graph width or height. A node or a label that is missing on one side gives a deviation of 1 and names the object. A case passes the proxy when the deviation is at most 0.02 and its SSIM is at least 0.90.
 
-`TestConformance` computes it for the cases of the corpora `gopuml` and `gopuml-clusters`, from the `plain` outputs it already compares and the SSIM of `CaseResult`. The proxy does not enter `Judge`, so no outcome depends on it.
+`Run` computes the deviation of every case after `Judge`, from the `plain` outputs it already has, and records it in `CaseResult` next to the SSIM. `TestConformance` passes the results of the corpora marked `Proxy` in `Corpora`, `gopuml` and `gopuml-clusters`, to the report. The proxy does not enter `Judge`, so no outcome depends on it.
 
 ### D3. The report
 
@@ -87,7 +87,7 @@ The causes are classified in the Findings section of this design, which the impl
 
 - [The reduction drifts to another difference] → The interesting input must keep failing on an object that failed in the original. The reduced cases are read by hand before they are committed. A graph whose reduction hides one of its causes, as `state2` did by hand, is reduced again from a variant without the first cause.
 - [The run of the reduction is long] → About a second per reference run, and about n·log n runs for n units: some minutes for the largest of the 13 graphs. The cache keeps a second run cheap.
-- [The proxy is stricter than gopuml's check] → Intended for #28: it lists 9 graphs that gopuml passes. It changes no outcome, so it costs no entry in `known-differences.yaml`.
+- [The proxy is stricter than gopuml's check] → Intended for #28: it lists 10 graphs that gopuml passes. It changes no outcome, so it costs no entry in `known-differences.yaml`.
 - [The DOT printer changes the meaning of an input] → The round-trip test on every curated and gopuml case.
 
 ## Findings

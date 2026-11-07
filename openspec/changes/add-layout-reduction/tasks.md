@@ -5,8 +5,8 @@
 - [x] 1.1 Read the centers of nodes and edge labels in `ParsePlain`, and add `ProxyDeviation` (design D1, D2). Add tests for the "Close layout" and "Label moved" scenarios, a missing node and a missing label. Verify:
   - the tests pass;
   - `ComparePlain` gives the same results on every curated case.
-- [ ] 1.2 Compute the proxy in `TestConformance` for the harvested corpora, and write its section in the report (design D3). Add a test for the "Proxy in the report" scenario on a report of fake results, and one showing that a report without a harvested corpus has no such section. Verify, by running `make conformance` with the gopuml corpora:
-  - 274 of the 296 cases pass the proxy, and the 22 others are those listed in the proposal;
+- [x] 1.2 Compute the proxy in `TestConformance` for the harvested corpora, and write its section in the report (design D3). Add a test for the "Proxy in the report" scenario on a report of fake results, and one showing that a report without a harvested corpus has no such section. Verify, by running `make conformance` with the gopuml corpora:
+  - 273 of the 296 cases pass the proxy, and the 23 others are those listed in the proposal;
   - no outcome changes;
   - the report of the curated corpus alone is unchanged.
 
