@@ -66,6 +66,8 @@ The candidates for the implementation are:
 
 The probes choose between them. In both, the cost stays optimal: only positions of equal cost are chosen among.
 
+The first probes (Findings, M3) show that neither candidate alone matches the reference: its ties follow the path of its network simplex. The initial tree of section 4.3 matches it on two forks, but on no reduced case. The work on M3 therefore comes after the mechanisms of geometry, and continues with the experiments that the Findings list.
+
 ### D3. Label room (M1)
 
 Probe the room that the reference gives a label:
@@ -131,7 +133,7 @@ The layouts change, so the release is a minor one: v0.4.0. Its notes and the lan
 
 - [Breaking ties changes the layouts of many graphs] → Any graph with a tie can move. The regression checks of D1 run after each mechanism, and an outcome that gets worse stops the mechanism until it is understood.
 - [A rule found on a few probes does not generalize] → The probes vary each case, and the gopuml corpora, 296 graphs, check each rule at scale.
-- [The mechanisms interact] → A changed order changes positions. The mechanisms go in the order of the tasks: positioning ties, label room, order ties, flat edges, flat labels. Each step's checks see the earlier steps.
+- [The mechanisms interact] → A changed order changes positions. The mechanisms go in the order of the tasks: flat edges, flat labels, label room, positioning ties, order ties. The rules of geometry come first; the ties, which depend on the path of the reference's network simplex (Findings, M3), come last. Each step's checks see the earlier steps.
 - [An original graph still fails after its mechanisms are fixed] → It is reduced again with `tools/reduce -on` on its remaining largest deviation. A new mechanism is recorded in the Findings and raised before it is fixed, since it widens the change.
 - [A fix changes the cost of the layout] → Ties are chosen among, not costs: the network simplex keeps its optimum, and the order keeps its number of crossings. `make perf` checks the time.
 - [Determinism] → New arithmetic follows CONTRIBUTING: no fused multiply-add, and `internal/fdlibm`.

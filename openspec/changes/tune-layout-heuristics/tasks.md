@@ -14,54 +14,53 @@ Each mechanism ends with the regression checks of design D1:
   - the test passes while the 20 reduced cases are listed;
   - it fails when the entry of a reduced case that still differs is removed.
 
-## 2. Ties in the x positioning (M3)
-
-Cases: `reduced-history-style-1` and its `-worst`, `reduced-entities-relationship-and-attributes-1` and its `-worst`, `reduced-ChenMovie_Test-1`, `reduced-ChenMovieAlias_Test-1`.
-
-- [ ] 2.1 Probe the rule of design D2 on these cases and their variants, and record it with its probes in the Findings. Verify that the rule predicts every probe.
-- [ ] 2.2 Implement the rule. Add the tests of the "Head between two tails" and "Tail between a node and a labeled edge" scenarios. Remove the entries of the cases that pass the proxy. Verify:
-  - the scenario tests and `TestReducedCasesPassProxy` pass;
-  - `state-diagram/history-style-1`, `vega-nonreg/group2681-history_style_all_forms-1` and `chen-eer-diagram/entities-relationship-and-attributes-1`, which M3 alone explains, pass the proxy in the report;
-  - the regression checks pass.
-
-## 3. Label room (M1)
-
-Cases: `reduced-choice-fork-join-1`, `reduced-simple-ComponentExtraArrows_0001-1` and its `-worst`, `reduced-state2-1` and its `-worst`, `reduced-state3-1-worst`, `reduced-simple-A0004-1-worst`, `reduced-ChenMovieAlias_Test-1-worst`.
-
-- [ ] 3.1 Probe the room of labels of design D3 on these cases and their variants, and record the extents with their probes in the Findings. Verify that the extents predict every probe, and still predict a single labeled edge.
-- [ ] 3.2 Implement the extents. Add the tests of the "Labeled and unlabeled edges between the same nodes" and "Labeled edge in a cycle" scenarios. Remove the entries of the cases that pass the proxy. Verify:
-  - the scenario tests and `TestReducedCasesPassProxy` pass;
-  - `vega-nonreg/simple-ComponentExtraArrows_0001-1` and `vega-scxml/state2-1`, which M1 alone explains, and `vega-migration/ChenMovieAlias_Test-1` and `vega-migration/ChenMovieExtended_Test-1`, which M3 and M1 explain, pass the proxy in the report;
-  - the regression checks pass.
-
-## 4. Ties in the order (M2)
-
-Cases: `reduced-ChenMovie_Test-1-worst`, `reduced-choice-fork-join-1-worst`, `reduced-simple-A0004-1`.
-
-- [ ] 4.1 Probe the tie-break of design D4 on these cases and their variants, and record it with its probes in the Findings. Verify that it predicts every probe, and that it never chooses an order with more crossings.
-- [ ] 4.2 Implement the tie-break. Add the test of the "Orders with the same crossings" scenario. Remove the entries of the cases that pass the proxy. Verify:
-  - the scenario test and `TestReducedCasesPassProxy` pass;
-  - `vega-migration/ChenMovie_Test-1`, `state-diagram/choice-fork-join-1` and `vega-nonreg/simple-A0004-1` pass the proxy in the report;
-  - the regression checks pass.
-
-## 5. Flat edges over nodes (M4)
+## 2. Flat edges over nodes (M4)
 
 Case: `reduced-state3-1`.
 
-- [ ] 5.1 Probe the curves of design D5, and record the curve and the room it takes with their probes in the Findings. Verify that the curve predicts the control points of every probe within a point.
-- [ ] 5.2 Implement the curve and its room. Add the test of the "Flat edge over a node" scenario. Remove the entry of the case if it passes the proxy. Verify:
+- [ ] 2.1 Probe the curves of design D5, and record the curve and the room it takes with their probes in the Findings. Verify that the curve predicts the control points of every probe within a point.
+- [ ] 2.2 Implement the curve and its room. Add the test of the "Flat edge over a node" scenario. Remove the entry of the case if it passes the proxy. Verify:
   - the scenario test and `TestReducedCasesPassProxy` pass;
-  - `vega-scxml/state3-1` and `gopuml-clusters/vega-scxml-state3-1` pass the proxy in the report;
   - the regression checks pass.
 
-## 6. Labels of flat edges with ports (M5)
+## 3. Labels of flat edges with ports (M5)
 
 Cases: `reduced-interactive-SVG0006_Svek-1` and its `-worst`.
 
-- [ ] 6.1 Probe the labels of design D6, and record the rule with its probes in the Findings. Verify that the rule predicts every probe within a point.
-- [ ] 6.2 Implement the rule. Add the test of the "Flat edge from a port" scenario. Remove the entries of the cases that pass the proxy. Verify:
+- [ ] 3.1 Probe the labels of design D6, and record the rule with its probes in the Findings. Verify that the rule predicts every probe within a point.
+- [ ] 3.2 Implement the rule. Add the test of the "Flat edge from a port" scenario. Remove the entries of the cases that pass the proxy. Verify:
   - the scenario test and `TestReducedCasesPassProxy` pass;
-  - `vega-svg/interactive-SVG0006_Svek-1` passes the proxy in the report;
+  - `vega-svg/interactive-SVG0006_Svek-1`, which M5 alone explains, passes the proxy in the report;
+  - the regression checks pass.
+
+## 4. Label room (M1)
+
+Cases: `reduced-choice-fork-join-1`, `reduced-simple-ComponentExtraArrows_0001-1` and its `-worst`, `reduced-state2-1` and its `-worst`, `reduced-state3-1-worst`, `reduced-simple-A0004-1-worst`, `reduced-ChenMovieAlias_Test-1-worst`.
+
+- [ ] 4.1 Probe the room of labels of design D3 on these cases and their variants, and record the extents with their probes in the Findings. Verify that the extents predict every probe, and still predict a single labeled edge.
+- [ ] 4.2 Implement the extents. Add the tests of the "Labeled and unlabeled edges between the same nodes" and "Labeled edge in a cycle" scenarios. Remove the entries of the cases that pass the proxy. Verify:
+  - the scenario tests and `TestReducedCasesPassProxy` pass;
+  - `vega-nonreg/simple-ComponentExtraArrows_0001-1` and `vega-scxml/state2-1`, which M1 alone explains, and `vega-scxml/state3-1` and `gopuml-clusters/vega-scxml-state3-1`, which M4 and M1 explain, pass the proxy in the report;
+  - the regression checks pass.
+
+## 5. Ties in the x positioning (M3)
+
+Cases: `reduced-history-style-1` and its `-worst`, `reduced-entities-relationship-and-attributes-1` and its `-worst`, `reduced-ChenMovie_Test-1`, `reduced-ChenMovieAlias_Test-1`.
+
+- [ ] 5.1 Probe the rule of design D2 on these cases and their variants, and record it with its probes in the Findings. The first probes are recorded: the ties follow the path of the reference's network simplex. Verify that the rule predicts every probe.
+- [ ] 5.2 Implement the rule. Add the tests of the "Head between two tails" and "Tail between a node and a labeled edge" scenarios. Remove the entries of the cases that pass the proxy. Verify:
+  - the scenario tests and `TestReducedCasesPassProxy` pass;
+  - `state-diagram/history-style-1`, `vega-nonreg/group2681-history_style_all_forms-1` and `chen-eer-diagram/entities-relationship-and-attributes-1`, which M3 alone explains, and `vega-migration/ChenMovieAlias_Test-1` and `vega-migration/ChenMovieExtended_Test-1`, which M3 and M1 explain, pass the proxy in the report;
+  - the regression checks pass.
+
+## 6. Ties in the order (M2)
+
+Cases: `reduced-ChenMovie_Test-1-worst`, `reduced-choice-fork-join-1-worst`, `reduced-simple-A0004-1`.
+
+- [ ] 6.1 Probe the tie-break of design D4 on these cases and their variants, and record it with its probes in the Findings. Verify that it predicts every probe, and that it never chooses an order with more crossings.
+- [ ] 6.2 Implement the tie-break. Add the test of the "Orders with the same crossings" scenario. Remove the entries of the cases that pass the proxy. Verify:
+  - the scenario test and `TestReducedCasesPassProxy` pass;
+  - `vega-migration/ChenMovie_Test-1` (M3 and M2), `state-diagram/choice-fork-join-1` and `vega-nonreg/simple-A0004-1` (M1 and M2) pass the proxy in the report;
   - the regression checks pass.
 
 ## 7. Acceptance and checks
