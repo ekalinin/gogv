@@ -27,11 +27,12 @@ Case: `reduced-state3-1`.
 
 Cases: `reduced-interactive-SVG0006_Svek-1` and its `-worst`.
 
-- [ ] 3.1 Probe the labels of design D6, and record the rule with its probes in the Findings. Verify that the rule predicts every probe within a point.
-- [ ] 3.2 Implement the rule. Add the test of the "Flat edge from a port" scenario. Remove the entries of the cases that pass the proxy. Verify:
+- [x] 3.1 Probe the labels of design D6, and record the rule with its probes in the Findings. Verify that the rule predicts every probe within a point, but for the labels below the rank whose curve the reference routes under them (task 7.1).
+- [x] 3.2 Implement the rule. Add the test of the "Flat edge from a port" scenario. Remove the entries of the cases that pass the proxy. Verify:
   - the scenario test and `TestReducedCasesPassProxy` pass;
-  - `vega-svg/interactive-SVG0006_Svek-1`, which M5 alone explains, passes the proxy in the report;
   - the regression checks pass.
+
+  `vega-svg/interactive-SVG0006_Svek-1` also needs the route of task 7.1.
 
 ## 4. Label room (M1)
 
@@ -63,11 +64,21 @@ Cases: `reduced-ChenMovie_Test-1-worst`, `reduced-choice-fork-join-1-worst`, `re
   - `vega-migration/ChenMovie_Test-1` (M3 and M2), `state-diagram/choice-fork-join-1` and `vega-nonreg/simple-A0004-1` (M1 and M2) pass the proxy in the report;
   - the regression checks pass.
 
-## 7. Acceptance and checks
+## 7. Route of flat edges with ports through their labels (M5)
 
-- [ ] 7.1 Check that the 13 graphs of #28 pass the proxy in the report and that their entries left `known-differences.yaml`. A graph that still fails is reduced again with `tools/reduce -on` on its largest deviation, and its new mechanism is recorded in the Findings and raised before it is fixed. Verify that the proxy section of the report lists none of the 13.
-- [ ] 7.2 Judge the other entries of `known-differences.yaml` (design D8): those whose cases pass leave it, and the others name `refine-layout-heuristics`. Verify that `make conformance` reports no failed case, and that no entry names `tune-layout-heuristics`.
-- [ ] 7.3 Run the checks:
+Case: `reduced-interactive-SVG0006_Svek-1`.
+
+- [ ] 7.1 Probe the route of a labeled flat edge with ports through its label (Findings, M5): the points of the label's sides that the path touches, for labels of text and of tables, above and below the rank. Record the rule with its probes in the Findings, then implement it. Remove the entry of the case if it passes the proxy. Verify:
+  - the rule predicts the control points of every probe within a point;
+  - `TestReducedCasesPassProxy` passes;
+  - `vega-svg/interactive-SVG0006_Svek-1` passes the proxy in the report;
+  - the regression checks pass.
+
+## 8. Acceptance and checks
+
+- [ ] 8.1 Check that the 13 graphs of #28 pass the proxy in the report and that their entries left `known-differences.yaml`. A graph that still fails is reduced again with `tools/reduce -on` on its largest deviation, and its new mechanism is recorded in the Findings and raised before it is fixed. Verify that the proxy section of the report lists none of the 13.
+- [ ] 8.2 Judge the other entries of `known-differences.yaml` (design D8): those whose cases pass leave it, and the others name `refine-layout-heuristics`. Verify that `make conformance` reports no failed case, and that no entry names `tune-layout-heuristics`.
+- [ ] 8.3 Run the checks:
   - `make lint`;
   - `go test -race ./...`;
   - `go run ./tools/provenance`;
@@ -77,11 +88,11 @@ Cases: `reduced-ChenMovie_Test-1-worst`, `reduced-choice-fork-join-1-worst`, `re
   - `openspec validate tune-layout-heuristics --strict`.
 
   Verify that all pass, with no benchmark significantly slower than on `main`.
-- [ ] 7.4 Push the branch and open a pull request with the template, with the user's approval. Verify that the CI jobs pass.
+- [ ] 8.4 Push the branch and open a pull request with the template, with the user's approval. Verify that the CI jobs pass.
 
-## 8. Release
+## 9. Release
 
-- [ ] 8.1 After the merge, write `docs/releases/v0.4.0.md` and name v0.4.0 on the landing page, in a pull request, with the user's approval (design D9). The notes give the changed layouts and the conformance results. Verify that the tests of `landing_test.go` pass.
-- [ ] 8.2 After its merge and a green CI, run `make release VERSION=v0.4.0` with the user's approval. Verify:
+- [ ] 9.1 After the merge, write `docs/releases/v0.4.0.md` and name v0.4.0 on the landing page, in a pull request, with the user's approval (design D9). The notes give the changed layouts and the conformance results. Verify that the tests of `landing_test.go` pass.
+- [ ] 9.2 After its merge and a green CI, run `make release VERSION=v0.4.0` with the user's approval. Verify:
   - `go install github.com/ekalinin/gogv/cmd/dot@v0.4.0` prints `gogv 0.4.0` for `dot -V`;
   - the landing page names v0.4.0 and its playground runs it.
