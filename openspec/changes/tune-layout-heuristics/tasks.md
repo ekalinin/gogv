@@ -10,7 +10,7 @@ Each mechanism ends with the regression checks of design D1:
 
 ## 1. Acceptance test
 
-- [ ] 1.1 Add `TestReducedCasesPassProxy` (design D7). Record the baseline in the Findings: 273 of 296 gopuml cases pass the proxy, and the outcomes of `conformance-report.md`. Verify:
+- [x] 1.1 Add `TestReducedCasesPassProxy` (design D7). Record the baseline in the Findings: 273 of 296 gopuml cases pass the proxy, and the outcomes of `conformance-report.md`. Verify:
   - the test passes while the 20 reduced cases are listed;
   - it fails when the entry of a reduced case that still differs is removed.
 

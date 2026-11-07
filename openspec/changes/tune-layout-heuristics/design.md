@@ -146,4 +146,12 @@ Rollback: revert the merge, or stay on v0.3.1.
 
 ## Findings
 
-To be filled during the implementation: for each mechanism, the rule found and the probes that support it.
+### Baseline
+
+Before any mechanism, on `conformance-report.md` of the change's first commit:
+
+- 607 cases: 516 passed, 52 known differences, 39 not supported yet, 0 failed;
+- 273 of the 296 gopuml cases pass the proxy;
+- the 52 known differences all name `tune-layout-heuristics`: the 13 graphs of #28, their 20 reduced cases, and 19 others.
+
+Each mechanism below records the rule found, the probes that support it, and the counts after it.
