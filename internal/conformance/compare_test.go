@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"image"
 	"image/color"
+	"math"
 	"os"
 	"strings"
 	"testing"
@@ -46,6 +47,12 @@ func TestParsePlain(t *testing.T) {
 	}
 	if len(p.Edges) != 1 || p.Edges[0] != [2]string{"a", "my node"} {
 		t.Errorf("edges = %q", p.Edges)
+	}
+	if c := p.NodeCenters["my node"]; c != (Point{0.375, 0.25}) || len(p.NodeCenters) != 2 {
+		t.Errorf("node centers = %v", p.NodeCenters)
+	}
+	if len(p.LabelCenters) != 0 {
+		t.Errorf("label centers = %v, want none", p.LabelCenters)
 	}
 	if _, err := ParsePlain([]byte("graph 1 1 1\n")); err == nil {
 		t.Error("output without stop: got no error")
@@ -152,4 +159,66 @@ func TestResvg(t *testing.T) {
 	if score, err := CompareSVG(r, doc(10), doc(60)); err == nil {
 		t.Errorf("moved rectangle: score %.4f, want an SSIM error", score)
 	}
+}
+
+// proxyPlain returns plain output with two nodes and a labeled edge, for the
+// proxy tests: the graph size, the centers of a and b, and the center of
+// the label, all in inches; a label center of nil gives an edge without a
+// label.
+func proxyPlain(t *testing.T, w, h float64, a, b Point, label *Point) Plain {
+	t.Helper()
+	edge := "edge a b 4 1 1.55 1 1.2 1 0.8 1 0.45"
+	if label != nil {
+		edge += fmt.Sprintf(" L %g %g", label.X, label.Y)
+	}
+	text := fmt.Sprintf("graph 1 %g %g\nnode a %g %g 0.75 0.5 a solid ellipse black lightgrey\nnode b %g %g 0.75 0.5 b solid ellipse black lightgrey\n%s solid black\nstop\n",
+		w, h, a.X, a.Y, b.X, b.Y, edge)
+	p, err := ParsePlain([]byte(text))
+	if err != nil {
+		t.Fatal(err)
+	}
+	return p
+}
+
+func TestProxyScenarios(t *testing.T) {
+	// Spec scenarios "Close layout" and "Label moved" of the requirement
+	// "Proxy of gopuml's contract" of upstream-compatibility.
+	ref := proxyPlain(t, 2, 2, Point{1, 1.8}, Point{1, 0.2}, &Point{1.2, 1})
+
+	t.Run("Close layout", func(t *testing.T) {
+		got := proxyPlain(t, 2.02, 2, Point{1.01, 1.8}, Point{1, 0.19}, &Point{1.21, 1.01})
+		d, object := ProxyDeviation(ref, got)
+		if d > 0.0101 || !PassesProxy(d, 0.95) {
+			t.Errorf("deviation %g (%s): want at most 1%%, and the proxy passed", d, object)
+		}
+	})
+
+	t.Run("Label moved", func(t *testing.T) {
+		got := proxyPlain(t, 2, 2, Point{1, 1.8}, Point{1, 0.2}, &Point{1.26, 1})
+		d, object := ProxyDeviation(ref, got)
+		if math.Abs(d-0.03) > 1e-9 || object != "label of a->b#0" || PassesProxy(d, 0.95) {
+			t.Errorf("deviation %g of %q: want 3%% of the label, and the proxy failed", d, object)
+		}
+	})
+
+	t.Run("Missing node or label", func(t *testing.T) {
+		got := proxyPlain(t, 2, 2, Point{1, 1.8}, Point{1, 0.2}, nil)
+		if d, object := ProxyDeviation(ref, got); d != 1 || object != "label of a->b#0 missing" {
+			t.Errorf("without the label: deviation %g of %q", d, object)
+		}
+		delete(got.NodeCenters, "b")
+		got.LabelCenters = ref.LabelCenters
+		if d, object := ProxyDeviation(ref, got); d != 1 || object != "node b missing" {
+			t.Errorf("without node b: deviation %g of %q", d, object)
+		}
+		if d, object := ProxyDeviation(got, ref); d != 1 || object != "node b not in the reference" {
+			t.Errorf("with a node the reference does not have: deviation %g of %q", d, object)
+		}
+	})
+
+	t.Run("SSIM", func(t *testing.T) {
+		if PassesProxy(0, MinSSIM-0.01) {
+			t.Error("an SSIM below 0.90 passes the proxy")
+		}
+	})
 }
