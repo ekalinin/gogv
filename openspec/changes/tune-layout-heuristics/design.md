@@ -238,3 +238,30 @@ After M4 (task 2.2):
 - 273 of 296 gopuml cases pass the proxy, as before: `vega-scxml/state3-1` and its variant also need M1;
 - no other case changes its outcome.
 
+### M5: labels of flat edges with ports (tasks 3.1 and 3.2, partly done)
+
+Probes on a table of three cells (ports at the top, the middle and the bottom), and on a cell between two fillers that moves the port from 20 points below the center to 20 above, with a label of 14 and 28 points:
+
+- the label lies below the rank when a port of the edge lies below the center of its node: its top 14 points below the center of the rank;
+- otherwise above it, its bottom 11.6 points above the center of the rank, or on the edge where the edge passes higher;
+- `ranksep`, a second rank and doubled ranks do not change these heights;
+- the drawing's box holds the label.
+
+An end at a port leaves the port's box from the middle of the side that faces the other end, level, its control point 4/9 of the way along; an end without a port gets its control point a sixth of the way towards the other end. A fit of `a:t -> b` and of `a -> b:t` gives 0.3 and 0.8 points.
+
+With these, gogv places the labels of the 32 probes within a point of the reference's, but for the labels below the rank in 28 points, 2.7 to 3.1 points off.
+
+The reference also routes the edge through its label, and gogv does not yet:
+
+- below the rank, the curve dips under the label, so the drawing reaches 4.6 points lower in `vega-svg/interactive-SVG0006_Svek-1` reduced again;
+- the path passes through points of the label's bottom side, with bisected tangents and control points at 4/9, as M4's. For text labels, the points are 4.5 points left of the label's center and a label's width right of that, which matches the two probes within 0.5 points. For the table label of SVG0006, the path touches only the bottom right corner.
+
+The points that the path touches thus follow the reference's boxes for the route, which are not modeled yet.
+
+After this step:
+
+- `reduced-interactive-SVG0006_Svek-1-worst` passes the proxy and leaves `known-differences.yaml`;
+- `reduced-interactive-SVG0006_Svek-1` passes it in `plain` (0.3%), but its SVG reaches an SSIM of 0.898;
+- `vega-svg/interactive-SVG0006_Svek-1` goes from a deviation of 17.4% to 12.6%;
+- 607 cases: 518 passed, 50 known differences, 39 not supported yet, 0 failed; 273 of 296 gopuml cases pass the proxy.
+

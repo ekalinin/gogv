@@ -655,15 +655,21 @@ func (r *router) routeEdges(g *graph.Graph, ends [][2]int, chains [][]int, polyl
 			pts = r.loop(t, inner)
 		case chains[i] == nil:
 			ot, oh := r.g.nodes[t].order, r.g.nodes[h].order
-			if k, ok := r.flatLabels[i]; ok {
+			neighbors := ot-oh == 1 || oh-ot == 1
+			k, labeled := r.flatLabels[i]
+			fromPorts := neighbors && len(group) == 1 && (r.ports[i][0].set || r.ports[i][1].set)
+			switch {
+			case fromPorts:
+				pts = r.flatFromPorts(i, t, h)
+			case labeled:
 				pts = r.labeledFlat(t, h, k, r.flatAcross[i])
-			} else if ot-oh == 1 || oh-ot == 1 {
+			case neighbors:
 				pts = r.flat(t, h, off)
-			} else {
+			default:
 				pts = r.flatArc(t, h, r.end(i, 0, t), r.end(i, 1, h), idx+1, len(group))
 			}
 			// From port to port: the ends move with their control points.
-			if n := len(pts); n == 4 {
+			if n := len(pts); n == 4 && !fromPorts {
 				dt, dh := sub(r.end(i, 0, t), r.pos[t]), sub(r.end(i, 1, h), r.pos[h])
 				pts[0], pts[1] = add(pts[0], dt), add(pts[1], dt)
 				pts[2], pts[3] = add(pts[2], dh), add(pts[3], dh)
@@ -775,6 +781,39 @@ func (r *router) flat(t, h int, off float64) []Point {
 	a, b := r.pos[t], r.pos[h]
 	d := Point{0, float64(off * r.nodesep)}
 	return []Point{a, add(a, d), add(b, d), b}
+}
+
+// flatFromPorts returns the curve of the only edge between two neighbors of
+// the same rank when it has a port at an end, as observed on the reference:
+// an end at a port leaves the port's box from the middle of the side that
+// faces the other end, level, its control point 4/9 of the way along; an
+// end without a port gets its control point a sixth of the way towards the
+// other end.
+func (r *router) flatFromPorts(i, t, h int) []Point {
+	nodes := [2]int{t, h}
+	ends := [2]Point{r.end(i, 0, t), r.end(i, 1, h)}
+	// toward is 1 when the other end lies to the right of end j, else -1.
+	toward := func(j int) float64 {
+		if r.pos[nodes[1-j]].X < r.pos[nodes[j]].X {
+			return -1
+		}
+		return 1
+	}
+	for j := range 2 {
+		if pe := r.ports[i][j]; pe.set {
+			ends[j].X += float64(toward(j) * pe.half.X)
+		}
+	}
+	d := dist(ends[0], ends[1])
+	var ctrl [2]Point
+	for j := range 2 {
+		if r.ports[i][j].set {
+			ctrl[j] = Point{ends[j].X + float64(float64(toward(j)*d*4)/9), ends[j].Y}
+		} else {
+			ctrl[j] = add(ends[j], scale(normalize(sub(ends[1-j], ends[j])), float64(d/6)))
+		}
+	}
+	return []Point{ends[0], ctrl[0], ctrl[1], ends[1]}
 }
 
 // flatArc returns the curve of the k-th of n edges between two nodes of the

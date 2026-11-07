@@ -14,7 +14,7 @@
 | description-diagram | 11 | 11 | 0 | 0 | 0 |
 | diagram-source | 4 | 4 | 0 | 0 | 0 |
 | dot-language | 107 | 68 | 3 | 36 | 0 |
-| dot-layout | 159 | 130 | 28 | 1 | 0 |
+| dot-layout | 159 | 131 | 27 | 1 | 0 |
 | gopuml-clusters | 36 | 35 | 1 | 0 | 0 |
 | graph-layout | 1 | 1 | 0 | 0 | 0 |
 | legacy-activity-diagram | 13 | 13 | 0 | 0 | 0 |
@@ -39,7 +39,7 @@
 | canon | 593 | 556 | 0 | 37 | 0 |
 | plain | 593 | 539 | 17 | 37 | 0 |
 | plain-ext | 24 | 24 | 0 | 0 | 0 |
-| svg | 593 | 507 | 49 | 37 | 0 |
+| svg | 593 | 508 | 48 | 37 | 0 |
 | svg_inline | 24 | 23 | 1 | 0 | 0 |
 | dot | 297 | 251 | 9 | 37 | 0 |
 | gv | 24 | 24 | 0 | 0 | 0 |
@@ -67,7 +67,7 @@
 | state-diagram/junction-1 | 21.2% | label of sh0006->sh0008#0 | 0.9190 |
 | gopuml-clusters/state-diagram-history-state-1 | 18.2% | label of sh0014->sh0013#0 | 0.9738 |
 | state-diagram/history-state-1 | 18.2% | label of sh0014->sh0013#0 | 0.9753 |
-| vega-svg/interactive-SVG0006_Svek-1 | 17.4% | label of sh0006->sh0007#0 | 0.8028 |
+| vega-svg/interactive-SVG0006_Svek-1 | 12.6% | label of sh0006->sh0007#0 | 0.8362 |
 | vega-scxml/junction-pseudostate-1 | 12.3% | label of sh0006->sh0008#0 | 0.9084 |
 | vega-state/junction-pseudostate-1 | 12.3% | label of sh0006->sh0008#0 | 0.9084 |
 | gopuml-clusters/vega-scxml-state4-1 | 10.6% | node sh0010 | 0.9786 |
@@ -143,8 +143,7 @@
 | dot-layout/reduced-entities-relationship-and-attributes-1-worst | known difference | svg: SSIM 0.8213 is below 0.90 |
 | dot-layout/reduced-history-style-1 | known difference | svg: SSIM 0.8630 is below 0.90 |
 | dot-layout/reduced-history-style-1-worst | known difference | svg: SSIM 0.8623 is below 0.90 |
-| dot-layout/reduced-interactive-SVG0006_Svek-1 | known difference | svg: SSIM 0.8008 is below 0.90 |
-| dot-layout/reduced-interactive-SVG0006_Svek-1-worst | known difference | svg: SSIM 0.8907 is below 0.90 |
+| dot-layout/reduced-interactive-SVG0006_Svek-1 | known difference | svg: SSIM 0.8984 is below 0.90 |
 | dot-layout/reduced-simple-A0004-1 | known difference | svg: SSIM 0.5258 is below 0.90 |
 | dot-layout/reduced-simple-A0004-1-worst | known difference | plain: plain width 2.4592 is not within 5% of the reference 2.6176; svg: svg width 185 is not within 5% of the reference 196 SSIM 0.7143 is below 0.90; dot: bb width 177.06 is not within 5% of the reference 188.47; xdot: bb width 177.06 is not within 5% of the reference 188.47; json: bb width 177.06 is not within 5% of the reference 188.47 |
 | dot-layout/reduced-simple-ComponentExtraArrows_0001-1 | known difference | plain: plain width 2.0739 is not within 5% of the reference 1.9353; svg: svg width 157 is not within 5% of the reference 147 SSIM 0.6155 is below 0.90; dot: bb width 149.32 is not within 5% of the reference 139.34; xdot: bb width 149.32 is not within 5% of the reference 139.34; json: bb width 149.32 is not within 5% of the reference 139.34 |
@@ -171,7 +170,7 @@
 | vega-scxml/state2-1 | known difference | svg: SSIM 0.8736 is below 0.90 |
 | vega-scxml/state3-1 | known difference | plain: plain height 5.7346 is not within 5% of the reference 6.0401; svg: SSIM 0.5920 is below 0.90 |
 | vega-svg/id-component_01-1 | known difference | plain: plain height 0.42083 is not within 5% of the reference 0.46307; svg: svg height 38 is not within 5% of the reference 41 SSIM 0.5905 is below 0.90 |
-| vega-svg/interactive-SVG0006_Svek-1 | known difference | plain: plain height 2.6806 is not within 5% of the reference 3.0929; svg: svg height 201 is not within 5% of the reference 231 SSIM 0.8028 is below 0.90 |
+| vega-svg/interactive-SVG0006_Svek-1 | known difference | plain: plain height 2.7083 is not within 5% of the reference 3.0929; svg: svg height 203 is not within 5% of the reference 231 SSIM 0.8362 is below 0.90 |
 | gopuml-clusters/vega-scxml-state3-1 | known difference | plain: plain height 4.947 is not within 5% of the reference 4.1137; svg: svg height 364 is not within 5% of the reference 304 SSIM 0.4358 is below 0.90 |
 | cli/other-engine | not supported yet |  |
 | cli/default-attribute-flag | not supported yet |  |

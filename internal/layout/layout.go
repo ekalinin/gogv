@@ -142,6 +142,11 @@ const (
 	loopGap = 18
 	// flatLabelLift is how far the label of a flat edge is above it.
 	flatLabelLift = 3
+	// flatPortAbove and flatPortBelow place the label of a flat edge with
+	// a port, as observed on the reference: its bottom flatPortAbove above
+	// the center of the rank, or its top flatPortBelow below it.
+	flatPortAbove = 11.6
+	flatPortBelow = 14
 )
 
 // params are the graph attributes the layout reads.
@@ -477,6 +482,20 @@ func Layout(ctx context.Context, g *graph.Graph) (*Result, error) {
 				l, r = r, l
 			}
 			x := half(pos[l].X + right[l] + pos[r].X - left[r])
+			if pt, ph := rt.ports[i][0], rt.ports[i][1]; pt.set || ph.set {
+				// With a port, as observed on the reference: below the
+				// rank when a port lies below the center of its node,
+				// else above it, and above the edge where the edge passes
+				// higher; the drawing's box holds the label.
+				y := pos[l].Y
+				if (pt.set && pt.off.Y < 0) || (ph.set && ph.off.Y < 0) {
+					labelPos[i] = Point{x, y - flatPortBelow - half(across)}
+				} else {
+					bottom := max(y+flatPortAbove, highestAt(res.Edges[i].Points, x-half(along), x+half(along), y))
+					labelPos[i] = Point{x, bottom + half(across)}
+				}
+				continue
+			}
 			// The first label is above the edge; the next ones alternate
 			// below and above, a label's height plus 6 points further at
 			// each level.
@@ -601,6 +620,25 @@ func rightmostAt(pts []Point, lo, hi, def float64) float64 {
 		return def
 	}
 	return x
+}
+
+// highestAt returns the highest y of a curve where its x lies between lo
+// and hi, or def when it does not reach there.
+func highestAt(pts []Point, lo, hi, def float64) float64 {
+	y, found := math.Inf(-1), false
+	for _, seg := range segments(pts) {
+		const steps = 64
+		for k := 0; k <= steps; k++ {
+			q := cubic(seg, float64(k)/steps)
+			if q.X >= lo && q.X <= hi {
+				y, found = max(y, q.Y), true
+			}
+		}
+	}
+	if !found {
+		return def
+	}
+	return y
 }
 
 // placeGraphLabel puts the graph label below the drawing, centered or at

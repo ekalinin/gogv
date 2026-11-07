@@ -135,9 +135,6 @@
 - id: dot-layout/reduced-interactive-SVG0006_Svek-1
   reason: "reduced from vega-svg/interactive-SVG0006_Svek-1: a labeled flat edge from a port of a table node: the reference puts its label 22 points below the centers of the nodes, gogv 11 points above them"
   change: tune-layout-heuristics
-- id: dot-layout/reduced-interactive-SVG0006_Svek-1-worst
-  reason: "reduced from vega-svg/interactive-SVG0006_Svek-1 on the label of sh0006 -> sh0007: a labeled flat edge between ports of two table nodes: its label is 9 points lower than the reference's"
-  change: tune-layout-heuristics
 - id: dot-layout/reduced-simple-A0004-1
   reason: "reduced from vega-nonreg/simple-A0004-1: order within ranks: gogv lays out the mirror of the reference's order; both orders have no crossing"
   change: tune-layout-heuristics
