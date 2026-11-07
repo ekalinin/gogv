@@ -200,6 +200,21 @@ make determinism          # compare native, amd64 and WebAssembly outputs
 that is not supported yet are reported as such; the remaining differences
 are listed in `testdata/conformance/known-differences.yaml`.
 
+For the gopuml corpora, the report also judges a proxy of gopuml's own
+check, which compares gopuml's drawings with upstream PlantUML's: a `plain`
+size within 2%, every node and edge label center within 2% of the graph
+size, and an SVG at SSIM 0.90 or more. The proxy changes no outcome. A graph
+that does not pass it can be reduced to a small input that still does not:
+
+```sh
+make reduce IN=.cache/gopuml-dot/vega-scxml/state2-1.gv OUT=reduced.gv
+```
+
+`tools/reduce` removes statements, attributes and subgraphs while gogv's
+layout still differs from the reference's on a node or label that differs in
+the original, and caches the reference's outputs in `.cache/reduce`;
+`-on "node a"` keeps it on one object.
+
 ## Releasing
 
 A release is a tag `vX.Y.Z` on a commit of `main` that CI passed, with its

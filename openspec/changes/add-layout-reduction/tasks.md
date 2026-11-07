@@ -29,7 +29,7 @@
 
 ## 4. Documentation and checks
 
-- [ ] 4.1 Describe the proxy and `make reduce` in the Conformance section of `README.md`. Verify that the README tests pass.
+- [x] 4.1 Describe the proxy and `make reduce` in the Conformance section of `README.md`. Verify that the README tests pass.
 - [ ] 4.2 Run the checks:
   - `make lint`;
   - `go test -race ./...`;
