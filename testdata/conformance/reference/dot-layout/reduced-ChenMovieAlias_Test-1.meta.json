@@ -1,0 +1,26 @@
+{
+  "canon": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of edge sh0020 -> sh0014\n"
+  },
+  "dot": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of edge sh0020 -> sh0014\n"
+  },
+  "json": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of edge sh0020 -> sh0014\n"
+  },
+  "plain": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of edge sh0020 -> sh0014\n"
+  },
+  "svg": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of edge sh0020 -> sh0014\n"
+  },
+  "xdot": {
+    "status": 0,
+    "stderr": "Warning: table size too small for content\nin label of edge sh0020 -> sh0014\n"
+  }
+}

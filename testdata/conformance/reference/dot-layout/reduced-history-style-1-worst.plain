@@ -1,0 +1,12 @@
+graph 1 5.0816 1.5
+node sh0011 0.54079 1.25 1.0816 0.5 sh0011 solid ellipse black lightgrey
+node sh0010 3.2075 1.25 1.0816 0.5 sh0010 solid ellipse black lightgrey
+node sh0006 3.8741 0.25 1.0816 0.5 sh0006 solid ellipse black lightgrey
+node sh0007 1.2075 0.25 1.0816 0.5 sh0007 solid ellipse black lightgrey
+node sh0008 4.5408 1.25 1.0816 0.5 sh0008 solid ellipse black lightgrey
+node sh0009 1.8741 1.25 1.0816 0.5 sh0009 solid ellipse black lightgrey
+edge sh0011 sh0007 4 0.69878 1.0057 0.77683 0.89189 0.8728 0.75194 0.96027 0.62437 solid black
+edge sh0010 sh0006 4 3.3654 1.0057 3.4435 0.89189 3.5395 0.75194 3.6269 0.62437 solid black
+edge sh0008 sh0006 4 4.3828 1.0057 4.3048 0.89189 4.2088 0.75194 4.1213 0.62437 solid black
+edge sh0009 sh0007 4 1.7161 1.0057 1.6381 0.89189 1.5421 0.75194 1.4546 0.62437 solid black
+stop

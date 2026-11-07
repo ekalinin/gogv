@@ -4,6 +4,7 @@
 package conformance
 
 import (
+	"math"
 	"os"
 	"path/filepath"
 	"strings"
@@ -255,5 +256,66 @@ func TestRun(t *testing.T) {
 	}
 	if _, err := Run(cases[:1], refDir, nil, failing, fakeRasterizer{}); err == nil || !strings.Contains(err.Error(), "dot-layout/same") {
 		t.Errorf("unlisted failure: err %v, want the run to fail naming the case", err)
+	}
+}
+
+func TestReportProxyScenarios(t *testing.T) {
+	// Spec scenario "Proxy in the report" of the requirement "Case outcomes
+	// and report" of upstream-compatibility, on fake results: the section
+	// counts the cases that pass the proxy and lists the others, and the
+	// outcomes stay those of the contract.
+	results := []CaseResult{
+		{Case: Case{ID: "vega-state/close", Capability: "vega-state"}, Outcome: Passed, SSIM: 0.99, ProxyDeviation: 0.01, ProxyObject: "node a"},
+		{Case: Case{ID: "vega-state/moved", Capability: "vega-state"}, Outcome: Passed, SSIM: 0.95, ProxyDeviation: 0.03, ProxyObject: "label of a->b#0"},
+		{Case: Case{ID: "vega-state/far", Capability: "vega-state"}, Outcome: KnownDiff, SSIM: 0.80, ProxyDeviation: 0.25, ProxyObject: "node c"},
+		{Case: Case{ID: "vega-state/blurred", Capability: "vega-state"}, Outcome: KnownDiff, SSIM: 0.85, ProxyDeviation: 0.0, ProxyObject: ""},
+	}
+	md := Report{Results: results, Proxy: results}.Markdown()
+	for _, want := range []string{
+		"| vega-state | 4 | 2 | 2 | 0 | 0 |",
+		"## gopuml contract proxy\n\n1 of 4 cases of the gopuml corpora pass the proxy",
+		"| Case | Largest deviation | Object | SSIM |\n|---|---|---|---|\n" +
+			"| vega-state/far | 25.0% | node c | 0.8000 |\n" +
+			"| vega-state/moved | 3.0% | label of a->b#0 | 0.9500 |\n" +
+			"| vega-state/blurred | 0.0% |  | 0.8500 |\n",
+	} {
+		if !strings.Contains(md, want) {
+			t.Errorf("report lacks %q:\n%s", want, md)
+		}
+	}
+	if strings.Contains(md, "| vega-state/close |") {
+		t.Errorf("a case that passes the proxy is listed:\n%s", md)
+	}
+
+	// A run without a harvested corpus has no such section.
+	if md := (Report{Results: results}).Markdown(); strings.Contains(md, "gopuml contract proxy") {
+		t.Errorf("report without a harvested corpus has the proxy section:\n%s", md)
+	}
+}
+
+func TestRunMeasuresProxy(t *testing.T) {
+	// Run records the deviation of each case from its plain outputs, without
+	// changing its outcome.
+	refDir := t.TempDir()
+	ref := okReference()
+	ref["plain"] = Result{Stdout: []byte("graph 1 2 2\nnode a 1 1.8 0.75 0.5 a solid ellipse black lightgrey\nstop\n")}
+	c := Case{ID: "dot-layout/moved", Capability: "dot-layout", Source: []byte("moved")}
+	if err := WriteReference(refDir, c.ID, ref); err != nil {
+		t.Fatal(err)
+	}
+	render := func(src []byte, format string) Result {
+		r := ref[format]
+		if format == "plain" {
+			r.Stdout = []byte("graph 1 2 2\nnode a 1.06 1.8 0.75 0.5 a solid ellipse black lightgrey\nstop\n")
+		}
+		return r
+	}
+	report, err := Run([]Case{c}, refDir, nil, render, fakeRasterizer{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	res := report.Results[0]
+	if res.Outcome != Passed || math.Abs(res.ProxyDeviation-0.03) > 1e-9 || res.ProxyObject != "node a" {
+		t.Errorf("outcome %q, deviation %g of %q; want passed, and 3%% of node a", res.Outcome, res.ProxyDeviation, res.ProxyObject)
 	}
 }

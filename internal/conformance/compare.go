@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"image"
 	"image/png"
+	"maps"
 	"math"
 	"os/exec"
 	"regexp"
@@ -42,11 +43,26 @@ func CompareCanon(ref, got []byte) error {
 }
 
 // Plain is what the comparison reads from plain output: the graph size in
-// inches, the node names, and the edges as tail and head names.
+// inches, the node names, the edges as tail and head names, and the centers
+// of the nodes and of the edge labels.
 type Plain struct {
 	Width, Height float64
 	Nodes         []string
 	Edges         [][2]string
+	// NodeCenters holds the center of each node, by name, and LabelCenters
+	// the center of each edge label, by the key of its edge: its tail, its
+	// head and its place among the edges between them, as "a->b#0".
+	NodeCenters, LabelCenters map[string]Point
+}
+
+// Point is a position of plain output, in inches.
+type Point struct{ X, Y float64 }
+
+// parsePoint reads the coordinates of a plain statement.
+func parsePoint(x, y string) (Point, bool) {
+	px, err1 := strconv.ParseFloat(x, 64)
+	py, err2 := strconv.ParseFloat(y, 64)
+	return Point{px, py}, err1 == nil && err2 == nil
 }
 
 // ParsePlain reads the graph, node and edge statements of plain or
@@ -54,12 +70,13 @@ type Plain struct {
 // newlines, and a backslash before a newline continues it, so statements are
 // split at the newlines outside quotes. Several graphs are not supported.
 func ParsePlain(data []byte) (Plain, error) {
-	var p Plain
+	p := Plain{NodeCenters: map[string]Point{}, LabelCenters: map[string]Point{}}
 	stmts, err := plainStatements(string(data))
 	if err != nil {
 		return p, err
 	}
 	var sawGraph, sawStop bool
+	between := map[[2]string]int{}
 	for n, f := range stmts {
 		if sawStop {
 			return p, fmt.Errorf("plain statement %d: text after stop", n+1)
@@ -76,15 +93,35 @@ func ParsePlain(data []byte) (Plain, error) {
 			}
 			p.Width, p.Height, sawGraph = w, h, true
 		case "node":
-			if len(f) < 2 {
+			if len(f) < 4 {
 				return p, fmt.Errorf("plain statement %d: short node line", n+1)
 			}
+			center, ok := parsePoint(f[2], f[3])
+			if !ok {
+				return p, fmt.Errorf("plain statement %d: bad node center", n+1)
+			}
 			p.Nodes = append(p.Nodes, f[1])
+			p.NodeCenters[f[1]] = center
 		case "edge":
-			if len(f) < 3 {
+			if len(f) < 4 {
 				return p, fmt.Errorf("plain statement %d: short edge line", n+1)
 			}
-			p.Edges = append(p.Edges, [2]string{f[1], f[2]})
+			e := [2]string{f[1], f[2]}
+			p.Edges = append(p.Edges, e)
+			// The control points, then the label and its center when the
+			// edge has one, then the style and the color.
+			points, err := strconv.Atoi(f[3])
+			if err != nil || points < 0 || len(f) < 4+2*points+2 {
+				return p, fmt.Errorf("plain statement %d: bad edge points", n+1)
+			}
+			if rest := f[4+2*points:]; len(rest) >= 5 {
+				center, ok := parsePoint(rest[1], rest[2])
+				if !ok {
+					return p, fmt.Errorf("plain statement %d: bad edge label center", n+1)
+				}
+				p.LabelCenters[fmt.Sprintf("%s->%s#%d", e[0], e[1], between[e])] = center
+			}
+			between[e]++
 		case "stop":
 			sawStop = true
 		default:
@@ -165,6 +202,66 @@ func ComparePlain(ref, got Plain, tolerance float64) error {
 	}
 	errs = append(errs, within("plain width", ref.Width, got.Width, tolerance), within("plain height", ref.Height, got.Height, tolerance))
 	return errors.Join(errs...)
+}
+
+// ProxyTolerance is the largest deviation of the proxy of gopuml's contract,
+// as a fraction of the reference's graph size.
+const ProxyTolerance = 0.02
+
+// ProxyDeviation returns the largest deviation of got from the reference
+// for the proxy of gopuml's contract, and the object that has it; see
+// ProxyDeviations. Among equal deviations, the first object in sorted order
+// has it.
+func ProxyDeviation(ref, got Plain) (float64, string) {
+	worst, object := 0.0, ""
+	devs := ProxyDeviations(ref, got)
+	for _, name := range slices.Sorted(maps.Keys(devs)) {
+		if devs[name] > worst {
+			worst, object = devs[name], name
+		}
+	}
+	return worst, object
+}
+
+// ProxyDeviations returns the deviation of each object of the proxy of
+// gopuml's contract: the relative difference of the graph width and height,
+// and the distance of each node and edge label center from the reference's,
+// the larger of its two axes, each as a fraction of the reference's graph
+// width or height. A node or label that only one side has deviates by 1.
+func ProxyDeviations(ref, got Plain) map[string]float64 {
+	devs := map[string]float64{}
+	relative := func(d, size float64) float64 {
+		if size == 0 {
+			return 0
+		}
+		return math.Abs(d) / size
+	}
+	devs["graph width"] = relative(got.Width-ref.Width, ref.Width)
+	devs["graph height"] = relative(got.Height-ref.Height, ref.Height)
+	centers := func(kind string, refCenters, gotCenters map[string]Point) {
+		for name, r := range refCenters {
+			g, ok := gotCenters[name]
+			if !ok {
+				devs[kind+" "+name+" missing"] = 1
+				continue
+			}
+			devs[kind+" "+name] = max(relative(g.X-r.X, ref.Width), relative(g.Y-r.Y, ref.Height))
+		}
+		for name := range gotCenters {
+			if _, ok := refCenters[name]; !ok {
+				devs[kind+" "+name+" not in the reference"] = 1
+			}
+		}
+	}
+	centers("node", ref.NodeCenters, got.NodeCenters)
+	centers("label of", ref.LabelCenters, got.LabelCenters)
+	return devs
+}
+
+// PassesProxy reports whether a case passes the proxy of gopuml's contract,
+// from its deviation and the SSIM of its svg.
+func PassesProxy(deviation, ssim float64) bool {
+	return deviation <= ProxyTolerance && ssim >= MinSSIM
 }
 
 func sameMultiset(a, b []string) bool {

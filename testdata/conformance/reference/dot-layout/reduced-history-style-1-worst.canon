@@ -1,0 +1,7 @@
+digraph unix {
+	node [label="\N"];
+	sh0011 -> sh0007;
+	sh0010 -> sh0006;
+	sh0008 -> sh0006;
+	sh0009 -> sh0007;
+}

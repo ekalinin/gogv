@@ -1,8 +1,8 @@
 # Conformance report
 
 - Reference: Graphviz 16.1.0 built without Pango
-- Cases: 587
-- Corpora: curated 277, gopuml 260 (gopuml v0.3.0), gopuml-clusters 36 (gopuml v0.3.0), cli 14
+- Cases: 607
+- Corpora: curated 297, gopuml 260 (gopuml v0.3.0), gopuml-clusters 36 (gopuml v0.3.0), cli 14
 
 ## By capability
 
@@ -14,7 +14,7 @@
 | description-diagram | 11 | 11 | 0 | 0 | 0 |
 | diagram-source | 4 | 4 | 0 | 0 | 0 |
 | dot-language | 107 | 68 | 3 | 36 | 0 |
-| dot-layout | 139 | 129 | 9 | 1 | 0 |
+| dot-layout | 159 | 129 | 29 | 1 | 0 |
 | gopuml-clusters | 36 | 35 | 1 | 0 | 0 |
 | graph-layout | 1 | 1 | 0 | 0 | 0 |
 | legacy-activity-diagram | 13 | 13 | 0 | 0 | 0 |
@@ -36,20 +36,50 @@
 
 | Name | Cases | Passed | Known differences | Not supported yet | Failed |
 |---|---|---|---|---|---|
-| canon | 573 | 536 | 0 | 37 | 0 |
-| plain | 573 | 521 | 15 | 37 | 0 |
+| canon | 593 | 556 | 0 | 37 | 0 |
+| plain | 593 | 537 | 19 | 37 | 0 |
 | plain-ext | 24 | 24 | 0 | 0 | 0 |
-| svg | 573 | 504 | 32 | 37 | 0 |
+| svg | 593 | 505 | 51 | 37 | 0 |
 | svg_inline | 24 | 23 | 1 | 0 | 0 |
-| dot | 277 | 233 | 7 | 37 | 0 |
+| dot | 297 | 249 | 11 | 37 | 0 |
 | gv | 24 | 24 | 0 | 0 | 0 |
-| xdot | 277 | 233 | 7 | 37 | 0 |
+| xdot | 297 | 249 | 11 | 37 | 0 |
 | xdot1.2 | 24 | 24 | 0 | 0 | 0 |
 | xdot1.4 | 24 | 24 | 0 | 0 | 0 |
-| json | 277 | 233 | 7 | 37 | 0 |
+| json | 297 | 249 | 11 | 37 | 0 |
 | json0 | 24 | 24 | 0 | 0 | 0 |
 | dot_json | 24 | 24 | 0 | 0 | 0 |
 | xdot_json | 24 | 24 | 0 | 0 | 0 |
+
+## gopuml contract proxy
+
+273 of 296 cases of the gopuml corpora pass the proxy of gopuml's contract: a `plain` size within 2%, every node and edge label center within 2% of the graph size, and an SVG at SSIM 0.90 or more. The proxy does not change the outcomes.
+
+| Case | Largest deviation | Object | SSIM |
+|---|---|---|---|
+| chen-eer-diagram/entities-relationship-and-attributes-1 | 53.9% | label of sh0010->sh0006#0 | 0.7404 |
+| vega-migration/ChenMovie_Test-1 | 48.0% | node sh0007 | 0.8090 |
+| gopuml-clusters/vega-scxml-state3-1 | 37.1% | label of sh0025->sh0017#0 | 0.4361 |
+| vega-scxml/state3-1 | 37.1% | label of sh0025->sh0017#0 | 0.5923 |
+| vega-migration/ChenMovieExtended_Test-1 | 30.8% | node sh0013 | 0.8670 |
+| vega-migration/ChenMovieAlias_Test-1 | 28.5% | node sh0013 | 0.8680 |
+| state-diagram/choice-fork-join-1 | 24.7% | node sh0006 | 0.7133 |
+| state-diagram/junction-1 | 21.2% | label of sh0006->sh0008#0 | 0.9190 |
+| gopuml-clusters/state-diagram-history-state-1 | 18.2% | label of sh0014->sh0013#0 | 0.9738 |
+| state-diagram/history-state-1 | 18.2% | label of sh0014->sh0013#0 | 0.9753 |
+| vega-svg/interactive-SVG0006_Svek-1 | 17.4% | label of sh0006->sh0007#0 | 0.8028 |
+| vega-scxml/junction-pseudostate-1 | 12.3% | label of sh0006->sh0008#0 | 0.9084 |
+| vega-state/junction-pseudostate-1 | 12.3% | label of sh0006->sh0008#0 | 0.9084 |
+| gopuml-clusters/vega-scxml-state4-1 | 10.6% | node sh0010 | 0.9786 |
+| vega-scxml/state4-1 | 10.6% | node sh0010 | 0.9786 |
+| vega-svg/id-component_01-1 | 9.1% | graph height | 0.5905 |
+| vega-nonreg/simple-A0004-1 | 8.0% | node sh0012 | 0.8610 |
+| state-diagram/history-style-1 | 6.8% | node sh0006 | 0.7064 |
+| vega-nonreg/group2681-history_style_all_forms-1 | 6.8% | node sh0006 | 0.7064 |
+| vega-nonreg/simple-ComponentExtraArrows_0001-1 | 4.1% | node sh0007 | 0.8178 |
+| vega-scxml/state2-1 | 4.1% | graph width | 0.8736 |
+| chen-eer-diagram/bold-only-from-the-left-1 | 3.9% | label of sh0006->sh0008#0 | 0.9194 |
+| vega-nonreg/group2917-smetana_hide_state_plain_edges-1 | 1.0% | label of sh0007->sh0008#0 | 0.8669 |
 
 ## Cases not passed
 
@@ -103,6 +133,26 @@
 | dot-layout/fontname-verdana | not supported yet |  |
 | dot-layout/long-edges | known difference | svg: SSIM 0.4851 is below 0.90 |
 | dot-layout/port-flat-arc | known difference | plain: plain height 0.55556 is not within 5% of the reference 0.84095; svg: svg height 48 is not within 5% of the reference 69 SSIM 0.5692 is below 0.90; dot: bb height 40 is not within 5% of the reference 60.549; xdot: bb height 40 is not within 5% of the reference 60.549; json: bb height 40 is not within 5% of the reference 60.549 |
+| dot-layout/reduced-ChenMovieAlias_Test-1 | known difference | svg: SSIM 0.8223 is below 0.90 |
+| dot-layout/reduced-ChenMovieAlias_Test-1-worst | known difference | svg: SSIM 0.6226 is below 0.90 |
+| dot-layout/reduced-ChenMovie_Test-1 | known difference | svg: SSIM 0.8738 is below 0.90 |
+| dot-layout/reduced-ChenMovie_Test-1-worst | known difference | svg: SSIM 0.7758 is below 0.90 |
+| dot-layout/reduced-choice-fork-join-1 | known difference |  |
+| dot-layout/reduced-choice-fork-join-1-worst | known difference | svg: SSIM 0.5538 is below 0.90 |
+| dot-layout/reduced-entities-relationship-and-attributes-1 | known difference | svg: SSIM 0.8195 is below 0.90 |
+| dot-layout/reduced-entities-relationship-and-attributes-1-worst | known difference | svg: SSIM 0.8213 is below 0.90 |
+| dot-layout/reduced-history-style-1 | known difference | svg: SSIM 0.8630 is below 0.90 |
+| dot-layout/reduced-history-style-1-worst | known difference | svg: SSIM 0.8623 is below 0.90 |
+| dot-layout/reduced-interactive-SVG0006_Svek-1 | known difference | svg: SSIM 0.8008 is below 0.90 |
+| dot-layout/reduced-interactive-SVG0006_Svek-1-worst | known difference | svg: SSIM 0.8907 is below 0.90 |
+| dot-layout/reduced-simple-A0004-1 | known difference | svg: SSIM 0.5258 is below 0.90 |
+| dot-layout/reduced-simple-A0004-1-worst | known difference | plain: plain width 2.4592 is not within 5% of the reference 2.6176; svg: svg width 185 is not within 5% of the reference 196 SSIM 0.7143 is below 0.90; dot: bb width 177.06 is not within 5% of the reference 188.47; xdot: bb width 177.06 is not within 5% of the reference 188.47; json: bb width 177.06 is not within 5% of the reference 188.47 |
+| dot-layout/reduced-simple-ComponentExtraArrows_0001-1 | known difference | plain: plain width 2.0739 is not within 5% of the reference 1.9353; svg: svg width 157 is not within 5% of the reference 147 SSIM 0.6155 is below 0.90; dot: bb width 149.32 is not within 5% of the reference 139.34; xdot: bb width 149.32 is not within 5% of the reference 139.34; json: bb width 149.32 is not within 5% of the reference 139.34 |
+| dot-layout/reduced-simple-ComponentExtraArrows_0001-1-worst | known difference | svg: SSIM 0.7624 is below 0.90 |
+| dot-layout/reduced-state2-1 | known difference | svg: SSIM 0.6513 is below 0.90 |
+| dot-layout/reduced-state2-1-worst | known difference | svg: SSIM 0.7130 is below 0.90 |
+| dot-layout/reduced-state3-1 | known difference | plain: plain height 0.53125 is not within 5% of the reference 0.85037; svg: svg height 46 is not within 5% of the reference 69 SSIM 0.2956 is below 0.90; dot: bb height 38.25 is not within 5% of the reference 61.227; xdot: bb height 38.25 is not within 5% of the reference 61.227; json: bb height 38.25 is not within 5% of the reference 61.227 |
+| dot-layout/reduced-state3-1-worst | known difference | plain: plain width 2.4149 is not within 5% of the reference 2.2344; svg: svg width 182 is not within 5% of the reference 169 SSIM 0.6828 is below 0.90; dot: bb width 173.87 is not within 5% of the reference 160.87; xdot: bb width 173.87 is not within 5% of the reference 160.87; json: bb width 173.87 is not within 5% of the reference 160.87 |
 | dot-layout/table-edge-not-fixed | known difference | svg: SSIM 0.8848 is below 0.90 |
 | output-formats/tooltips-ids | known difference | svg: SSIM 0.8994 is below 0.90; svg_inline: SSIM 0.8994 is below 0.90 |
 | pprof/cpu | known difference | plain: plain width 27.414 is not within 5% of the reference 24.544; svg: svg width 1982 is not within 5% of the reference 1775 SSIM 0.8179 is below 0.90; dot: bb width 1973.8 is not within 5% of the reference 1767.1; xdot: bb width 1973.8 is not within 5% of the reference 1767.1; json: bb width 1973.8 is not within 5% of the reference 1767.1 |

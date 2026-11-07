@@ -1,0 +1,26 @@
+{
+  "canon": {
+    "status": 0,
+    "stderr": "Warning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0006\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0007\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0006\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0007\n"
+  },
+  "dot": {
+    "status": 0,
+    "stderr": "Warning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0006\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0007\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0006\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0007\n"
+  },
+  "json": {
+    "status": 0,
+    "stderr": "Warning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0006\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0007\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0006\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0007\n"
+  },
+  "plain": {
+    "status": 0,
+    "stderr": "Warning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0006\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0007\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0006\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0007\n"
+  },
+  "svg": {
+    "status": 0,
+    "stderr": "Warning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0006\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0007\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0006\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0007\n"
+  },
+  "xdot": {
+    "status": 0,
+    "stderr": "Warning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0006\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0007\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0006\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node sh0007\n"
+  }
+}

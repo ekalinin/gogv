@@ -246,6 +246,11 @@ type CaseResult struct {
 	Formats  map[string]Outcome
 	Problems map[string]string
 	SSIM     float64
+	// ProxyDeviation is the largest deviation of the case for the proxy of
+	// gopuml's contract, and ProxyObject the object that has it. They play
+	// no part in the outcome.
+	ProxyDeviation float64
+	ProxyObject    string
 }
 
 // Judge compares gogv's results for a case with the reference's.
@@ -380,6 +385,9 @@ type Report struct {
 	Results []CaseResult
 	// Corpora are the corpora of the run, in the order they ran.
 	Corpora []CorpusRun
+	// Proxy holds the results of the cases that the report judges with the
+	// proxy of gopuml's contract: those of the harvested gopuml corpora.
+	Proxy []CaseResult
 }
 
 // CorpusRun is a corpus of a conformance run: its name, its number of cases
@@ -457,6 +465,10 @@ func (r Report) Markdown() string {
 		}
 	}
 
+	if len(r.Proxy) > 0 {
+		r.proxyMarkdown(&b)
+	}
+
 	var other []CaseResult
 	for _, res := range r.Results {
 		if res.Outcome != Passed {
@@ -476,6 +488,29 @@ func (r Report) Markdown() string {
 		}
 	}
 	return b.String()
+}
+
+// proxyMarkdown writes the section of the proxy of gopuml's contract: the
+// number of cases that pass it, then the others by decreasing deviation.
+func (r Report) proxyMarkdown(b *strings.Builder) {
+	var failing []CaseResult
+	for _, res := range r.Proxy {
+		if !PassesProxy(res.ProxyDeviation, res.SSIM) {
+			failing = append(failing, res)
+		}
+	}
+	slices.SortStableFunc(failing, func(a, b CaseResult) int {
+		return cmp.Or(cmp.Compare(b.ProxyDeviation, a.ProxyDeviation), cmp.Compare(a.Case.ID, b.Case.ID))
+	})
+	fmt.Fprintf(b, "\n## gopuml contract proxy\n\n%d of %d cases of the gopuml corpora pass the proxy of gopuml's contract: a `plain` size within %.0f%%, every node and edge label center within %.0f%% of the graph size, and an SVG at SSIM %.2f or more. The proxy does not change the outcomes.\n",
+		len(r.Proxy)-len(failing), len(r.Proxy), ProxyTolerance*100, ProxyTolerance*100, MinSSIM)
+	if len(failing) == 0 {
+		return
+	}
+	b.WriteString("\n| Case | Largest deviation | Object | SSIM |\n|---|---|---|---|\n")
+	for _, res := range failing {
+		fmt.Fprintf(b, "| %s | %.1f%% | %s | %.4f |\n", res.Case.ID, res.ProxyDeviation*100, mdCell(res.ProxyObject), res.SSIM)
+	}
 }
 
 func mdCell(s string) string {
@@ -502,7 +537,9 @@ func Run(cases []Case, refDir string, known map[string]KnownDifference, render R
 		for _, f := range formatsOf(ref) {
 			got[f] = render(c.Source, f)
 		}
-		report.Results = append(report.Results, Judge(c, ref, got, known, r))
+		res := Judge(c, ref, got, known, r)
+		res.ProxyDeviation, res.ProxyObject = proxy(ref, got)
+		report.Results = append(report.Results, res)
 	}
 	if failed := report.Failed(); len(failed) > 0 {
 		ids := make([]string, len(failed))
@@ -512,4 +549,19 @@ func Run(cases []Case, refDir string, known map[string]KnownDifference, render R
 		return report, fmt.Errorf("%d case(s) failed: %s", len(failed), strings.Join(ids, ", "))
 	}
 	return report, nil
+}
+
+// proxy measures the deviation of a case for the proxy of gopuml's contract,
+// from its plain outputs; a case whose plain output cannot be read deviates
+// by 1.
+func proxy(ref Reference, got map[string]Result) (float64, string) {
+	r, err := ParsePlain(ref["plain"].Stdout)
+	if err != nil {
+		return 1, "plain output of the reference"
+	}
+	g, err := ParsePlain(got["plain"].Stdout)
+	if err != nil {
+		return 1, "plain output"
+	}
+	return ProxyDeviation(r, g)
 }

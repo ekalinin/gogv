@@ -1,7 +1,7 @@
 GO ?= go
 REFERENCE_IMAGE ?= gogv-reference
 
-.PHONY: build test lint provenance reference-image reference pprof-corpus harvest conformance determinism perf site release
+.PHONY: build test lint provenance reference-image reference pprof-corpus harvest conformance reduce determinism perf site release
 
 build:
 	$(GO) build ./...
@@ -53,6 +53,13 @@ conformance:
 # Checks that the curated corpus renders byte for byte the same natively,
 # for amd64 and in the WebAssembly build (run on an arm64 host with Rosetta
 # and Node.js).
+# Reduces the DOT input IN, whose layout does not pass the proxy of gopuml's
+# contract against the reference, into OUT; the reference's outputs are
+# cached in .cache/reduce.
+reduce:
+	@test -n "$(IN)" -a -n "$(OUT)" || { echo "reduce: set IN and OUT"; exit 1; }
+	$(GO) run ./tools/reduce -in $(IN) -out $(OUT)
+
 determinism:
 	$(GO) build -o .cache/tools/hash-native ./internal/corpushash
 	GOARCH=amd64 $(GO) build -o .cache/tools/hash-amd64 ./internal/corpushash
