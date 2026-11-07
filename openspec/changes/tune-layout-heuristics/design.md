@@ -155,3 +155,39 @@ Before any mechanism, on `conformance-report.md` of the change's first commit:
 - the 52 known differences all name `tune-layout-heuristics`: the 13 graphs of #28, their 20 reduced cases, and 19 others.
 
 Each mechanism below records the rule found, the probes that support it, and the counts after it.
+
+### M3: ties in the x positioning (probes of task 2.1, not concluded)
+
+The reference does not depend on the order of the statements: `digraph { a -> x; b -> x; c -> y; d -> y }` and its five orders tested all center `x` between `a` and `b`, and `y` between `c` and `d`. gogv centers only `x` when the edges of the two components come interleaved. Centering under a larger part matches: a chain below `x` or `y`, four tails into one head.
+
+The ties are decided by the spanning tree that the network simplex ends with, and by the balancing of its tree edges with a zero cut value. Section 4.3 of Gansner et al. describes the initial feasible tree for the auxiliary graph:
+
+- every separation edge;
+- for each pair of adjacent ranks, both edges of one ranked edge between them;
+- for every other ranked edge, the edge to its leftmost end.
+
+gogv builds it instead from longest paths and a search of tight edges from node 0.
+
+Probes, as x in points (reference / gogv):
+
+| Graph | Reference | gogv | Section 4.3 tree, ties to the lower end |
+|---|---|---|---|
+| `a -> b; c -> d; c -> e` | c 135, d 117, e 189 | c 135, d 99, e 171 | as the reference |
+| `a -> b; c -> d; c -> e [minlen=2]` | c 126, d 112, e 167 | c 126, d 99, e 154 | as the reference |
+| `a -> x; c -> y; b -> x; d -> y` | y 207 | y 171 | y 171 |
+| `a -> b; c -> d; c -> e [minlen=2, label="L"]` | c 131 | c 146 | c 146 |
+
+In the first graph, the reference's result is that of a tree in which the edge node of `c -> d` hangs on `d`, balanced in the order of the edges: `c` first (36 points), then `{d, e}` (18 points). The section 4.3 tree gives this tree when a tie between the two ends goes to the lower one.
+
+In the last graph:
+
+- gogv's balancing moves `c` by 31, half of a range of 63 truncated, where the reference's result needs 32;
+- gogv then moves a part that holds `c` by 16 more, which the reference does not move.
+
+On the corpora, the section 4.3 tree changes the layout of few graphs:
+
+- no reduced case gets closer to the reference;
+- `vega-nonreg/group2917-smetana_hide_state_plain_edges-1` goes from a deviation of 1.0% to 13.5%.
+
+Conclusion so far: the ties depend on the whole path of the reference's network simplex, which a black box shows only through its results: the initial tree, the choice of the edges that leave and enter, the order of the balancing and its rounding. The section 4.3 tree is part of it, but not enough alone.
+
