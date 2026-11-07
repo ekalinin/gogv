@@ -12,9 +12,9 @@
 
 ## 2. Reduction tool
 
-- [ ] 2.1 Add `tools/reduce` with the parsing into units and the printing of an AST as DOT (design D4). Add the round-trip test on every curated case, and on every gopuml case when the corpus is collected. Verify that the printed input of each gives the same `canon` output as the original.
-- [ ] 2.2 Add the search: ddmin over statements, then attributes, then the replacement of subgraphs, with the predicate as a function. Add a test for the "Unrelated statements removed" scenario and one for the "Another difference" scenario, with fake references. Verify that the tests pass.
-- [ ] 2.3 Add the reference run with its cache, the predicate of design D4, and the `reduce` target of the `Makefile`. Run it on `vega-scxml/state2-1`. Verify:
+- [x] 2.1 Add `tools/reduce` with the parsing into units and the printing of an AST as DOT (design D4). Add the round-trip test on every curated case, and on every gopuml case when the corpus is collected. Verify that the printed input of each gives the same `canon` output as the original.
+- [x] 2.2 Add the search: ddmin over statements, then attributes, then the replacement of subgraphs, with the predicate as a function. Add a test for the "Unrelated statements removed" scenario and one for the "Another difference" scenario, with fake references. Verify that the tests pass.
+- [x] 2.3 Add the reference run with its cache, the predicate of design D4, and the `reduce` target of the `Makefile`. Run it on `vega-scxml/state2-1`. Verify:
   - it writes a smaller input that gogv renders without a warning;
   - that input still fails the proxy on one of the original's failing objects;
   - a second run uses the cache and runs no container.

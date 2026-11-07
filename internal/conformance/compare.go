@@ -209,46 +209,53 @@ func ComparePlain(ref, got Plain, tolerance float64) error {
 const ProxyTolerance = 0.02
 
 // ProxyDeviation returns the largest deviation of got from the reference
-// for the proxy of gopuml's contract, and the object that has it: the
-// relative difference of the graph width and height, and the distance of
-// each node and edge label center from the reference's on each axis, as a
-// fraction of the reference's graph width or height. A node or label that
-// only one side has deviates by 1.
+// for the proxy of gopuml's contract, and the object that has it; see
+// ProxyDeviations. Among equal deviations, the first object in sorted order
+// has it.
 func ProxyDeviation(ref, got Plain) (float64, string) {
 	worst, object := 0.0, ""
-	note := func(d float64, what string) {
-		if d > worst {
-			worst, object = d, what
+	devs := ProxyDeviations(ref, got)
+	for _, name := range slices.Sorted(maps.Keys(devs)) {
+		if devs[name] > worst {
+			worst, object = devs[name], name
 		}
 	}
+	return worst, object
+}
+
+// ProxyDeviations returns the deviation of each object of the proxy of
+// gopuml's contract: the relative difference of the graph width and height,
+// and the distance of each node and edge label center from the reference's,
+// the larger of its two axes, each as a fraction of the reference's graph
+// width or height. A node or label that only one side has deviates by 1.
+func ProxyDeviations(ref, got Plain) map[string]float64 {
+	devs := map[string]float64{}
 	relative := func(d, size float64) float64 {
 		if size == 0 {
 			return 0
 		}
 		return math.Abs(d) / size
 	}
-	note(relative(got.Width-ref.Width, ref.Width), "graph width")
-	note(relative(got.Height-ref.Height, ref.Height), "graph height")
+	devs["graph width"] = relative(got.Width-ref.Width, ref.Width)
+	devs["graph height"] = relative(got.Height-ref.Height, ref.Height)
 	centers := func(kind string, refCenters, gotCenters map[string]Point) {
-		for _, name := range slices.Sorted(maps.Keys(refCenters)) {
-			r := refCenters[name]
+		for name, r := range refCenters {
 			g, ok := gotCenters[name]
 			if !ok {
-				note(1, kind+" "+name+" missing")
+				devs[kind+" "+name+" missing"] = 1
 				continue
 			}
-			note(relative(g.X-r.X, ref.Width), kind+" "+name)
-			note(relative(g.Y-r.Y, ref.Height), kind+" "+name)
+			devs[kind+" "+name] = max(relative(g.X-r.X, ref.Width), relative(g.Y-r.Y, ref.Height))
 		}
-		for _, name := range slices.Sorted(maps.Keys(gotCenters)) {
+		for name := range gotCenters {
 			if _, ok := refCenters[name]; !ok {
-				note(1, kind+" "+name+" not in the reference")
+				devs[kind+" "+name+" not in the reference"] = 1
 			}
 		}
 	}
 	centers("node", ref.NodeCenters, got.NodeCenters)
 	centers("label of", ref.LabelCenters, got.LabelCenters)
-	return worst, object
+	return devs
 }
 
 // PassesProxy reports whether a case passes the proxy of gopuml's contract,
