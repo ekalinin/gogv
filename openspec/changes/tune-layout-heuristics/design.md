@@ -364,6 +364,15 @@ All are worse than gogv's breadth-first search from the sources in node order: 1
 
 A simulation of 60 initial orders on 84 small graphs without crossings, each in up to 12 statement orders, explains at best 59 of them, gogv's 58. The reference's initial order thus follows another rule, or `mincross` changes it from an order with crossings.
 
+The rule found next: the breadth-first search takes the sources in the order of a depth-first search of the component from its first node, along the edges down before those up, instead of in node order.
+
+- In `digraph { f -> g; c -> f; b -> g }`, with the nodes as `f, g, c, b`, the search visits `f, g, b, c`, so that `b` comes first; with `g, f, c, b`, it visits `g, f, c, b`, and `c` comes first. The rule gives the reference's order for the six statement orders and the six declarations of the nodes.
+- In the simulation, it gives the reference's order for 66 of the 84 small graphs, and for none of the others: their initial orders have crossings, which `mincross` then changes.
+- In gogv, the orders match for 373 random graphs without labels, against 360, and 342 with labels, against 332; the layouts match exactly for 279 random graphs, against 268.
+- No gopuml or curated case changes its order or its outputs.
+
+The order of the label nodes in the graphs of #28 is thus not explained by the initial order.
+
 ### Separation next to a rank of its own (task 8.1, not concluded)
 
 `digraph { a -> b; c -> d [label="L"]; subgraph { rank=source; s } }` shows the form of `reduced-state3-1-worst`: the reference puts `c` 59 points right of `a`, gogv 72. Measured with the default sizes:
