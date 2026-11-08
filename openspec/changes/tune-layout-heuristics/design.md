@@ -245,6 +245,19 @@ C1 is implemented as a first step of task 4.2. After it:
 - no other case changes its outcome;
 - the outputs are the same on amd64, arm64 and WebAssembly.
 
+On top of C1, every choice among tied leaving and entering edges was enumerated on the probes, with C1's balancing:
+
+- the leaving edge that the reference's layout needs differs from graph to graph:
+  - in `b -> e; b -> c; c -> e; d -> a`, the separation `b`-`d`;
+  - in `a -> b; c -> d; c -> e; f -> g`, the second separation of rank 0;
+  - in `a -> b; c -> d; c -> e [minlen=2, label="L"]`, twice a separation before an edge to an edge node;
+  - in `history-style-1`, the edge `sh0008 -> sh0006` before the separation `sh0006`-`sh0007`;
+  - in `group2917`, the edges of the `f`s before the separations;
+- in `a -> b [label="LLLLLLLLLLLL"]; b -> c; c -> a`, the probe with three ranks of `minlen=2`, and the three probes of the Chen form with `s10`, no path gives the reference's layout. In `digraph { s10 -> s6; s10 -> s8 [minlen=2, label="L"] }`, one path has the reference's positions before the balancing, and its first step puts `s10` where the reference does. Its second step then moves the part that holds `s6` and `s8`, where the reference's result moves only the virtual node between `s10` and `s6`. The reference thus balances another tree at the same positions;
+- with the weight 2 of section 4.2 for an edge between a real and a virtual node, the ties of the first graph disappear, but only 142 random graphs match, against 267: the weight 1 holds.
+
+C1's model of the balancing is thus incomplete for these graphs, and a rule for the leaving edge cannot be found from it.
+
 Variants rejected:
 
 - the last of equal edges, on the current tree: `history-style-1` goes from 6.8% to 12.1% and `group2917` to 20.2%, and `chen-eer-diagram/element-styles-1` fails;
