@@ -315,6 +315,20 @@ After `tieReverse: 1`:
 - 607 cases: 525 passed, 43 known differences, 39 not supported yet, 0 failed; 275 of 296 gopuml cases pass the proxy;
 - the outputs are the same on amd64, arm64 and WebAssembly.
 
+### Separation next to a rank of its own (task 8.1, not concluded)
+
+`digraph { a -> b; c -> d [label="L"]; subgraph { rank=source; s } }` shows the form of `reduced-state3-1-worst`: the reference puts `c` 59 points right of `a`, gogv 72. Measured with the default sizes:
+
+- the gap between `a` and `c`, sides to sides, is 5 points for `nodesep` up to 21.6, then 9, 19, 37, 54, 82 and 127 points for `nodesep` 25.2, 28.8, 36, 43.2, 54 and 72: about 2.5 `nodesep` less 53;
+- it does not depend on the widths of the nodes nor on the width of the label, and a third component keeps the same gap;
+- without the label, with `minlen=2` instead of it, with `rank=sink`, `rank=min` or `rank=max`, or with an edge from `s`, the layouts are the same as gogv's.
+
+No mechanism explains these numbers yet.
+
+### Edges between the same nodes with labels (task 7.1, not concluded)
+
+In `digraph { a -> b [label="LLLLLLLLLLLL"]; a -> b }`, the reference's unlabeled curve crosses the height of the label 2.0, 6.8, 11.2 and 16.0 points right of the label, for `nodesep` 18, 36, 54 and 72: about a quarter of `nodesep` less 2.5. With a third edge to another node, the gaps grow by 3.4 to 6.6 points. These are curves, not the virtual nodes they pass by: the rule depends on the extents and positions of the label nodes, as in task 5.
+
 ### M4: flat edges over nodes (task 2.1)
 
 The reference reorders a rank so that a flat edge joins neighbors when it can: `{rank=same; a; b; c} a -> c` puts `c` next to `a`. An edge goes over nodes when the order forbids it, as with two flat edges into the same head: `a -> c [minlen=0]; b -> c [minlen=0]`.
