@@ -21,18 +21,16 @@ Issue #28: 12 of gopuml's conformance cases fail because gogv lays out their gra
 
 ## What Changes
 
-- The x positioning breaks its ties as the reference does: a node, or a part of the drawing, that edges pull equally both ways lies halfway across the range where its cost does not change.
-- Edge labels take the room that the reference gives them when a labeled edge shares its nodes with another edge, lies in a cycle, or is in one of several components.
-- The order within ranks breaks its ties as the reference does, so that gogv does not lay out the mirror of the reference's order.
+- The x positioning starts from the initial feasible tree of section 4.3 of Gansner et al., and balances the parts of the tree with a zero cut value in the order of its edges, as the reference does in the forms probed.
+- The order within ranks takes the sources of a component in the order of a search of it, and flips the nodes with equal medians on the passes down, as the reference does in the forms probed.
+- The shorter edges are routed first, and a routed edge keeps the edges routed after it clear of its curve, as section 5.1.1 of Gansner et al. describes.
 - A flat edge between nodes that are not neighbors goes over the nodes between them as the reference's curve does, and the drawing's box includes it.
 - The label of a flat edge with a port lies where the reference puts it.
-- The 13 graphs and their 20 reduced cases pass the proxy of gopuml's contract, and leave `known-differences.yaml`. The other known differences are judged again:
-  - those that pass leave it;
-  - the others name a new follow-up change, `refine-layout-heuristics`.
-- A release with these layouts, so that gopuml can require it and remove its own entries.
+- The cases that pass the contract leave `known-differences.yaml`, among them `history-style-1`, `group2681-history_style_all_forms-1` and the reduced cases of these forms. The other known differences name a new follow-up change, `refine-layout-heuristics`.
+- A release with these layouts, so that gopuml can require it and remove the entries of the graphs that pass.
 
-Out of scope:
-- the known differences that these mechanisms do not explain, which stay listed with `refine-layout-heuristics`;
+Out of scope, moved to `refine-layout-heuristics` (design D10):
+- the other graphs of #28, whose remaining forms the probes of this change do not explain: the order of the label nodes (the Chen graphs, `simple-A0004-1`, `simple-ComponentExtraArrows_0001-1`, `state3-1`, `interactive-SVG0006_Svek-1`), of which the probes isolate one form, two labeled chains from one node; the ties of the positioning that the rule found does not reproduce; the room of labels between the same nodes and in a cycle; and the separation next to a rank of its own;
 - any change of the proxy or of the layered similarity contract.
 
 ## Capabilities
@@ -43,15 +41,14 @@ None.
 
 ### Modified Capabilities
 
-- `dot-layout`: how ties are broken in the order within ranks and in the positioning; the room of edge labels; the curve of a flat edge over nodes; the label of a flat edge with a port.
+- `dot-layout`: how ties are broken in the order within ranks and in the positioning; the order in which edges are routed; the curve of a flat edge over nodes; the label of a flat edge with a port.
 
 ## Impact
 
 - Code: `internal/layout`:
   - the order (`order.go`);
   - the positioning and its balancing (`position.go`, `simplex.go`);
-  - the room of label nodes (`layout.go`);
-  - the routes of flat edges and the places of their labels (`route.go`, `layout.go`).
+  - the order of the routes, and the routes of flat edges and the places of their labels (`route.go`, `layout.go`).
 - Tests:
   - the scenarios of the delta spec;
   - a conformance test that requires every reduced case not listed in `known-differences.yaml` to pass the proxy.

@@ -21,7 +21,7 @@ See proposal.md for the motivation, the delta spec of `dot-layout` for the behav
 
 **Goals:**
 
-- The 13 graphs of #28 and their 20 reduced cases pass the proxy, so that gopuml's check passes after the release.
+- The 13 graphs of #28 and their 20 reduced cases pass the proxy, so that gopuml's check passes after the release. The change stops short of it (D10).
 - Each mechanism is fixed by a rule that holds on variants of its reduced cases, not only on the cases themselves.
 - No case that passes today fails, and the number of gopuml cases that pass the proxy does not go down.
 
@@ -129,6 +129,15 @@ At the end:
 ### D9. Release
 
 The layouts change, so the release is a minor one: v0.4.0. Its notes and the landing page go in one pull request, as the Releasing section of the README asks: the changed outputs and the conformance results. The tag follows after the merge and a green CI, with the maintainer's approval.
+
+### D10. Scope after the probes
+
+The probes found rules for part of the mechanisms, and the others proved to depend on choices of the reference that its outputs do not show (Findings). The change keeps what the rules lay out as the reference does, with no case failing, and stops there:
+
+- implemented: the initial tree of section 4.3 and the order of the balancing (M3, in part); the sources in search order and the flip of equal medians on the passes down (M2, in part); the routing order of section 5.1.1 and the gates clear of routed curves (task 5, in part); the flat edges over nodes (M4); the labels of flat edges with ports (M5, in part);
+- moved to `refine-layout-heuristics`, with their reduced cases and Findings: the order of the label nodes, the ties of the positioning that the rule does not reproduce, the room of labels between the same nodes and in a cycle, the separation next to a rank of its own, and the route of a flat edge through its label.
+
+The delta spec states what is implemented; the scenarios of the moved forms leave it.
 
 ## Risks / Trade-offs
 
@@ -493,4 +502,26 @@ The tasks follow this map:
 3. the ties of M2;
 4. the edges between the same nodes;
 5. the separation next to a rank of its own.
+
+### Outcome for #28 (task 9.1)
+
+The 13 graphs in the report at the end of the change, with the largest deviation of the proxy before and after, and what each still needs:
+
+| Graph | Before | After | Still needed |
+|---|---|---|---|
+| `state-diagram/history-style-1` | 6.8% | passes | |
+| `vega-nonreg/group2681-history_style_all_forms-1` | 6.8% | passes | |
+| `state-diagram/choice-fork-join-1` | 24.7% | 1.2%, SSIM 0.851 | the curves of its labeled edges |
+| `chen-eer-diagram/entities-relationship-and-attributes-1` | 53.9% | 53.9% | the order of two labeled chains from one node (S1); the ties of the positioning of the Chen form |
+| `vega-migration/ChenMovie_Test-1` | 48.0% | 48.0% | the order of the label nodes; the ties of the positioning of the Chen form |
+| `vega-migration/ChenMovieAlias_Test-1` | 28.5% | 28.5% | the same as `ChenMovie_Test-1` |
+| `vega-migration/ChenMovieExtended_Test-1` | 30.8% | 30.8% | the same as `ChenMovie_Test-1` |
+| `vega-scxml/state2-1` | 4.1% | 4.1% | the label in a cycle |
+| `vega-scxml/state3-1` | 37.1% | 37.1% | the order of the label nodes; the separation next to a rank of its own |
+| `gopuml-clusters/vega-scxml-state3-1` | 37.1% | 37.1% | the same |
+| `vega-nonreg/simple-A0004-1` | 8.0% | 4.8% | the order of the label nodes; the positions of `reduced-simple-A0004-1-worst` |
+| `vega-nonreg/simple-ComponentExtraArrows_0001-1` | 4.1% | 4.1% | the order of the label nodes; the edges between the same nodes with labels |
+| `vega-svg/interactive-SVG0006_Svek-1` | 17.4% | 12.6% | the order of the label nodes; the route of a flat edge through its label |
+
+The eleven that still fail keep their entries, with `refine-layout-heuristics`.
 

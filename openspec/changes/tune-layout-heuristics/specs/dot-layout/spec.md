@@ -2,7 +2,7 @@
 
 ### Requirement: Order within ranks
 
-The system SHALL order the nodes of each rank to reduce edge crossings, with the median and transposition heuristics of Gansner et al. When no edge decides between two nodes, the system SHALL keep their input order. Between orders with the same number of crossings, the system SHALL choose the reference's order, and SHALL NOT lay out its mirror. `remincross` and `searchsize` SHALL be accepted.
+The system SHALL order the nodes of each rank to reduce edge crossings, with the median and transposition heuristics of Gansner et al. When no edge decides between two nodes, the system SHALL keep their input order. As the reference does, the initial order SHALL take the sources of each component in the order of a depth-first search of it from its first node, along the edges down before those up, and the sort by medians SHALL swap the nodes with equal medians on the passes down, so that between orders with the same number of crossings the system chooses the reference's order in the scenarios below. `remincross` and `searchsize` SHALL be accepted.
 
 #### Scenario: Crossing removed
 
@@ -19,9 +19,14 @@ The system SHALL order the nodes of each rank to reduce edge crossings, with the
 - **WHEN** the graph is `digraph { a -> b [label="LLLLLL"]; a -> c; d -> b }`
 - **THEN** `a` lies left of `d`, and `c` left of `b`, as the reference orders them
 
+#### Scenario: Sources in the order of a search
+
+- **WHEN** the graph is `digraph { f -> g; c -> f; b -> g }`
+- **THEN** `b` lies left of `f`, as the reference orders them
+
 ### Requirement: Positioning
 
-Within the separation constraints, the system SHALL place nodes to keep edges short and straight, each edge weighed by its `weight` (default 1) times the factor of Gansner et al. for the virtual nodes it joins, as the positioning of Gansner et al. does. Among positions of equal cost, a node, or a part of the drawing, that the edges pull equally to the left and to the right SHALL lie halfway across the range in which its cost does not change, within a point, as the reference places it.
+Within the separation constraints, the system SHALL place nodes to keep edges short and straight, each edge weighed by its `weight` (default 1) times the factor of Gansner et al. for the virtual nodes it joins, as the positioning of Gansner et al. does. Among positions of equal cost, the system SHALL choose as the reference does in the scenarios below: it SHALL start from the initial feasible tree of section 4.3 of Gansner et al., and balance the parts of the tree whose cut value is zero in the order of the tree's edges.
 
 #### Scenario: Straight chain
 
@@ -43,14 +48,9 @@ Within the separation constraints, the system SHALL place nodes to keep edges sh
 - **WHEN** the graph is `digraph { a -> x; c -> y; b -> x; d -> y }`
 - **THEN** `x` lies halfway between `a` and `b`, and `y` halfway between `c` and `d`
 
-#### Scenario: Tail between a node and a labeled edge
-
-- **WHEN** the graph is `digraph { a -> b; c -> d; c -> e [minlen=2, label="L"] }`
-- **THEN** `c` lies halfway between `d` and `e`, within a point
-
 ### Requirement: Edge routing
 
-With `splines=spline` (the default), edges SHALL be smooth curves made of cubic Bezier segments. With `splines=polyline`, edges SHALL be made of straight segments. Edges SHALL start and end on the outlines of their nodes, SHALL be routed around nodes other than their own, and edges between the same two nodes SHALL be drawn as distinct curves. An edge from a node to itself SHALL be drawn as a loop beside the node. An edge between two nodes of the same rank SHALL be drawn between them; when they are not neighbors, it SHALL go over the nodes between them, as high as the reference's curve goes, and the drawing's box SHALL include it.
+With `splines=spline` (the default), edges SHALL be smooth curves made of cubic Bezier segments. With `splines=polyline`, edges SHALL be made of straight segments. Edges SHALL start and end on the outlines of their nodes, SHALL be routed around nodes other than their own, and edges between the same two nodes SHALL be drawn as distinct curves. An edge from a node to itself SHALL be drawn as a loop beside the node. An edge between two nodes of the same rank SHALL be drawn between them; when they are not neighbors, it SHALL go over the nodes between them, as high as the reference's curve goes, and the drawing's box SHALL include it. As section 5.1.1 of Gansner et al. describes, the shorter edges SHALL be routed first, and an edge routed SHALL keep those routed after it clear of its curve rather than of its virtual nodes.
 
 #### Scenario: Edge avoids a node
 
@@ -72,49 +72,15 @@ With `splines=spline` (the default), edges SHALL be smooth curves made of cubic 
 - **WHEN** the graph has `splines=polyline`
 - **THEN** every edge is made of straight segments
 
+#### Scenario: Label clear of an edge routed before
+
+- **WHEN** the graph is `digraph { l -> m; x -> r; x -> l [label="LLLLLL"] }`
+- **THEN** the center of the label lies 28 points right of the center of `l`, within 2 points, as the reference puts it
+
 #### Scenario: Flat edge over a node
 
 - **WHEN** the graph is `digraph { a -> c [minlen=0]; b -> c [minlen=0] }`
 - **THEN** the curve of `a -> c` goes over `b`, and the drawing is 60 points high, within 2%, where its nodes are 36 points high
-
-### Requirement: Edge labels
-
-The `label` of an edge between two ranks SHALL be drawn beside the edge, halfway between its ends, with its left side on the edge, and SHALL take room in the layout, as the reference's off-center virtual nodes do (Gansner et al., section 5.3), so that it overlaps no node, edge or other label. As the reference does, a graph with at least one edge label SHALL have its ranks laid out with a rank between every two of its ranks, half `ranksep` apart from them, and each edge label SHALL lie on the rank halfway along its edge. The label SHALL be set in the edge's `fontname`, `fontsize` and `fontcolor`. In `rankdir=LR`, the label SHALL lie above the edge. Two edges with labels between the same nodes SHALL be drawn as two curves, each with its own label. An edge label SHALL take the room that the reference gives it also when its edge shares its nodes with another edge, lies in a cycle, or is in one of several components.
-
-#### Scenario: Label beside the edge
-
-- **WHEN** the graph is `digraph { a -> b [label="x"] }`
-- **THEN** `x` is drawn between `a` and `b`, its left side on the edge, and `a` is farther above `b` than in `digraph { a -> b }`
-
-#### Scenario: Ranks of the other edges
-
-- **WHEN** the graph is `digraph { a -> b [label="x"]; c -> d }`
-- **THEN** `c` is on the rank of `a` and `d` on the rank of `b`
-
-#### Scenario: Font of an edge label
-
-- **WHEN** an edge has `label="x"`, `fontname="Helvetica"`, `fontsize=20` and `fontcolor="#FF0000"`
-- **THEN** `x` is set in Helvetica, 20 points, in red
-
-#### Scenario: Left to right
-
-- **WHEN** the graph is `digraph { rankdir=LR; a -> b [label="x"] }`
-- **THEN** `x` is drawn above the edge, between `a` and `b`
-
-#### Scenario: Two labeled edges between the same nodes
-
-- **WHEN** the graph is `digraph { a -> b [label="x"]; a -> b [label="y"] }`
-- **THEN** the two edges are two different curves, `x` beside one and `y` beside the other
-
-#### Scenario: Labeled and unlabeled edges between the same nodes
-
-- **WHEN** the graph is `digraph { a -> b [label="LLLLLLLLLLLL"]; a -> b }`
-- **THEN** the drawing is 108 points wide, within 2%, as the reference's
-
-#### Scenario: Labeled edge in a cycle
-
-- **WHEN** the graph is `digraph { a -> b [label="LLLLLLLLLLLL"]; b -> c; c -> a }`
-- **THEN** the drawing is 112 points wide, and the centers of the nodes and of the label are within 2% of its size of the reference's
 
 ### Requirement: Labels of flat edges and loops
 

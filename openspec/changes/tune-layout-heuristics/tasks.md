@@ -36,65 +36,50 @@ Cases: `reduced-interactive-SVG0006_Svek-1` and its `-worst`.
 
 ## 4. Ties in the x positioning (M3)
 
-The probes of M1 (Findings) show that its form in a cycle is a tie as well. Cases: `reduced-history-style-1` and its `-worst`, `reduced-entities-relationship-and-attributes-1` and its `-worst`, `reduced-ChenMovie_Test-1`, `reduced-ChenMovieAlias_Test-1`, `reduced-state2-1` and its `-worst`. `reduced-simple-A0004-1-worst` and `reduced-ChenMovieAlias_Test-1-worst` are checked after this step, and move to the mechanism that they show.
+The scope follows design D10: the rule found is implemented, and the forms it does not reproduce move to `refine-layout-heuristics`. Cases: `reduced-history-style-1` and its `-worst`; the Chen and `state2` cases move.
 
-- [ ] 4.1 Find the path of the reference's network simplex for the x positioning (design D2): the initial tree, the edges that leave and enter, the order of the balancing and its rounding. Compare candidates on the probes of the Findings and on these cases, and record the one chosen with its probes. Verify that it predicts every probe, and that it changes no layout of the curated and gopuml cases that has no tie.
-- [ ] 4.2 Implement it. Add the tests of the "Head between two tails", "Tail between a node and a labeled edge" and "Labeled edge in a cycle" scenarios. Remove the entries of the cases that pass the proxy. Verify:
-  - the scenario tests and `TestReducedCasesPassProxy` pass;
-  - `state-diagram/history-style-1`, `vega-nonreg/group2681-history_style_all_forms-1`, `chen-eer-diagram/entities-relationship-and-attributes-1` and `vega-scxml/state2-1` pass the proxy in the report;
+- [x] 4.1 Find the path of the reference's network simplex for the x positioning (design D2): the initial tree, the edges that leave and enter, the order of the balancing and its rounding. Compare candidates on the probes of the Findings and on the corpora, and record the one chosen, C1, with its probes and what it does not reproduce. Verify that C1 lays out `history-style-1` and `group2917` as the reference does, and that no case fails.
+- [x] 4.2 Implement C1. Add the test of the "Head between two tails" scenario. Remove the entries of the cases that pass. Verify:
+  - the scenario test and `TestReducedCasesPassProxy` pass;
+  - `state-diagram/history-style-1` and `vega-nonreg/group2681-history_style_all_forms-1` pass the proxy in the report;
   - the regression checks pass.
-
-  First step: candidate C1 of the Findings, with the test of the "Head between two tails" scenario. `history-style-1`, `group2681-history_style_all_forms-1` and their reduced cases pass. The leaving edge among equal cut values and the form of the Chen graphs remain open (task 4.1). They come back after tasks 5 to 8, when the original graphs show what remains of them.
 
 ## 5. Routes through the boxes of labels
 
-The reference routes an edge with a label through the box of its label's rank: the path touches the corners of the boxes, and the curve follows it with bisected tangents and control points at 4/9, as M4's. Cases: `reduced-choice-fork-join-1` and `reduced-interactive-SVG0006_Svek-1`.
+Case: `reduced-choice-fork-join-1`; the route of a flat edge through its label, `reduced-interactive-SVG0006_Svek-1`, moves (D10).
 
-- [ ] 5.1 Probe the routes of labeled edges between ranks and of labeled flat edges with ports (Findings, M1 and M5): the boxes, and the points of them that the path touches. Record the rule with its probes in the Findings. Verify that it predicts the control points of every probe within a point.
-- [ ] 5.2 Implement it. Remove the entries of the cases that pass the proxy. Verify:
-  - `TestReducedCasesPassProxy` passes;
-  - `vega-svg/interactive-SVG0006_Svek-1` passes the proxy in the report;
+- [x] 5.1 Probe the separations of label nodes and virtual nodes, the gates next to a virtual node, and the routes of labeled edges between ranks (Findings, routed curves). Record the rule, the routing order and the gates clear of the curves routed before, with its probes. Verify that it predicts the bend of `reduced-choice-fork-join-1` within a point.
+- [x] 5.2 Implement it. Add the test of the "Label clear of an edge routed before" scenario. Remove the entries of the cases that pass. Verify:
+  - the scenario test and `TestReducedCasesPassProxy` pass;
+  - `reduced-choice-fork-join-1` passes the proxy;
   - the regression checks pass.
-
-  Done: the gates of the chains routed later stand off the curves routed before them (Findings, routed curves). `reduced-choice-fork-join-1` passes. Open: the labels of `x -> l [label]; x -> r` are 2 to 3 points off; `reduced-interactive-SVG0006_Svek-1` (the route of a flat edge through its label) is unchanged.
 
 ## 6. Ties in the order (M2)
 
-Cases: `reduced-ChenMovie_Test-1-worst`, `reduced-choice-fork-join-1-worst`, `reduced-simple-A0004-1`.
+Cases: `reduced-ChenMovie_Test-1-worst`, `reduced-choice-fork-join-1-worst`, `reduced-simple-A0004-1`; the order of the label nodes in the originals moves (D10).
 
-- [ ] 6.1 Probe the tie-break of design D4 on these cases and their variants, and record it with its probes in the Findings. Verify that it predicts every probe, and that it never chooses an order with more crossings.
-- [ ] 6.2 Implement the tie-break. Add the test of the "Orders with the same crossings" scenario. Remove the entries of the cases that pass the proxy. Verify:
-  - the scenario test and `TestReducedCasesPassProxy` pass;
-  - `vega-migration/ChenMovie_Test-1`, `state-diagram/choice-fork-join-1` and `vega-nonreg/simple-A0004-1` pass the proxy in the report, with the earlier steps;
+- [x] 6.1 Probe the tie-break of design D4 on these cases, their variants and the random benches, and record the flip of equal medians on the passes down and the sources in search order, with their probes and the graphs where they add a crossing. Verify that they predict the three reduced cases and the twelve orders of `f -> g; c -> f; b -> g`.
+- [x] 6.2 Implement them. Add the tests of the "Orders with the same crossings" and "Sources in the order of a search" scenarios. Remove the entries of the cases that pass. Verify:
+  - the scenario tests and `TestReducedCasesPassProxy` pass;
   - the regression checks pass.
-
-  Done: the flip of equal medians on the passes down (Findings, M2), with the test of the scenario. The three reduced cases pass. Open: the random graph `g236` gets one more crossing; the originals also need tasks 4 and 5.
 
 ## 7. Edges between the same nodes with labels
 
-Cases: `reduced-simple-ComponentExtraArrows_0001-1` and its `-worst`.
+Cases: `reduced-simple-ComponentExtraArrows_0001-1` and its `-worst`, which move (D10).
 
-- [ ] 7.1 Probe how the reference lays out the edges between the same two nodes when some have labels (Findings, M1): their order, the room of each label, the effect of `nodesep`. Record the rule with its probes in the Findings, then implement it. Add the test of the "Labeled and unlabeled edges between the same nodes" scenario. Verify:
-  - the rule predicts every probe within a point;
-  - the scenario test and `TestReducedCasesPassProxy` pass;
-  - `vega-nonreg/simple-ComponentExtraArrows_0001-1` passes the proxy in the report;
-  - the regression checks pass.
+- [x] 7.1 Probe how the reference lays out the edges between the same two nodes when some have labels, and record the probes in the Findings. Verify that the Findings give the gaps measured for `nodesep` 18 to 72.
 
 ## 8. Separation next to a rank of its own
 
-Case: `reduced-state3-1-worst`.
+Case: `reduced-state3-1-worst`, which moves (D10).
 
-- [ ] 8.1 Probe the separation of two components when a node with `rank=source` lies on a rank of its own (Findings, M1): the reference puts the components closer than `nodesep`. Record the rule with its probes in the Findings, then implement it. Verify:
-  - the rule predicts every probe within a point;
-  - `TestReducedCasesPassProxy` passes;
-  - `vega-scxml/state3-1` and `gopuml-clusters/vega-scxml-state3-1` pass the proxy in the report;
-  - the regression checks pass.
+- [x] 8.1 Probe the separation of two components when a node with `rank=source` lies on a rank of its own, and record the probes in the Findings. Verify that the Findings give the gap measured for `nodesep` 1.4 to 72.
 
 ## 9. Acceptance and checks
 
-- [ ] 9.1 Check that the 13 graphs of #28 pass the proxy in the report and that their entries left `known-differences.yaml`. A graph that still fails is reduced again with `tools/reduce -on` on its largest deviation, and its new mechanism is recorded in the Findings and raised before it is fixed. Verify that the proxy section of the report lists none of the 13.
-- [ ] 9.2 Judge the other entries of `known-differences.yaml` (design D8): those whose cases pass leave it, and the others name `refine-layout-heuristics`. Verify that `make conformance` reports no failed case, and that no entry names `tune-layout-heuristics`.
-- [ ] 9.3 Run the checks:
+- [x] 9.1 Check which of the 13 graphs of #28 pass the proxy in the report, and that their entries left `known-differences.yaml`. Record the others with the mechanisms they still need, for `refine-layout-heuristics` (D10). Verify that the Findings list each of the 13 with its outcome.
+- [x] 9.2 Judge the other entries of `known-differences.yaml` (design D8): those whose cases pass leave it, and the others name `refine-layout-heuristics`. Verify that `make conformance` reports no failed case, and that no entry names `tune-layout-heuristics`.
+- [x] 9.3 Run the checks:
   - `make lint`;
   - `go test -race ./...`;
   - `go run ./tools/provenance`;
