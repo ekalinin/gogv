@@ -373,6 +373,12 @@ The rule found next: the breadth-first search takes the sources in the order of 
 
 The order of the label nodes in the graphs of #28 is thus not explained by the initial order.
 
+The form of `entities-relationship-and-attributes-1` reduced further: in `digraph { a -> b; c -> d; e -> f; f -> b [minlen=2, label="L"]; f -> d [minlen=2, label="L"] }`, the reference puts the labels outside `a` and `c`, and gogv between them, both without crossing. With `e` declared first, the reference puts them between, and gogv lays out the mirror. Variants that do not explain it:
+
+- the breadth-first search from the last source in search order, placed from the right: 183 to 223 random graphs match, against 373;
+- `mincross` iterating on at zero crossings, with the flip of equal medians on the passes down, up or both: 343 to 374 random graphs match, 308 to 340 with labels, and no gopuml case gains the reference's order. By hand, a flip on the first pass up gives the reference's order of this graph, but the next flips undo it, and the paper keeps only an order with fewer crossings.
+
+
 ### Separation next to a rank of its own (task 8.1, not concluded)
 
 `digraph { a -> b; c -> d [label="L"]; subgraph { rank=source; s } }` shows the form of `reduced-state3-1-worst`: the reference puts `c` 59 points right of `a`, gogv 72. Measured with the default sizes:
