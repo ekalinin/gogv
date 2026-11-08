@@ -89,7 +89,7 @@ Case: `reduced-state3-1-worst`, which moves (D10).
   - `openspec validate tune-layout-heuristics --strict`.
 
   Verify that all pass, with no benchmark significantly slower than on `main`.
-- [ ] 9.4 Push the branch and open a pull request with the template, with the user's approval. Verify that the CI jobs pass.
+- [x] 9.4 Push the branch and open a pull request with the template, with the user's approval. Verify that the CI jobs pass.
 
 ## 10. Release
 
