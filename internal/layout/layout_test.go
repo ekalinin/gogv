@@ -278,6 +278,16 @@ func TestRoutingScenarios(t *testing.T) {
 		t.Errorf("flat edge over a node: over b %v, drawing %g points high, nodes %g", over, res.Height, b.H)
 	}
 
+	// Spec scenario "Label clear of an edge routed before": the label of
+	// x -> l lies 28 points right of l, within 2 points.
+	res, es = edgesOf(t, `digraph { l -> m; x -> r; x -> l [label="LLLLLL"] }`)
+	l := nodeNamed(res, "l")
+	for _, e := range es {
+		if d := e.LabelPos.X - l.X; e.Edge.Head.Name == "l" && math.Abs(d-28) > 2 {
+			t.Errorf("label clear of an edge routed before: %g points right of l", d)
+		}
+	}
+
 	_, es = edgesOf(t, "digraph { splines=polyline; a -> b -> c; a -> c }")
 	for _, e := range es {
 		for _, s := range segments(e.Points) {
