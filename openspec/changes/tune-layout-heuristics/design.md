@@ -346,6 +346,24 @@ Results:
 
 In `x -> l [label="LLLLLLLL"]; x -> r` and its variants of label width and `nodesep`, the label's left side still lies 2 to 3 points right of the reference's (10 before): the curve of `x -> r`, routed first, is not the reference's.
 
+### The order of the label nodes (task 6, continued)
+
+The order bench above compares real nodes only. With the labels taken as nodes of their ranks, 286 gopuml cases match the reference's order, against 288. Ten gopuml cases differ in their order, and eight of them are graphs of #28: the four Chen graphs, `simple-A0004-1`, `simple-ComponentExtraArrows_0001-1`, `state3-1` and its variant with clusters, and `interactive-SVG0006_Svek-1`. In `entities-relationship-and-attributes-1`, the reference puts the labels of `sh0010 -> sh0006` and `sh0010 -> sh0008` outside `sh0007` and `sh0009`, and gogv between them: both orders have no crossing.
+
+A second bench of 400 random graphs with edge labels matches in 332 cases. In most mismatches of both benches, gogv lays out the mirror of the reference's order:
+
+- in 38 of 800 random graphs, the initial order already has no crossing and differs from the reference's;
+- in `digraph { f -> g; c -> f; b -> g }`, the reference puts `b` left of `f`, gogv right; in the five other orders of the statements, and with the nodes declared first, gogv matches the reference but when the nodes come as `f, g, c, b`.
+
+Variants of the initial order, on the benches with and without labels:
+
+- the depth-first and breadth-first searches of section 3, from the nodes of the lowest rank, along the out-edges or all edges;
+- the sources taken in reverse order, the neighbors in reverse order, or both.
+
+All are worse than gogv's breadth-first search from the sources in node order: 126 to 328 random graphs against 360. The settings of `mincross` do not change the gopuml cases.
+
+A simulation of 60 initial orders on 84 small graphs without crossings, each in up to 12 statement orders, explains at best 59 of them, gogv's 58. The reference's initial order thus follows another rule, or `mincross` changes it from an order with crossings.
+
 ### Separation next to a rank of its own (task 8.1, not concluded)
 
 `digraph { a -> b; c -> d [label="L"]; subgraph { rank=source; s } }` shows the form of `reduced-state3-1-worst`: the reference puts `c` 59 points right of `a`, gogv 72. Measured with the default sizes:
