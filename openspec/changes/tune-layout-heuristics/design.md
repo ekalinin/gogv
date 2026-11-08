@@ -264,6 +264,30 @@ Variants rejected:
 - a tree grown from the top left node: it lays out `history-style-1` as the reference does, and puts 11 other gopuml cases further from it;
 - a search of the leaving edge in postorder: it breaks `history-style-1`.
 
+### Routes through the boxes of labels (task 5.1, not concluded)
+
+Section 5.3 of Gansner et al. represents the label of an edge between ranks by an off-center virtual node, so that it overlaps no node, edge or label: the edge passes on one side of the node, and the label takes the other.
+
+The probes:
+
+- **`reduced-choice-fork-join-1`.** The reference's curve of `sh0006 -> sh0010` bends at the top left corner of its label, (59.9, 144), in two segments. gogv's label node lies at 57.9, and its straight curve passes at 67.5 at that height, so that its label lies 7.3 points right of the reference's. In both, the label's left side lies on the rightmost point of the curve across the label. The reference's bend leaves its label half `nodesep` left of x = 111.9; gogv puts the virtual node of `sh0006 -> sh0012`, the next node on the rank, at 124.9.
+- **`dot-layout/edge-label-fan`.** The reference's three curves are straight, and the left side of each label lies 0.5 points left of the rightmost point of its curve across the label. The label of `a -> b` lies 9.3 points left of the curve of `a -> c`, where gogv's label node keeps 43 points from the next one.
+
+`router.bounds` has a switch, `labelMode`, that keeps the curve left of the label node when it is 1; it is 2. Variants of the gates on the rank of a label:
+
+- **The curve left of the label node (`labelMode` 1).**
+  - Better: `state-diagram/history-state-1` and its variant with clusters (18.2% to 1.6%), `state-diagram/junction-1` (21.2% to 2.0%), the two `junction-pseudostate-1` (12.3% to 3.0%), `reduced-choice-fork-join-1` (4.2% to 1.2%), `reduced-state2-1` (6.3% to 1.4%) and its `-worst` (4.6% to 1.0%), `dot-layout/table-edge-not-fixed` (13.4% to 0.7%), `dot-layout/edge-label-long` (7.5% to 0.5%).
+  - Worse: `chen-eer-diagram/bold-only-from-the-left-1` (3.9% to 19.4%), `weak-entity-and-identifying-relationship-1` (0.2% to 7.3%), `legacy-activity-diagram/branch-two-outcomes-1` (0.6% to 6.6%), `group2917` (1.0% to 10.1%), `edge-label-fan` (0.5% to 13.9%), `table-edge-small` (0.8% to 8.7%), `output-formats/tooltips-ids` (1.9% to 10.5%), and others by less.
+
+  In `edge-label-fan`, the curve of `a -> b` bends to gogv's label node, 28 points left of where the reference's straight curve passes.
+- **Half `nodesep` between a label and the next virtual node, instead of a quarter.**
+  - Better: `history-state-1` (18.2% to 13.3%), `junction-1` (21.2% to 17.4%), `simple-ComponentExtraArrows_0001-1` (4.1% to 2.2%), `reduced-state2-1` (6.3% to 4.6%), `edge-label-long` (7.5% to 3.7%).
+  - Worse: `reduced-simple-ComponentExtraArrows_0001-1` (7.2% to 10.8%) and `tooltips-ids` (1.9% to 3.2%).
+
+The reduced `state2` cases are thus cases of this mechanism, not of M3.
+
+Conclusion so far: where the reference bends a route, and where it puts the labels, depends on the positions of the virtual nodes: the label nodes and the nodes of the chains. They are ties of the positioning, as in M3, and gogv places them elsewhere. No rule of the gates alone fits the probes.
+
 ### M4: flat edges over nodes (task 2.1)
 
 The reference reorders a rank so that a flat edge joins neighbors when it can: `{rank=same; a; b; c} a -> c` puts `c` next to `a`. An edge goes over nodes when the order forbids it, as with two flat edges into the same head: `a -> c [minlen=0]; b -> c [minlen=0]`.

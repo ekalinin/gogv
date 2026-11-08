@@ -44,7 +44,7 @@ The probes of M1 (Findings) show that its form in a cycle is a tie as well. Case
   - `state-diagram/history-style-1`, `vega-nonreg/group2681-history_style_all_forms-1`, `chen-eer-diagram/entities-relationship-and-attributes-1` and `vega-scxml/state2-1` pass the proxy in the report;
   - the regression checks pass.
 
-  First step: candidate C1 of the Findings, with the test of the "Head between two tails" scenario. `history-style-1`, `group2681-history_style_all_forms-1` and their reduced cases pass. The leaving edge among equal cut values and the form of the Chen graphs remain open (task 4.1).
+  First step: candidate C1 of the Findings, with the test of the "Head between two tails" scenario. `history-style-1`, `group2681-history_style_all_forms-1` and their reduced cases pass. The leaving edge among equal cut values and the form of the Chen graphs remain open (task 4.1). They come back after tasks 5 to 8, when the original graphs show what remains of them.
 
 ## 5. Routes through the boxes of labels
 
