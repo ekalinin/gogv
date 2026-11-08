@@ -144,6 +144,11 @@ func TestRankDirectionAndOrder(t *testing.T) {
 	if !(n["a"].X < n["d"].X && n["c"].X < n["b"].X) {
 		t.Errorf("orders with the same crossings: a %v d %v, c %v b %v", n["a"].X, n["d"].X, n["c"].X, n["b"].X)
 	}
+	// The sources in the order of a search from f: b before c.
+	n = layoutOf(t, "digraph { f -> g; c -> f; b -> g }")
+	if !(n["b"].X < n["f"].X) {
+		t.Errorf("sources in search order: b %v f %v", n["b"].X, n["f"].X)
+	}
 }
 
 func TestSeparationAndPositioning(t *testing.T) {

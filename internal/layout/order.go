@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 // Provenance: paper Gansner, Koutsofios, North, Vo 1993, A Technique for Drawing Directed Graphs, section 3
+// Provenance: observed dot 16.1.0
 
 package layout
 
@@ -261,8 +262,9 @@ func (g *ranked) neighbors(v int) []int {
 
 // initialOrder places the nodes of a component in their ranks in the order
 // a breadth-first search visits them, starting from the component's nodes
-// without an upper neighbor, in node order. A tree gets an order without
-// crossings.
+// without an upper neighbor. As observed on the reference, it takes them in
+// the order of a depth-first search of the component from its first node.
+// A tree gets an order without crossings.
 func (g *ranked) initialOrder(comp []int) [][]int {
 	ranks := make([][]int, len(g.ranks))
 	seen := map[int]bool{}
@@ -285,7 +287,7 @@ func (g *ranked) initialOrder(comp []int) [][]int {
 			}
 		}
 	}
-	for _, v := range comp {
+	for _, v := range g.searchOrder(comp) {
 		if len(g.nodes[v].up) == 0 || g.startSkeletons && g.nodes[v].skeleton {
 			visit(v)
 		}
@@ -294,6 +296,47 @@ func (g *ranked) initialOrder(comp []int) [][]int {
 		visit(v)
 	}
 	return ranks
+}
+
+// searchOrder returns the nodes of a component in the order of a
+// depth-first search from its first node, along the edges down before those
+// up.
+func (g *ranked) searchOrder(comp []int) []int {
+	seq := make([]int, 0, len(comp))
+	// The nodes outside the component, as those around a cluster, are not
+	// searched.
+	seen := make(map[int]bool, len(comp))
+	inComp := make(map[int]bool, len(comp))
+	for _, v := range comp {
+		inComp[v] = true
+	}
+	type frame struct {
+		ns   []int
+		next int
+	}
+	for _, root := range comp {
+		if seen[root] {
+			continue
+		}
+		seen[root] = true
+		seq = append(seq, root)
+		stack := []frame{{g.neighbors(root), 0}}
+		for len(stack) > 0 {
+			f := &stack[len(stack)-1]
+			if f.next >= len(f.ns) {
+				stack = stack[:len(stack)-1]
+				continue
+			}
+			w := f.ns[f.next]
+			f.next++
+			if !seen[w] && inComp[w] {
+				seen[w] = true
+				seq = append(seq, w)
+				stack = append(stack, frame{g.neighbors(w), 0})
+			}
+		}
+	}
+	return seq
 }
 
 // mincrossOptions are the details of the heuristics that the paper leaves
