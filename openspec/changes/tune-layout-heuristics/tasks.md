@@ -66,6 +66,8 @@ Cases: `reduced-ChenMovie_Test-1-worst`, `reduced-choice-fork-join-1-worst`, `re
   - `vega-migration/ChenMovie_Test-1`, `state-diagram/choice-fork-join-1` and `vega-nonreg/simple-A0004-1` pass the proxy in the report, with the earlier steps;
   - the regression checks pass.
 
+  Done: the flip of equal medians on the passes down (Findings, M2), with the test of the scenario. The three reduced cases pass. Open: the random graph `g236` gets one more crossing; the originals also need tasks 4 and 5.
+
 ## 7. Edges between the same nodes with labels
 
 Cases: `reduced-simple-ComponentExtraArrows_0001-1` and its `-worst`.

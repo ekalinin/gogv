@@ -288,6 +288,33 @@ The reduced `state2` cases are thus cases of this mechanism, not of M3.
 
 Conclusion so far: where the reference bends a route, and where it puts the labels, depends on the positions of the virtual nodes: the label nodes and the nodes of the chains. They are ties of the positioning, as in M3, and gogv places them elsewhere. No rule of the gates alone fits the probes.
 
+### M2: ties in the order (tasks 6.1 and 6.2)
+
+Section 3 of Gansner et al. flips the nodes with equal values while sorting by medians and transposing, on every other forward and backward traversal. gogv has the switch, `tieReverse`, and kept it off.
+
+In `digraph { a -> b [label="LLLLLL"]; a -> c; d -> b }`, the scenario of the spec, the initial order has one crossing:
+
+- rank 0: `a`, `d`;
+- rank 1: the label node of `a -> b`, the virtual nodes of `a -> c` and `d -> b`;
+- rank 2: `b`, `c`.
+
+On the first pass down, the label node and the node of `a -> c` have the same median, that of `a`. Flipped, they put `c` before `b` on rank 2 by their medians, with no crossing: the reference's order. Without the flip, transpose reaches the mirror, as gogv did. The three reduced cases of M2 are the mirrors of the reference's orders in the same way.
+
+A bench compares the order of the real nodes on each rank with the reference's: the 400 random graphs, the gopuml corpora and the curated cases. Of the 48 settings of the four options of `mincross`, flipping the ties on the passes down (`tieReverse: 1`) gives the most matches:
+
+- 360 random graphs against 357, 288 gopuml cases as before, 289 curated cases against 286;
+- the three reduced cases of M2 get the reference's order, and no curated or gopuml case loses it;
+- the number of crossings goes down in 7 graphs, and up in 1, the random graph `g236` (`digraph { b -> d [minlen=2]; d -> e; c -> g; b -> d; a -> d; a -> c; f -> c; b -> g; c -> g }`): from 0 to 1, where the reference has none.
+
+The second run that section 3 also suggests, from the nodes of the last rank and searching up, kept when it has fewer crossings, gives `g236` the reference's order. With it, no graph gets more crossings, and 8 fewer. It costs 18% to 25% more time on the graphs of `BenchmarkRenderClasses`, above the threshold of `make perf`, and is not taken.
+
+After `tieReverse: 1`:
+
+- the reduced cases of M2 pass the proxy and leave `known-differences.yaml`;
+- `state-diagram/choice-fork-join-1` goes from 24.7% to 1.2% in `plain`, and fails the proxy on its SSIM, 0.852, through the labels of task 5. Its entry stays, with the reason updated;
+- 607 cases: 525 passed, 43 known differences, 39 not supported yet, 0 failed; 275 of 296 gopuml cases pass the proxy;
+- the outputs are the same on amd64, arm64 and WebAssembly.
+
 ### M4: flat edges over nodes (task 2.1)
 
 The reference reorders a rank so that a flat edge joins neighbors when it can: `{rank=same; a; b; c} a -> c` puts `c` next to `a`. An edge goes over nodes when the order forbids it, as with two flat edges into the same head: `a -> c [minlen=0]; b -> c [minlen=0]`.
