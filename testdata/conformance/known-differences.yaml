@@ -12,12 +12,6 @@
 - id: dot-language/node-lists
   reason: "x coordinates: the optimum of the positioning is not unique, and gogv takes another one than the reference (d, e, f, g, h are 9 points apart)"
   change: tune-layout-heuristics
-- id: state-diagram/history-style-1
-  reason: "x coordinates: the optimum of the positioning is not unique, and gogv takes another one than the reference (the rounded states are 4 to 14 points apart); reduced to dot-layout/reduced-history-style-1 and dot-layout/reduced-history-style-1-worst"
-  change: tune-layout-heuristics
-- id: vega-nonreg/group2681-history_style_all_forms-1
-  reason: "the same graph as state-diagram/history-style-1; reduced to the same graphs, dot-layout/reduced-history-style-1 and dot-layout/reduced-history-style-1-worst"
-  change: tune-layout-heuristics
 - id: dot-layout/cluster-edges-between
   reason: "order within ranks: the chain of x -> c1 goes right of the clusters instead of left, and cluster_c goes under cluster_b instead of cluster_a; the orders have as many crossings, and how the reference breaks this tie is not known yet"
   change: tune-layout-heuristics
@@ -125,12 +119,6 @@
   change: tune-layout-heuristics
 - id: dot-layout/reduced-choice-fork-join-1-worst
   reason: "reduced from state-diagram/choice-fork-join-1 on node sh0006: order within ranks: gogv lays out the mirror of the reference's order, with the labeled edge sh0006 -> sh0010 on the right instead of the left; both orders have no crossing"
-  change: tune-layout-heuristics
-- id: dot-layout/reduced-history-style-1
-  reason: "reduced from state-diagram/history-style-1 and vega-nonreg/group2681-history_style_all_forms-1: x coordinates: of two components where two nodes have an edge to the same head, the reference centers the head of the second component between its tails, and gogv puts it under its first tail, 48 points left"
-  change: tune-layout-heuristics
-- id: dot-layout/reduced-history-style-1-worst
-  reason: "reduced from state-diagram/history-style-1 and vega-nonreg/group2681-history_style_all_forms-1 on node sh0006: as dot-layout/reduced-history-style-1, with the components in the other order"
   change: tune-layout-heuristics
 - id: dot-layout/reduced-interactive-SVG0006_Svek-1
   reason: "reduced from vega-svg/interactive-SVG0006_Svek-1: a labeled flat edge from a port of a table node: the reference puts its label 22 points below the centers of the nodes, gogv 11 points above them"

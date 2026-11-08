@@ -155,6 +155,11 @@ func TestSeparationAndPositioning(t *testing.T) {
 	if !approx(n["a"].X, n["b"].X) || !approx(n["b"].X, n["c"].X) {
 		t.Errorf("straight chain: %v %v %v", n["a"].X, n["b"].X, n["c"].X)
 	}
+	n = layoutOf(t, "digraph { a -> x; c -> y; b -> x; d -> y }")
+	if !approx(n["x"].X, (n["a"].X+n["b"].X)/2) || !approx(n["y"].X, (n["c"].X+n["d"].X)/2) {
+		t.Errorf("heads between their tails: x %v of %v %v, y %v of %v %v",
+			n["x"].X, n["a"].X, n["b"].X, n["y"].X, n["c"].X, n["d"].X)
+	}
 }
 
 // Every rank between the ends of a long edge holds one virtual node of it.
