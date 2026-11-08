@@ -49,7 +49,7 @@
   reason: "the same order difference as vega-migration/ChenMovie_Test-1; reduced to the same graphs, dot-layout/reduced-ChenMovieAlias_Test-1 and dot-layout/reduced-ChenMovieAlias_Test-1-worst"
   change: tune-layout-heuristics
 - id: state-diagram/choice-fork-join-1
-  reason: "x coordinates of the nodes around the labeled edges differ from the reference's by up to 60 points; reduced to dot-layout/reduced-choice-fork-join-1 and dot-layout/reduced-choice-fork-join-1-worst"
+  reason: "the nodes are where the reference puts them, and the labels of the labeled edges are not: the reference bends their curves at the corners of the labels; reduced to dot-layout/reduced-choice-fork-join-1"
   change: tune-layout-heuristics
 - id: vega-nonreg/group2917-smetana_hide_state_plain_edges-1
   reason: "nodes and labels are where the reference puts them, within 2 points, but the routes of the labeled edges differ"
@@ -105,9 +105,6 @@
 - id: dot-layout/reduced-ChenMovie_Test-1
   reason: "reduced from vega-migration/ChenMovie_Test-1: the tail of a labeled edge of minlen 2 that has a second out-edge is 18 points right of the reference's, which centers it between the label and its other head, and the label 5 points right"
   change: tune-layout-heuristics
-- id: dot-layout/reduced-ChenMovie_Test-1-worst
-  reason: "reduced from vega-migration/ChenMovie_Test-1 on node sh0007: order within ranks: gogv lays out the chain sh0007 -> sh0006 left of the chains of sh0021 instead of right; both orders have no crossing"
-  change: tune-layout-heuristics
 - id: dot-layout/reduced-ChenMovieAlias_Test-1
   reason: "reduced from vega-migration/ChenMovieAlias_Test-1 and vega-migration/ChenMovieExtended_Test-1: the tail of a labeled edge of minlen 2 that has a second out-edge is 20 points left of the reference's, and the label 16 points left; the other nodes are within 1 point"
   change: tune-layout-heuristics
@@ -117,14 +114,8 @@
 - id: dot-layout/reduced-choice-fork-join-1
   reason: "reduced from state-diagram/choice-fork-join-1: the label of a labeled edge whose tail has a second out-edge is 7 points right of the reference's; the nodes are where the reference puts them"
   change: tune-layout-heuristics
-- id: dot-layout/reduced-choice-fork-join-1-worst
-  reason: "reduced from state-diagram/choice-fork-join-1 on node sh0006: order within ranks: gogv lays out the mirror of the reference's order, with the labeled edge sh0006 -> sh0010 on the right instead of the left; both orders have no crossing"
-  change: tune-layout-heuristics
 - id: dot-layout/reduced-interactive-SVG0006_Svek-1
   reason: "reduced from vega-svg/interactive-SVG0006_Svek-1: a labeled flat edge from a port of a table node: the reference puts its label 22 points below the centers of the nodes, gogv 11 points above them"
-  change: tune-layout-heuristics
-- id: dot-layout/reduced-simple-A0004-1
-  reason: "reduced from vega-nonreg/simple-A0004-1: order within ranks: gogv lays out the mirror of the reference's order; both orders have no crossing"
   change: tune-layout-heuristics
 - id: dot-layout/reduced-simple-A0004-1-worst
   reason: "reduced from vega-nonreg/simple-A0004-1 on node sh0012: x coordinates: with a labeled edge into sh0014 and a wide node below it, the nodes of the chain sh0012 -> sh0016 and sh0013 are 12 points left of the reference's, and the drawing is 11 points narrower"

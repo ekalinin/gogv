@@ -314,7 +314,7 @@ type mincrossOptions struct {
 	minQuit int
 }
 
-var mincrossOpts = mincrossOptions{tieReverse: 0, equalSwap: 3, keepEqual: true, initialTranspose: true, minQuit: 1 << 30}
+var mincrossOpts = mincrossOptions{tieReverse: 1, equalSwap: 3, keepEqual: true, initialTranspose: true, minQuit: 1 << 30}
 
 // mincross improves an order by the weighted median and transposition
 // heuristics and returns the order with the fewest crossings found.

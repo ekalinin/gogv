@@ -140,6 +140,10 @@ func TestRankDirectionAndOrder(t *testing.T) {
 	if (n["a"].X < n["b"].X) != (n["d"].X < n["c"].X) {
 		t.Errorf("crossing not removed: a %v b %v c %v d %v", n["a"].X, n["b"].X, n["c"].X, n["d"].X)
 	}
+	n = layoutOf(t, `digraph { a -> b [label="LLLLLL"]; a -> c; d -> b }`)
+	if !(n["a"].X < n["d"].X && n["c"].X < n["b"].X) {
+		t.Errorf("orders with the same crossings: a %v d %v, c %v b %v", n["a"].X, n["d"].X, n["c"].X, n["b"].X)
+	}
 }
 
 func TestSeparationAndPositioning(t *testing.T) {
