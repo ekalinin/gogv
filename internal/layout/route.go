@@ -6,6 +6,7 @@
 package layout
 
 import (
+	"cmp"
 	"math"
 	"slices"
 
@@ -148,6 +149,12 @@ type router struct {
 	// labelAlong is, for the ranked nodes that hold an edge label, the
 	// label's extent along the rank.
 	labelAlong map[int]float64
+	// routed holds, for the virtual nodes of the chains already routed,
+	// how far their curve reaches across the band of their rank. As
+	// section 5.1.1 of Gansner et al. describes, the box of a virtual node
+	// shrinks to its curve, so that the edges routed later keep clear of
+	// the curve rather than of the node.
+	routed map[int]routedBox
 	// loopLabels is, by edge, the extent along the rank of the label of a
 	// loop.
 	loopLabels []float64
@@ -257,7 +264,7 @@ func (r *router) bounds(v int, ends [2]int) (lo, hi, down, up float64) {
 			a := r.tree.childToward(r.tree.common(cv, cu), cu)
 			lo = max(lo, box(a)[1].X+half(clusterMargin))
 		} else {
-			lo = max(lo, r.pos[u].X+r.right[u]+half(r.nodesep))
+			lo = max(lo, r.reach(u, ends, true)+r.right[u]+half(r.nodesep))
 		}
 	}
 	if rn.order+1 < len(rank) {
@@ -270,13 +277,13 @@ func (r *router) bounds(v int, ends [2]int) (lo, hi, down, up float64) {
 			// keeps a quarter of nodesep from the edge of a virtual node
 			// that comes next, and half nodesep from the side of a real
 			// one.
-			next := r.pos[u].X - math.Floor(r.nodesep/4)
+			next := r.reach(u, ends, false) - math.Floor(r.nodesep/4)
 			if r.g.nodes[u].real >= 0 {
 				next = r.pos[u].X - r.left[u] - half(r.nodesep)
 			}
 			hi = min(hi, next-along)
 		} else {
-			hi = min(hi, r.pos[u].X-r.left[u]-half(r.nodesep))
+			hi = min(hi, r.reach(u, ends, false)-r.left[u]-half(r.nodesep))
 		}
 	}
 	if _, ok := r.labelAlong[v]; ok && labelMode == 1 {
@@ -286,6 +293,66 @@ func (r *router) bounds(v int, ends [2]int) (lo, hi, down, up float64) {
 }
 
 var labelMode = 2
+
+// routedBox is how far a routed curve reaches across the band of the rank
+// of one of its virtual nodes, and the ends of its chain.
+type routedBox struct {
+	lo, hi float64
+	ends   [2]int
+}
+
+// reach returns where a neighbor u on the rank of a chain between ends
+// stands for its gates: its position, or, once u's chain is routed, the
+// side of its curve that faces the chain, the right side when u lies left.
+// Observed on the reference: the curves of edges between the same nodes
+// do not narrow each other's gates.
+func (r *router) reach(u int, ends [2]int, fromLeft bool) float64 {
+	b, ok := r.routed[u]
+	if !ok || b.ends == ends || b.ends == [2]int{ends[1], ends[0]} {
+		return r.pos[u].X
+	}
+	if fromLeft {
+		return b.hi
+	}
+	return b.lo
+}
+
+// markRouted records, for each virtual node of a routed chain, how far its
+// curve reaches across the band of its rank.
+func (r *router) markRouted(chain []int, pts []Point) {
+	if len(chain) <= 2 {
+		return
+	}
+	if r.routed == nil {
+		r.routed = map[int]routedBox{}
+	}
+	segs := segments(pts)
+	// How far each segment's control points reach across the ranks, to
+	// skip the segments away from a band.
+	span := make([][2]float64, len(segs))
+	for j, sg := range segs {
+		span[j] = [2]float64{min(sg[0].Y, sg[1].Y, sg[2].Y, sg[3].Y), max(sg[0].Y, sg[1].Y, sg[2].Y, sg[3].Y)}
+	}
+	for _, v := range chain[1 : len(chain)-1] {
+		rk := r.g.nodes[v].rank
+		y0, y1 := r.ys[rk]-r.bandDn[rk], r.ys[rk]+r.bandUp[rk]
+		b := routedBox{lo: math.Inf(1), hi: math.Inf(-1), ends: [2]int{chain[0], chain[len(chain)-1]}}
+		for j, sg := range segs {
+			if span[j][1] < y0 || span[j][0] > y1 {
+				continue
+			}
+			for k := 0; k <= 64; k++ {
+				q := cubic(sg, float64(k)/64)
+				if q.Y >= y0 && q.Y <= y1 {
+					b.lo, b.hi = min(b.lo, q.X), max(b.hi, q.X)
+				}
+			}
+		}
+		if b.lo <= b.hi {
+			r.routed[v] = b
+		}
+	}
+}
 
 // clusterOf returns the innermost cluster of a ranked node, or -1 when the
 // graph has no clusters.
@@ -632,7 +699,30 @@ func (r *router) routeEdges(g *graph.Graph, ends [][2]int, chains [][]int, polyl
 			return 1
 		})
 	}
-	for i, e := range edges {
+	// As section 5.1.1 suggests, the shorter edges are routed first; and,
+	// as observed on the reference, of two edges as long, the one further
+	// right. An edge routed narrows the gates of those routed after it.
+	order := make([]int, len(edges))
+	for i := range order {
+		order[i] = i
+	}
+	length := func(i int) int {
+		if len(chains[i]) > 2 {
+			return len(chains[i])
+		}
+		return 0
+	}
+	right := func(i int) float64 {
+		if len(chains[i]) > 2 {
+			return r.pos[chains[i][1]].X
+		}
+		return math.Inf(-1)
+	}
+	slices.SortStableFunc(order, func(a, b int) int {
+		return cmp.Or(cmp.Compare(length(a), length(b)), cmp.Compare(right(b), right(a)))
+	})
+	for _, i := range order {
+		e := edges[i]
 		a := readEdgeAttrs(g, e)
 		res := EdgeResult{Edge: e, Invisible: a.invisible, Color: a.color, Style: a.style, Dotted: a.dotted, PenWidth: a.penWidth}
 		group := groups[keyOf(i)]
@@ -692,6 +782,7 @@ func (r *router) routeEdges(g *graph.Graph, ends [][2]int, chains [][]int, polyl
 				bottom.Y += r.ports[i][bj].half.Y
 			}
 			pts = r.chain(chains[i], top, bottom, float64(off*r.nodesep), polyline)
+			r.markRouted(chains[i], pts)
 			if n := len(pts); n >= 4 {
 				if cellT {
 					straightAcross(pts, 0, 1, 3)

@@ -33,9 +33,6 @@
 - id: dot-layout/edge-label-minlen
   reason: "x coordinates: a node whose edge has a label on a rank of nodes is 7 points left of the reference's"
   change: tune-layout-heuristics
-- id: dot-layout/table-edge-not-fixed
-  reason: "the label of a slanted edge is 18 points further right than the reference's, as the edge bends further right"
-  change: tune-layout-heuristics
 - id: chen-eer-diagram/entities-relationship-and-attributes-1
   reason: "order within ranks: the label nodes and the nodes on the rank of the labels are in another order than the reference's; both orders have no crossing; reduced to dot-layout/reduced-entities-relationship-and-attributes-1 and dot-layout/reduced-entities-relationship-and-attributes-1-worst"
   change: tune-layout-heuristics
@@ -81,9 +78,6 @@
 - id: dot-language/pprof-attributes
   reason: "a heavy labeled edge and a light edge back between the same nodes: the reference keeps the labeled edge straight and routes the other one within the width of the nodes, gogv bends both as parallel edges, so the drawing is 11 points wider; the nodes are where the reference puts them"
   change: tune-layout-heuristics
-- id: output-formats/tooltips-ids
-  reason: "a labeled edge and an edge back between the same nodes: the edge back goes 4 points further right than the reference's (SSIM 0.899); the nodes are where the reference puts them"
-  change: tune-layout-heuristics
 - id: pprof/cpu
   reason: "order within ranks of a large profile: subtrees are ordered otherwise than the reference's, so the drawing is 12% wider; without weights the two differ as much"
   change: tune-layout-heuristics
@@ -110,9 +104,6 @@
   change: tune-layout-heuristics
 - id: dot-layout/reduced-ChenMovieAlias_Test-1-worst
   reason: "reduced from vega-migration/ChenMovieAlias_Test-1 and vega-migration/ChenMovieExtended_Test-1 on node sh0013: x coordinates: with the edges of minlen 2 from sh0035 to sh0014 and sh0006, and a labeled edge in another component, sh0013 is 33 points left of the reference's and sh0006 24 points right, in the same order"
-  change: tune-layout-heuristics
-- id: dot-layout/reduced-choice-fork-join-1
-  reason: "reduced from state-diagram/choice-fork-join-1: the label of a labeled edge whose tail has a second out-edge is 7 points right of the reference's; the nodes are where the reference puts them"
   change: tune-layout-heuristics
 - id: dot-layout/reduced-interactive-SVG0006_Svek-1
   reason: "reduced from vega-svg/interactive-SVG0006_Svek-1: a labeled flat edge from a port of a table node: the reference puts its label 22 points below the centers of the nodes, gogv 11 points above them"
