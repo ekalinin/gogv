@@ -315,6 +315,37 @@ After `tieReverse: 1`:
 - 607 cases: 525 passed, 43 known differences, 39 not supported yet, 0 failed; 275 of 296 gopuml cases pass the proxy;
 - the outputs are the same on amd64, arm64 and WebAssembly.
 
+### Routes through the boxes of labels: the routed curves (tasks 5.1 and 5.2)
+
+The positions of the virtual nodes are not the cause by themselves. Two probes rule out the extents and the gates:
+
+- **The separations.** Two edges pulled under one node by `weight=100`, with ends of `shape=point`, put their virtual nodes against each other. gogv's distances match the reference's within a point, for a label node then a virtual node, a virtual node then a label node, two virtual nodes on a rank of labels or of nodes, and two label nodes, with `nodesep` 18, 36 and 72 and labels of one to eight letters.
+- **The gate.** A labeled edge `a -> b` left of `a -> c [weight=100]`, whose virtual node lies under `a`, bends so that its label keeps `floor(nodesep/4)` from that node, 4, 9 and 18 points, in the reference and in gogv alike.
+
+Section 5.1.1 of Gansner et al. gives the rest: after a curve is computed, the boxes of its virtual nodes shrink to the curve, so that the curves computed afterward keep clear of it; and the shorter curves are computed first.
+
+- In `reduced-choice-fork-join-1`, the reference's curve of `sh0006 -> sh0012` reaches 106.3 at the least across the label's height, and 106.3 - 4 - 43 = 59.3 matches the bend at 59.9 within a point.
+- In `junction-1`, `edge-label-parallel` and `choice-fork-join`, the reference bends the left edge around the right one, which it thus routes first.
+- In `group2917`, the long edge goes around the labels of two shorter edges, routed before it.
+
+The rule implemented:
+
+- the edges are routed by the number of their ranks, the shorter first, and of two as long, the one whose first virtual node lies further right first;
+- once a chain is routed, each of its virtual nodes holds how far its curve reaches across the band of its rank;
+- the gates of a chain routed later stand off this reach instead of the node's position, with the same room: `floor(nodesep/4)` for a label, half `nodesep` and the extent of the node otherwise;
+- the curves of the edges between the same two nodes do not narrow each other's gates, as the reference's `edge-label-parallel` shows.
+
+Results:
+
+- `reduced-choice-fork-join-1` passes the proxy (0.3%) and leaves `known-differences.yaml`, with `table-edge-not-fixed` and `tooltips-ids`, which now pass;
+- `history-state-1` and its variant with clusters go from 18.2% to 0.9% and 0.4%, the two `junction-pseudostate-1` from 12.3% to 0.6%, `junction-1` from 21.2% to 4.0%;
+- 607 cases: 527 passed, 41 known differences, 39 not supported yet, 0 failed; 279 of 296 gopuml cases pass the proxy;
+- `reduced-simple-A0004-1-worst` goes from 6.4% to 7.7%, and `table-edge-small` from 0.8% to 2.5%, within its contract;
+- in `docs/example.gv`, the label of `parser -> canon` moves 2.5 points, to 1.9 from the reference's, against 0.6 before;
+- the time of `BenchmarkRenderClasses` stays within 3%.
+
+In `x -> l [label="LLLLLLLL"]; x -> r` and its variants of label width and `nodesep`, the label's left side still lies 2 to 3 points right of the reference's (10 before): the curve of `x -> r`, routed first, is not the reference's.
+
 ### Separation next to a rank of its own (task 8.1, not concluded)
 
 `digraph { a -> b; c -> d [label="L"]; subgraph { rank=source; s } }` shows the form of `reduced-state3-1-worst`: the reference puts `c` 59 points right of `a`, gogv 72. Measured with the default sizes:

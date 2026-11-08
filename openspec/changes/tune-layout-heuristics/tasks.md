@@ -56,6 +56,8 @@ The reference routes an edge with a label through the box of its label's rank: t
   - `vega-svg/interactive-SVG0006_Svek-1` passes the proxy in the report;
   - the regression checks pass.
 
+  Done: the gates of the chains routed later stand off the curves routed before them (Findings, routed curves). `reduced-choice-fork-join-1` passes. Open: the labels of `x -> l [label]; x -> r` are 2 to 3 points off; `reduced-interactive-SVG0006_Svek-1` (the route of a flat edge through its label) is unchanged.
+
 ## 6. Ties in the order (M2)
 
 Cases: `reduced-ChenMovie_Test-1-worst`, `reduced-choice-fork-join-1-worst`, `reduced-simple-A0004-1`.
