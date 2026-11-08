@@ -14,7 +14,7 @@
 | description-diagram | 11 | 11 | 0 | 0 | 0 |
 | diagram-source | 4 | 4 | 0 | 0 | 0 |
 | dot-language | 107 | 68 | 3 | 36 | 0 |
-| dot-layout | 159 | 138 | 20 | 1 | 0 |
+| dot-layout | 159 | 139 | 19 | 1 | 0 |
 | gopuml-clusters | 36 | 35 | 1 | 0 | 0 |
 | graph-layout | 1 | 1 | 0 | 0 | 0 |
 | legacy-activity-diagram | 13 | 13 | 0 | 0 | 0 |
@@ -126,7 +126,6 @@
 | dot-layout/edge-label-parallel | known difference | svg: SSIM 0.8169 is below 0.90 |
 | dot-layout/fontname-verdana | not supported yet |  |
 | dot-layout/long-edges | known difference | svg: SSIM 0.4496 is below 0.90 |
-| dot-layout/port-flat-arc | known difference |  |
 | dot-layout/reduced-ChenMovieAlias_Test-1 | known difference | svg: SSIM 0.8223 is below 0.90 |
 | dot-layout/reduced-ChenMovieAlias_Test-1-worst | known difference | svg: SSIM 0.6148 is below 0.90 |
 | dot-layout/reduced-ChenMovie_Test-1 | known difference | svg: SSIM 0.8738 is below 0.90 |

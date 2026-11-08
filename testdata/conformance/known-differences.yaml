@@ -8,121 +8,118 @@
 
 - id: dot-layout/long-edges
   reason: "order within ranks: the chain of b -> e goes right of c and d instead of left; both orders have no crossing, and how the reference breaks this tie is not known yet"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: dot-language/node-lists
   reason: "x coordinates: the optimum of the positioning is not unique, and gogv takes another one than the reference (d, e, f, g, h are 9 points apart)"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: dot-layout/cluster-edges-between
   reason: "order within ranks: the chain of x -> c1 goes right of the clusters instead of left, and cluster_c goes under cluster_b instead of cluster_a; the orders have as many crossings, and how the reference breaks this tie is not known yet"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: dot-layout/cluster-two-chains
   reason: "x coordinates: the optimum of the positioning is not unique, and gogv takes another one than the reference (top is 12 points to the right)"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: dot-language/canon-canon-03
   reason: "the flat edge a -> c goes over b and the box of cluster_x lower than the reference draws it, so the drawing is 18 points lower"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: dot-layout/edge-label-cycle
   reason: "two labeled edges between the same nodes: the reference draws one straight and bends the other close to it, gogv keeps their labels further apart, so the drawing is 6 points wider"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: dot-layout/edge-label-parallel
   reason: "two labeled edges between the same nodes: the labels are 5 to 7 points further right than the reference's"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: dot-layout/edge-label-long
   reason: "the edge with a long label bends 10 points further right than the reference's, so its label is 10 points further right"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: dot-layout/edge-label-minlen
   reason: "x coordinates: a node whose edge has a label on a rank of nodes is 7 points left of the reference's"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: chen-eer-diagram/entities-relationship-and-attributes-1
   reason: "order within ranks: the label nodes and the nodes on the rank of the labels are in another order than the reference's; both orders have no crossing; reduced to dot-layout/reduced-entities-relationship-and-attributes-1 and dot-layout/reduced-entities-relationship-and-attributes-1-worst"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: vega-migration/ChenMovie_Test-1
   reason: "order within ranks around the labeled edges of the relationships differs from the reference's; reduced to dot-layout/reduced-ChenMovie_Test-1 and dot-layout/reduced-ChenMovie_Test-1-worst"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: vega-migration/ChenMovieAlias_Test-1
   reason: "the same order difference as vega-migration/ChenMovie_Test-1; reduced to dot-layout/reduced-ChenMovieAlias_Test-1 and dot-layout/reduced-ChenMovieAlias_Test-1-worst"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: vega-migration/ChenMovieExtended_Test-1
   reason: "the same order difference as vega-migration/ChenMovie_Test-1; reduced to the same graphs, dot-layout/reduced-ChenMovieAlias_Test-1 and dot-layout/reduced-ChenMovieAlias_Test-1-worst"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: state-diagram/choice-fork-join-1
   reason: "the nodes are where the reference puts them, and the labels of the labeled edges are not: the reference bends their curves at the corners of the labels; reduced to dot-layout/reduced-choice-fork-join-1"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: vega-nonreg/group2917-smetana_hide_state_plain_edges-1
   reason: "nodes and labels are where the reference puts them, within 2 points, but the routes of the labeled edges differ"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: vega-nonreg/simple-A0004-1
   reason: "a labeled flat edge and head and tail labels: the nodes are 4 points left of the reference's and the labels are placed differently; reduced to dot-layout/reduced-simple-A0004-1 and dot-layout/reduced-simple-A0004-1-worst"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: vega-nonreg/simple-ComponentExtraArrows_0001-1
   reason: "labeled flat edges: the reference keeps more room for their labels, so the nodes are about 20 points right of gogv's; reduced to dot-layout/reduced-simple-ComponentExtraArrows_0001-1 and dot-layout/reduced-simple-ComponentExtraArrows_0001-1-worst"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: vega-scxml/state2-1
   reason: "a labeled flat edge: the reference keeps room for its label on the rank above, which moves a rank 30 points right of gogv's; reduced to dot-layout/reduced-state2-1 and dot-layout/reduced-state2-1-worst"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: vega-scxml/state3-1
   reason: "labeled flat edges between clusters: ranks and positions differ from the reference's; reduced to dot-layout/reduced-state3-1 and dot-layout/reduced-state3-1-worst"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: gopuml-clusters/vega-scxml-state3-1
   reason: "the same graph as vega-scxml/state3-1, with empty cluster labels; reduced to the same graphs, dot-layout/reduced-state3-1 and dot-layout/reduced-state3-1-worst"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: vega-svg/id-component_01-1
   reason: "two labeled flat edges between the same nodes: the second bends 4 points less than the reference's, so the drawing is 3 points lower"
-  change: tune-layout-heuristics
-- id: dot-layout/port-flat-arc
-  reason: "the flat edge a:h -> c:h goes over m lower than the reference draws it, so the drawing is 21 points lower; the same arc between the nodes themselves differs the same way"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: vega-svg/interactive-SVG0006_Svek-1
   reason: "labeled flat edges between ports: the reference raises their labels above the rank and routes the edges through them, the second one below the rank, so the drawing is 30 points higher; gogv draws them straight with the label above, as labeled flat edges without ports; reduced to dot-layout/reduced-interactive-SVG0006_Svek-1 and dot-layout/reduced-interactive-SVG0006_Svek-1-worst"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: dot-language/pprof-attributes
   reason: "a heavy labeled edge and a light edge back between the same nodes: the reference keeps the labeled edge straight and routes the other one within the width of the nodes, gogv bends both as parallel edges, so the drawing is 11 points wider; the nodes are where the reference puts them"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: pprof/cpu
   reason: "order within ranks of a large profile: subtrees are ordered otherwise than the reference's, so the drawing is 12% wider; without weights the two differ as much"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: pprof/cpu-diff
   reason: "order within ranks of a large profile: subtrees are ordered otherwise than the reference's, so the drawing is 41% wider; without weights the two differ as much"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: pprof/cpu-focus
   reason: "order within ranks: the drawing is 5% narrower than the reference's"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: pprof/heap-nodecount
   reason: "the nodes are where the reference puts them, but its thick dotted edges have other control points, so their dots fall at other places (SSIM 0.846)"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: dot-layout/reduced-entities-relationship-and-attributes-1
   reason: "reduced from chen-eer-diagram/entities-relationship-and-attributes-1: the tail of a labeled edge of minlen 2 that has a second out-edge is 21 points left of the reference's, and the label 16 points left; the other nodes are within 1 point"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: dot-layout/reduced-entities-relationship-and-attributes-1-worst
   reason: "reduced from chen-eer-diagram/entities-relationship-and-attributes-1 on the label of sh0010 -> sh0006: the same graph as dot-layout/reduced-ChenMovieAlias_Test-1 but for the names; the tail of the labeled edge of minlen 2 is 20 points left of the reference's, and the label 16 points left"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: dot-layout/reduced-ChenMovie_Test-1
   reason: "reduced from vega-migration/ChenMovie_Test-1: the tail of a labeled edge of minlen 2 that has a second out-edge is 18 points right of the reference's, which centers it between the label and its other head, and the label 5 points right"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: dot-layout/reduced-ChenMovieAlias_Test-1
   reason: "reduced from vega-migration/ChenMovieAlias_Test-1 and vega-migration/ChenMovieExtended_Test-1: the tail of a labeled edge of minlen 2 that has a second out-edge is 20 points left of the reference's, and the label 16 points left; the other nodes are within 1 point"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: dot-layout/reduced-ChenMovieAlias_Test-1-worst
   reason: "reduced from vega-migration/ChenMovieAlias_Test-1 and vega-migration/ChenMovieExtended_Test-1 on node sh0013: x coordinates: with the edges of minlen 2 from sh0035 to sh0014 and sh0006, and a labeled edge in another component, sh0013 is 33 points left of the reference's and sh0006 24 points right, in the same order"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: dot-layout/reduced-interactive-SVG0006_Svek-1
   reason: "reduced from vega-svg/interactive-SVG0006_Svek-1: a labeled flat edge from a port of a table node: the reference puts its label 22 points below the centers of the nodes, gogv 11 points above them"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: dot-layout/reduced-simple-A0004-1-worst
   reason: "reduced from vega-nonreg/simple-A0004-1 on node sh0012: x coordinates: with a labeled edge into sh0014 and a wide node below it, the nodes of the chain sh0012 -> sh0016 and sh0013 are 12 points left of the reference's, and the drawing is 11 points narrower"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: dot-layout/reduced-simple-ComponentExtraArrows_0001-1
   reason: "reduced from vega-nonreg/simple-ComponentExtraArrows_0001-1: two edges between the same nodes, one with a label 133 points wide: the drawing is 10 points wider than the reference's, with the nodes within 1 point"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: dot-layout/reduced-simple-ComponentExtraArrows_0001-1-worst
   reason: "reduced from vega-nonreg/simple-ComponentExtraArrows_0001-1 on node sh0007: two labeled edges between the same nodes: the nodes are 9 points left of the reference's"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: dot-layout/reduced-state2-1
   reason: "reduced from vega-scxml/state2-1: a cycle of three nodes with a label 149 points wide on one of its edges: the nodes are 10 points left of the reference's, and the drawing is 8 points narrower"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: dot-layout/reduced-state2-1-worst
   reason: "reduced from vega-scxml/state2-1 on node sh0007: dot-layout/reduced-state2-1 with an isolated node, which moves as the others: the nodes are 10 points left of the reference's, and the drawing is 10 points narrower"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
 - id: dot-layout/reduced-state3-1-worst
   reason: "reduced from vega-scxml/state3-1 and gopuml-clusters/vega-scxml-state3-1 on the label of sh0025 -> sh0017: of two components, the second has a labeled edge: it is 13 points right of the reference's, so the drawing is 13 points wider"
-  change: tune-layout-heuristics
+  change: refine-layout-heuristics
