@@ -378,6 +378,14 @@ The form of `entities-relationship-and-attributes-1` reduced further: in `digrap
 - the breadth-first search from the last source in search order, placed from the right: 183 to 223 random graphs match, against 373;
 - `mincross` iterating on at zero crossings, with the flip of equal medians on the passes down, up or both: 343 to 374 random graphs match, 308 to 340 with labels, and no gopuml case gains the reference's order. By hand, a flip on the first pass up gives the reference's order of this graph, but the next flips undo it, and the paper keeps only an order with fewer crossings.
 
+A set of nine small shapes with labels, each in up to 24 statement orders (104 graphs), isolates the form. gogv lays out eight shapes as the reference does, in every order, and none of the 24 orders of this one, S1: the shape where one node has two labeled chains whose heads have other parents.
+
+- When gogv's initial order of S1 has no crossing (18 orders), the reference's order differs from it by the two pairs that share a head, swapped: `Lfb a c Lfd` for `a Lfb Lfd c`. When it has one (6 orders, with `e -> f` first), the reference's order is the mirror of gogv's result.
+- One pass up whose sort exchanges neighbors, swapping equal ones, gives the reference's order of S1 in both cases. But the same pass breaks 20 of the 80 graphs of the other shapes: in `e -> f; a -> b; f -> b [minlen=2, label="L"]`, the reference keeps `a` left of the label, which the swap would move.
+- A search of 36,864 settings of `mincross` (flips by iteration, swaps of equal pairs in transpose, the rule that keeps the best order, the direction of the first pass, the first transpose, iterating on at zero crossings, `maxiter` and the `MinQuit` of the `mclimit` documentation) finds 126 settings that lay out at least 20 orders of S1 as the reference does. All of them break at least 44 of the 80 other graphs.
+
+The order of S1 thus lies outside the variants of gogv's `mincross`: the reference's initial order of S1, or its ranks of virtual nodes, differ from gogv's in a way the outputs do not show.
+
 
 ### Separation next to a rank of its own (task 8.1, not concluded)
 
