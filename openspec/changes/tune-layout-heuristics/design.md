@@ -237,6 +237,14 @@ C1 does not explain:
   An order of the edges by rank, with the separations of each rank before its edges down and reversed within the rank, lays out this graph and `reduced-ChenMovie_Test-1` (7.2% to 1.1%) as the reference does. It breaks `group2917` (1.0% to 20.2%).
 - **The reduced `entities-relationship-and-attributes`, `ChenMovieAlias_Test` and `state2` cases.** No variant changes them.
 
+C1 is implemented as a first step of task 4.2. After it:
+
+- 607 cases: 522 passed, 46 known differences, 39 not supported yet, 0 failed;
+- 275 of 296 gopuml cases pass the proxy;
+- `history-style-1`, `group2681-history_style_all_forms-1` and their two reduced cases leave `known-differences.yaml`;
+- no other case changes its outcome;
+- the outputs are the same on amd64, arm64 and WebAssembly.
+
 Variants rejected:
 
 - the last of equal edges, on the current tree: `history-style-1` goes from 6.8% to 12.1% and `group2917` to 20.2%, and `chen-eer-diagram/element-styles-1` fails;
