@@ -194,6 +194,55 @@ On the corpora, the section 4.3 tree changes the layout of few graphs:
 
 Conclusion so far: the ties depend on the whole path of the reference's network simplex, which a black box shows only through its results: the initial tree, the choice of the edges that leave and enter, the order of the balancing and its rounding. The section 4.3 tree is part of it, but not enough alone.
 
+### M3: the path of the network simplex (task 4.1, not concluded)
+
+The bench:
+
+- 400 random graphs of 4 to 9 nodes, a tenth of their edges with `minlen=2`, laid out by the reference in one run;
+- the gopuml corpora (296 cases) and the curated cases (297), compared in `plain`: the node positions exactly, and the `plain` part of the proxy.
+
+Before any change, gogv lays out 263 of the random graphs as the reference does, and exactly 268 gopuml and 237 curated cases; 274 gopuml cases pass the `plain` part of the proxy.
+
+The reference does not center in general:
+
+- in `a -> b; c -> d; c -> e`, `c` lies 18 points from `d` and 54 from `e` (above);
+- in `state-diagram/history-style-1` itself (nodes 22 and 50 points wide, `nodesep` 35, `searchsize` 500), `sh0006` lies 39 and 18 points from its tails, and `sh0007` 17 and 40.
+
+Both are reproduced exactly by the initial tree of section 4.3, followed by gogv's pivots and balancing, with these choices:
+
+- **The edge `f` between two ranks:** the edge from the leftmost node of the upper rank that has edges down, to the leftmost of its lower ends. In `dot-layout/edge-label-lr`, it goes to the label of `a -> c`, which lies left of the label of `a -> b`, the first edge. In `a -> b; b -> d; a -> d`, it is `b -> d`. A tie for the leftmost end of another edge goes to its lower end.
+- **The order of the tree's edges:** the edges of the `f`s first, then the separations, then the others. An entering edge takes the place of the leaving one. The balancing takes the tree edges with a zero cut value in this order:
+  - in `history-style-1`, only the order "separation `sh0010`-`sh0009`, separation `sh0006`-`sh0007`, then the edge to `sh0007` of `sh0009 -> sh0007`" of the six gives the reference's layout;
+  - `vega-nonreg/group2917-smetana_hide_state_plain_edges-1` needs the edges of the `f`s before the separations.
+- **The order of the auxiliary graph's edges:** by the rank and the order of their upper end, so that a tie between entering edges goes to the edge further left. The reduced `history-style-1` and `x -> a; x -> b; y -> c` need it.
+- **The rounding:** truncation. On the random graphs, rounding down gives 235 matches, up 186, away from zero 174, and truncation 263.
+
+This candidate, C1, keeps the current path for the graphs with clusters, and for those with two adjacent ranks without an edge between them, where section 4.3 does not apply. Its results:
+
+- 270 gopuml cases are exact, and 276 pass the `plain` part of the proxy;
+- in the report, 275 of the 296 gopuml cases pass the proxy, against 273. `history-style-1`, `group2681-history_style_all_forms-1` and their reduced cases pass, and `simple-A0004-1` goes from 8.0% to 4.8%;
+- 239 curated cases are exact, and none fails;
+- 267 random graphs match.
+
+C1 does not explain:
+
+- **The leaving edge among equal cut values.**
+  - `b -> e; b -> c; c -> e; d -> a` needs the separation of rank 0 to leave before the edge of the `f` from `b`.
+  - `group2917` needs the edge of the `f` from rank 1 to leave before the separation of rank 1.
+  - `a -> b; c -> d; c -> e; f -> g` needs the second separation of rank 0 to leave before the first.
+
+  No order of the edges by kind, rank and position satisfies the three.
+- **The form of the Chen graphs**, `a -> b; c -> d; c -> e [minlen=2, label="L"]`, the scenario "Tail between a node and a labeled edge". Before the balancing, the reference has `c` over the chain of the label, and then moves it left by 31, half of 63 truncated, and `v6` by 16. C1 has `c` over `d`.
+
+  An order of the edges by rank, with the separations of each rank before its edges down and reversed within the rank, lays out this graph and `reduced-ChenMovie_Test-1` (7.2% to 1.1%) as the reference does. It breaks `group2917` (1.0% to 20.2%).
+- **The reduced `entities-relationship-and-attributes`, `ChenMovieAlias_Test` and `state2` cases.** No variant changes them.
+
+Variants rejected:
+
+- the last of equal edges, on the current tree: `history-style-1` goes from 6.8% to 12.1% and `group2917` to 20.2%, and `chen-eer-diagram/element-styles-1` fails;
+- a tree grown from the top left node: it lays out `history-style-1` as the reference does, and puts 11 other gopuml cases further from it;
+- a search of the leaving edge in postorder: it breaks `history-style-1`.
+
 ### M4: flat edges over nodes (task 2.1)
 
 The reference reorders a rank so that a flat edge joins neighbors when it can: `{rank=same; a; b; c} a -> c` puts `c` next to `a`. An edge goes over nodes when the order forbids it, as with two flat edges into the same head: `a -> c [minlen=0]; b -> c [minlen=0]`.
