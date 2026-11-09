@@ -7,6 +7,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"math"
 	"math/rand/v2"
 	"strings"
 	"sync"
@@ -139,6 +140,15 @@ func TestRankDirectionAndOrder(t *testing.T) {
 	if (n["a"].X < n["b"].X) != (n["d"].X < n["c"].X) {
 		t.Errorf("crossing not removed: a %v b %v c %v d %v", n["a"].X, n["b"].X, n["c"].X, n["d"].X)
 	}
+	n = layoutOf(t, `digraph { a -> b [label="LLLLLL"]; a -> c; d -> b }`)
+	if !(n["a"].X < n["d"].X && n["c"].X < n["b"].X) {
+		t.Errorf("orders with the same crossings: a %v d %v, c %v b %v", n["a"].X, n["d"].X, n["c"].X, n["b"].X)
+	}
+	// The sources in the order of a search from f: b before c.
+	n = layoutOf(t, "digraph { f -> g; c -> f; b -> g }")
+	if !(n["b"].X < n["f"].X) {
+		t.Errorf("sources in search order: b %v f %v", n["b"].X, n["f"].X)
+	}
 }
 
 func TestSeparationAndPositioning(t *testing.T) {
@@ -153,6 +163,11 @@ func TestSeparationAndPositioning(t *testing.T) {
 	n = layoutOf(t, "digraph { a -> b -> c }")
 	if !approx(n["a"].X, n["b"].X) || !approx(n["b"].X, n["c"].X) {
 		t.Errorf("straight chain: %v %v %v", n["a"].X, n["b"].X, n["c"].X)
+	}
+	n = layoutOf(t, "digraph { a -> x; c -> y; b -> x; d -> y }")
+	if !approx(n["x"].X, (n["a"].X+n["b"].X)/2) || !approx(n["y"].X, (n["c"].X+n["d"].X)/2) {
+		t.Errorf("heads between their tails: x %v of %v %v, y %v of %v %v",
+			n["x"].X, n["a"].X, n["b"].X, n["y"].X, n["c"].X, n["d"].X)
 	}
 }
 
@@ -247,6 +262,30 @@ func TestRoutingScenarios(t *testing.T) {
 	}
 	if es[0].Head.Shape == "" || !(maxX(es[0].Points) > a.X+a.W/2) {
 		t.Errorf("loop is not beside the node: %+v", es[0])
+	}
+
+	// Spec scenario "Flat edge over a node": the curve of a -> c goes over
+	// b, and the drawing is 60 points high, within 2%, where its nodes are 36.
+	res, es = edgesOf(t, "digraph { a -> c [minlen=0]; b -> c [minlen=0] }")
+	b = nodeNamed(res, "b")
+	over := false
+	for _, q := range sample(es[0].Points) {
+		if math.Abs(q.X-b.X) < b.W/2 && q.Y > b.Y+b.H/2 {
+			over = true
+		}
+	}
+	if !over || math.Abs(res.Height-60) > 1.2 || b.H != 36 {
+		t.Errorf("flat edge over a node: over b %v, drawing %g points high, nodes %g", over, res.Height, b.H)
+	}
+
+	// Spec scenario "Label clear of an edge routed before": the label of
+	// x -> l lies 28 points right of l, within 2 points.
+	res, es = edgesOf(t, `digraph { l -> m; x -> r; x -> l [label="LLLLLL"] }`)
+	l := nodeNamed(res, "l")
+	for _, e := range es {
+		if d := e.LabelPos.X - l.X; e.Edge.Head.Name == "l" && math.Abs(d-28) > 2 {
+			t.Errorf("label clear of an edge routed before: %g points right of l", d)
+		}
 	}
 
 	_, es = edgesOf(t, "digraph { splines=polyline; a -> b -> c; a -> c }")

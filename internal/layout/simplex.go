@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
-// Provenance: paper Gansner, Koutsofios, North, Vo 1993, A Technique for Drawing Directed Graphs, sections 2.3, 2.4, 4.2
+// Provenance: paper Gansner, Koutsofios, North, Vo 1993, A Technique for Drawing Directed Graphs, sections 2.3, 2.4, 4.2, 4.3
+// Provenance: observed dot 16.1.0
 
 // Package layout computes the dot layout: ranks, the order of nodes within
 // ranks, coordinates, and the routes of edges.
@@ -57,6 +58,10 @@ type simplex struct {
 	// occupancy is, for a node that stands for a block of nodes on several
 	// ranks, the number of its nodes on each of them; nil means one node.
 	occupancy [][]int
+	// list, when the initial tree is given, holds the tree edges in the
+	// order in which balanceLR takes them; an entering edge takes the place
+	// of the leaving one.
+	list []int
 }
 
 func newSimplex(ctx context.Context, n int, edges []nsEdge, search int) *simplex {
@@ -77,6 +82,26 @@ func (s *simplex) solve(mode balanceMode) ([]int, error) {
 	}
 	s.initRank()
 	s.feasibleTree()
+	return s.optimize(mode)
+}
+
+// solveFrom runs the network simplex from a feasible ranking and a spanning
+// tree of edges that are tight in it, listed in the order in which
+// balanceLR takes them.
+func (s *simplex) solveFrom(rank, list []int, mode balanceMode) ([]int, error) {
+	s.rank = rank
+	s.inTree = make([]bool, len(s.edges))
+	for _, e := range list {
+		s.inTree[e] = true
+	}
+	s.list = list
+	s.buildTree()
+	return s.optimize(mode)
+}
+
+// optimize pivots from a feasible tree to an optimal one, then spreads the
+// solution as mode asks.
+func (s *simplex) optimize(mode balanceMode) ([]int, error) {
 	s.initCutValues()
 	for iter := 0; ; iter++ {
 		if iter%64 == 0 {
@@ -421,6 +446,9 @@ func (s *simplex) exchange(f, e int) {
 	}
 	s.inTree[f] = false
 	s.inTree[e] = true
+	if s.list != nil {
+		s.list[slices.Index(s.list, f)] = e
+	}
 	s.treeOut[fe.tail] = slices.DeleteFunc(s.treeOut[fe.tail], func(ei int) bool { return ei == f })
 	s.treeIn[fe.head] = slices.DeleteFunc(s.treeIn[fe.head], func(ei int) bool { return ei == f })
 	s.treeOut[ee.tail] = append(s.treeOut[ee.tail], e)
@@ -506,9 +534,17 @@ func (s *simplex) balanceTB() {
 // balanceLR slides, for each tree edge whose cut value is 0, the part of the
 // tree below it to the middle of the range where all its edges stay
 // feasible: such moves do not change the objective, and they center nodes
-// between their neighbors.
+// between their neighbors. It takes the tree edges in the order of s.list
+// when the initial tree was given, and by index otherwise.
 func (s *simplex) balanceLR() {
-	for f := range s.edges {
+	order := s.list
+	if order == nil {
+		order = make([]int, len(s.edges))
+		for f := range order {
+			order[f] = f
+		}
+	}
+	for _, f := range order {
 		if !s.inTree[f] || s.cut[f] != 0 {
 			continue
 		}

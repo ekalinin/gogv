@@ -5,8 +5,10 @@
 package layout
 
 import (
+	"cmp"
 	"context"
 	"math"
+	"slices"
 )
 
 // omegaTable weighs the edges of the auxiliary graph by how many of their
@@ -46,7 +48,19 @@ func (g *ranked) placeX(ctx context.Context, left, right []float64, nodesep floa
 		m := max(u, v)
 		return m - u, m - v
 	}
-	for _, e := range g.edges {
+	// As observed, the reference lists the edges of the auxiliary graph by
+	// the rank and the order of their upper ends: the network simplex breaks
+	// its ties between them in this order.
+	byUpper := make([]int, len(g.edges))
+	for k := range byUpper {
+		byUpper[k] = k
+	}
+	slices.SortStableFunc(byUpper, func(a, b int) int {
+		u, v := g.nodes[g.edges[a].upper], g.nodes[g.edges[b].upper]
+		return cmp.Or(cmp.Compare(u.rank, v.rank), cmp.Compare(u.order, v.order))
+	})
+	for _, k := range byUpper {
+		e := g.edges[k]
 		w := omega(e) * e.weight
 		du, dv := delta(e.upperPort, e.lowerPort)
 		edges = append(edges,
@@ -77,7 +91,18 @@ func (g *ranked) placeX(ctx context.Context, left, right []float64, nodesep floa
 	if total == 0 {
 		return nil, nil
 	}
-	sol, err := solveConnected(ctx, total, edges, search, balanceLeftRight)
+	var rank, list []int
+	ok := false
+	if extra == nil {
+		rank, list, ok = g.initialXTree(edges, byUpper, total)
+	}
+	var sol []int
+	var err error
+	if ok {
+		sol, err = newSimplex(ctx, total, edges, search).solveFrom(rank, list, balanceLeftRight)
+	} else {
+		sol, err = solveConnected(ctx, total, edges, search, balanceLeftRight)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -86,6 +111,80 @@ func (g *ranked) placeX(ctx context.Context, left, right []float64, nodesep floa
 		x[v] = float64(sol[v])
 	}
 	return x, nil
+}
+
+// initialXTree builds the initial feasible tree that section 4.3 of Gansner
+// et al. gives for the auxiliary graph of placeX, whose edges are the two
+// edges of each ranked edge, in the order byUpper, then those of each flat
+// edge, then the separations rank by rank:
+//   - each rank is packed from the left, with its separations in the tree;
+//   - for each pair of adjacent ranks, both edges of one edge f between them
+//     are in the tree, which places the lower rank under the upper one. As
+//     observed, f goes from the leftmost node of the upper rank that has
+//     edges down to the leftmost of their lower ends;
+//   - every other edge has its edge to its leftmost end in the tree, to its
+//     lower or right end when both ends are at the same x.
+//
+// It returns the ranking, and the tree edges in the order in which, as
+// observed, the reference balances them: the edges of the fs, then the
+// separations, then the others. It reports false when two adjacent ranks
+// have no edge between them, so that the tree would not span the graph.
+func (g *ranked) initialXTree(edges []nsEdge, byUpper []int, total int) ([]int, []int, bool) {
+	if len(g.ranks) == 0 {
+		return nil, nil, false
+	}
+	pos := make([]int, len(g.edges))
+	for i, k := range byUpper {
+		pos[k] = i
+	}
+	rank := make([]int, total)
+	var fs, seps, others []int
+	si := 2 * (len(g.edges) + len(g.flats))
+	for _, nodes := range g.ranks {
+		for i := 0; i+1 < len(nodes); i++ {
+			rank[nodes[i+1]] = rank[nodes[i]] + edges[si].minlen
+			seps = append(seps, si)
+			si++
+		}
+	}
+	isF := make([]bool, len(g.edges))
+	for r := 0; r+1 < len(g.ranks); r++ {
+		f := -1
+		for _, v := range g.ranks[r] {
+			for _, k := range g.nodes[v].down {
+				if f < 0 || g.nodes[g.edges[k].lower].order < g.nodes[g.edges[f].lower].order {
+					f = k
+				}
+			}
+			if f >= 0 {
+				break
+			}
+		}
+		if f < 0 {
+			return nil, nil, false
+		}
+		isF[f] = true
+		eu, el := edges[2*pos[f]], edges[2*pos[f]+1]
+		shift := (rank[eu.head] - eu.minlen) - (rank[el.head] - el.minlen)
+		for _, v := range g.ranks[r+1] {
+			rank[v] += shift
+		}
+	}
+	// Each edge node lies at the leftmost of its ends, less their offsets.
+	for i := range len(g.edges) + len(g.flats) {
+		a, b := 2*i, 2*i+1
+		xa, xb := rank[edges[a].head]-edges[a].minlen, rank[edges[b].head]-edges[b].minlen
+		rank[edges[a].tail] = min(xa, xb)
+		switch {
+		case i < len(g.edges) && isF[byUpper[i]]:
+			fs = append(fs, a, b)
+		case xa < xb:
+			others = append(others, a)
+		default:
+			others = append(others, b)
+		}
+	}
+	return rank, slices.Concat(fs, seps, others), true
 }
 
 // solveConnected solves a network simplex problem whose graph may not be

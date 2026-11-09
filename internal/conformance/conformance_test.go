@@ -101,3 +101,48 @@ func TestConformance(t *testing.T) {
 		t.Fatal(strings.Join(failures, "\n"))
 	}
 }
+
+// TestReducedCasesPassProxy requires every reduced case of the curated
+// corpus, dot-layout/reduced-*, that known-differences.yaml does not list to
+// pass the proxy of gopuml's contract against its reference: a listed case
+// leaves the file when the change that it names lays it out as the
+// reference does.
+func TestReducedCasesPassProxy(t *testing.T) {
+	known, err := conformance.ReadKnownDifferences(filepath.Join(root, "testdata/conformance/known-differences.yaml"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	rasterizer := conformance.Resvg{
+		Path:     filepath.Join(root, ".cache/tools/resvg"),
+		FontsDir: filepath.Join(root, ".cache/fonts/liberation"),
+	}
+	if _, err := os.Stat(rasterizer.Path); err != nil {
+		t.Fatal("resvg not fetched: run tools/reference/fetch-tools.sh")
+	}
+	all, err := conformance.LoadCases(filepath.Join(root, "testdata/conformance/cases"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var cases []conformance.Case
+	for _, c := range all {
+		if strings.HasPrefix(c.ID, "dot-layout/reduced-") {
+			cases = append(cases, c)
+		}
+	}
+	if len(cases) == 0 {
+		t.Fatal("no reduced case")
+	}
+	// A failed case also fails TestConformance; here, the proxy decides.
+	report, _ := conformance.Run(cases, filepath.Join(root, "testdata/conformance/reference"), known, render, rasterizer)
+	listed := 0
+	for _, res := range report.Results {
+		if _, ok := known[res.Case.ID]; ok {
+			listed++
+			continue
+		}
+		if !conformance.PassesProxy(res.ProxyDeviation, res.SSIM) {
+			t.Errorf("%s does not pass the proxy: deviation %.1f%% of %s, SSIM %.4f", res.Case.ID, res.ProxyDeviation*100, res.ProxyObject, res.SSIM)
+		}
+	}
+	t.Logf("%d reduced cases, %d listed in known-differences.yaml", len(cases), listed)
+}

@@ -3,7 +3,10 @@
 
 package layout
 
-import "testing"
+import (
+	"math"
+	"testing"
+)
 
 func edgeOf(t *testing.T, res *Result, tail, head string) EdgeResult {
 	t.Helper()
@@ -90,6 +93,16 @@ func TestFlatAndLoopLabels(t *testing.T) {
 	if !(e.LabelPos.Y > n["a"].Y) || !(e.LabelPos.X > n["a"].X && e.LabelPos.X < n["b"].X) || !(n["b"].X-n["a"].X > plain["b"].X-plain["a"].X) {
 		t.Errorf("flat edge: label at %v, a %v, b %v", e.LabelPos, n["a"], n["b"])
 	}
+	// Spec scenario "Flat edge from a port": the label is 8.5 points higher
+	// than without the port, within a point, and the drawing is higher.
+	table := `a [shape=plaintext, label=<<TABLE><TR><TD PORT="p" WIDTH="40" HEIGHT="30"></TD></TR></TABLE>>]`
+	withPort := layoutResolved(t, `digraph { `+table+`; a:p -> b [minlen=0, label="L"] }`)
+	without := layoutResolved(t, `digraph { `+table+`; a -> b [minlen=0, label="L"] }`)
+	lp, lw := edgeOf(t, withPort, "a", "b").LabelPos, edgeOf(t, without, "a", "b").LabelPos
+	if d := lp.Y - lw.Y; math.Abs(d-8.5) > 1 || !(withPort.Height > without.Height) {
+		t.Errorf("flat edge from a port: label %g points higher, drawing %g against %g", d, withPort.Height, without.Height)
+	}
+
 	res = layoutResolved(t, `digraph { a -> a [label="loop"] }`)
 	e = edgeOf(t, res, "a", "a")
 	var far float64
