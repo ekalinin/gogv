@@ -93,7 +93,7 @@ Case: `reduced-state3-1-worst`, which moves (D10).
 
 ## 10. Release
 
-- [ ] 10.1 After the merge, write `docs/releases/v0.4.0.md` and name v0.4.0 on the landing page, in a pull request, with the user's approval (design D9). The notes give the changed layouts and the conformance results. Verify that the tests of `landing_test.go` pass.
-- [ ] 10.2 After its merge and a green CI, run `make release VERSION=v0.4.0` with the user's approval. Verify:
+- [x] 10.1 After the merge, write `docs/releases/v0.4.0.md` and name v0.4.0 on the landing page, in a pull request, with the user's approval (design D9). The notes give the changed layouts and the conformance results. Verify that the tests of `landing_test.go` pass.
+- [x] 10.2 After its merge and a green CI, run `make release VERSION=v0.4.0` with the user's approval. Verify:
   - `go install github.com/ekalinin/gogv/cmd/dot@v0.4.0` prints `gogv 0.4.0` for `dot -V`;
   - the landing page names v0.4.0 and its playground runs it.
