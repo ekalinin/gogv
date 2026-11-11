@@ -169,6 +169,13 @@ func TestSeparationAndPositioning(t *testing.T) {
 		t.Errorf("heads between their tails: x %v of %v %v, y %v of %v %v",
 			n["x"].X, n["a"].X, n["b"].X, n["y"].X, n["c"].X, n["d"].X)
 	}
+	// Issue #46: with the ranks packed, c -> e is the edge whose ends are
+	// in line, so the initial tree holds e under c, and the odd gap of 81
+	// points between d and e leaves e the nearer to c.
+	n = layoutOf(t, "digraph { node [shape=box, width=0.875]; a -> b; a -> c; c -> d; c -> e }")
+	if !approx(n["c"].X-n["d"].X, 41) || !approx(n["e"].X-n["c"].X, 40) {
+		t.Errorf("odd gap under c: d %v c %v e %v", n["d"].X, n["c"].X, n["e"].X)
+	}
 }
 
 // Every rank between the ends of a long edge holds one virtual node of it.
