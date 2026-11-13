@@ -10,7 +10,7 @@
   reason: "order within ranks: the chain of b -> e goes right of c and d instead of left; both orders have no crossing, and how the reference breaks this tie is not known yet"
   change: refine-layout-heuristics
 - id: dot-language/node-lists
-  reason: "x coordinates: the optimum of the positioning is not unique, and gogv takes another one than the reference (d, e, f, g, h are 9 points apart)"
+  reason: "x coordinates: the optimum of the positioning is not unique, and gogv takes another one than the reference (d, e and f are 27 points to the right, g, h and i 9 points)"
   change: refine-layout-heuristics
 - id: dot-layout/cluster-edges-between
   reason: "order within ranks: the chain of x -> c1 goes right of the clusters instead of left, and cluster_c goes under cluster_b instead of cluster_a; the orders have as many crossings, and how the reference breaks this tie is not known yet"

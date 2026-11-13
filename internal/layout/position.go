@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Provenance: paper Gansner, Koutsofios, North, Vo 1993, A Technique for Drawing Directed Graphs, section 4
+// Provenance: paper Gansner, Koutsofios, North, Vo 1993, A Technique for Drawing Directed Graphs, sections 2.3, 4
 // Provenance: observed dot 16.1.0
 
 package layout
@@ -120,8 +120,11 @@ func (g *ranked) placeX(ctx context.Context, left, right []float64, nodesep floa
 //   - each rank is packed from the left, with its separations in the tree;
 //   - for each pair of adjacent ranks, both edges of one edge f between them
 //     are in the tree, which places the lower rank under the upper one. As
-//     observed, f goes from the leftmost node of the upper rank that has
-//     edges down to the leftmost of their lower ends;
+//     observed, f is the edge whose ends lie closest along the rank with
+//     every rank packed and none shifted yet, as when the search of section
+//     2.3 grows the tree down from the top rank and moves it to meet each
+//     next rank. A tie goes to the edge from the leftmost upper end, then to
+//     the leftmost lower end;
 //   - every other edge has its edge to its leftmost end in the tree, to its
 //     lower or right end when both ends are at the same x.
 //
@@ -148,16 +151,23 @@ func (g *ranked) initialXTree(edges []nsEdge, byUpper []int, total int) ([]int, 
 		}
 	}
 	isF := make([]bool, len(g.edges))
+	// How far apart the ends of edge k lie along the rank, ports included,
+	// with the ranks packed.
+	packed := slices.Clone(rank)
+	gap := func(k int) int {
+		eu, el := edges[2*pos[k]], edges[2*pos[k]+1]
+		d := (packed[eu.head] - eu.minlen) - (packed[el.head] - el.minlen)
+		return max(d, -d)
+	}
 	for r := 0; r+1 < len(g.ranks); r++ {
 		f := -1
 		for _, v := range g.ranks[r] {
 			for _, k := range g.nodes[v].down {
-				if f < 0 || g.nodes[g.edges[k].lower].order < g.nodes[g.edges[f].lower].order {
+				if f < 0 || cmp.Or(cmp.Compare(gap(k), gap(f)),
+					cmp.Compare(g.nodes[g.edges[k].upper].order, g.nodes[g.edges[f].upper].order),
+					cmp.Compare(g.nodes[g.edges[k].lower].order, g.nodes[g.edges[f].lower].order)) < 0 {
 					f = k
 				}
-			}
-			if f >= 0 {
-				break
 			}
 		}
 		if f < 0 {
